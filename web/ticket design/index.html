@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171714">
+  <meta name="description" content="Twenty-one MoneyBTI demo spending personality tickets in one reusable offline layout.">
+  <title>MoneyBTI · Personality Ticket Archive</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <form class="persona-picker" aria-label="Personality ticket preview">
+      <label for="personaSelect">Preview personality</label>
+      <select id="personaSelect" name="persona"></select>
+      <span id="dataStatus">DEMO DATA</span>
+    </form>
+
+    <article class="ticket" id="ticket" aria-labelledby="persona-title">
+      <div class="grain" aria-hidden="true"></div>
+      <header class="ticket-head">
+        <div class="institution"><span class="seal" aria-hidden="true">¥</span><div><p class="brand">MoneyBTI</p><p>ARCHIVE OF SPENDING TEMPERAMENTS</p></div></div>
+        <div class="filing"><span data-field="file"></span><span>ISSUED / SEP 2026</span></div>
+      </header>
+      <section class="hero">
+        <p class="eyebrow" data-field="category"></p>
+        <div class="title-lockup">
+          <h1 id="persona-title"><span data-field="titleTop"></span><span data-field="titleBottom"></span></h1>
+          <p class="code"><b data-field="code"></b><i data-field="number"></i></p>
+        </div>
+        <figure class="cat-plate"><img id="personaImage" src="../cats/WMBY.webp" alt=""><figcaption data-field="caption"></figcaption></figure>
+        <blockquote><span data-field="quoteTop"></span><span data-field="quoteBottom"></span></blockquote>
+        <div class="registration" aria-hidden="true">＋&nbsp; ＋&nbsp; ＋</div>
+      </section>
+      <section class="stub" aria-label="Personality match summary">
+        <div class="stub-label"><span>PERSONA TYPE</span><b data-field="type"></b></div>
+        <div class="match"><span>MATCH RATE</span><strong><span data-field="match"></span><sup>%</sup></strong></div>
+        <div class="rarity"><span>RARITY</span><b data-field="rarity"></b></div>
+        <div class="cut" aria-hidden="true">TEAR ON THE DOTTED LINE</div>
+      </section>
+      <section class="ledger" aria-labelledby="ledger-title">
+        <div class="section-title"><div><span>ACCOUNT EXTRACT</span><h2 id="ledger-title">Spending snapshot</h2></div><span>04 SEP 2026</span></div>
+        <dl class="facts">
+          <div><dt>Total spent</dt><dd data-field="total"></dd></div><div><dt>Transactions</dt><dd data-field="transactions"></dd></div>
+          <div><dt>Frequent stop</dt><dd data-field="merchant"></dd></div><div><dt>Defining signal</dt><dd data-field="signal"></dd></div>
+        </dl>
+        <div class="indices" id="indices" aria-label="Spending personality indices"></div>
+      </section>
+      <section class="finding" aria-labelledby="finding-title">
+        <p class="vertical-note" data-field="observation"></p>
+        <div><span>PERSONA FINDING</span><h2 id="finding-title" data-field="findingTitle"></h2><p data-field="description"></p></div>
+      </section>
+      <footer class="ticket-foot"><div class="barcode" aria-hidden="true"></div><div><p data-field="tagline"></p><span>THE NUMBERS CHANGE · THE TEMPERAMENT REMAINS</span></div><span class="endmark">Mβ</span></footer>
+    </article>
+  </main>
+
+  <script src="personas.js"></script><script src="persona-rules.js"></script><script src="app.js"></script>
+</body>
+</html>

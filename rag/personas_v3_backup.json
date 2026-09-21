@@ -1,0 +1,1365 @@
+{
+  "_meta": {
+    "version": "3.0",
+    "date": "2026-09-08",
+    "description": "MoneyBTI 钱格 人格卡知识库 v3。16 张常规卡 (group=regular) 用 signature（维度原型 + 权重 + 门槛）在 11 维消费维度空间里做原型匹配：原型 ≥ 50 的维度是「应当高」，sat = 1 − max(0, proto − score)/50；原型 < 50 的维度是「不应高」，sat = 1 − max(0, score − proto)/100；match = 100 × Σ w·sat / Σ w，门槛不满足封顶 40，match ≥ 70 记命中。trigger 字段保留为 v1 阈值规则（评估对照变体）。7 张特别卡 (special / fallback) 仍用 trigger 阈值：成就卡描述事件而非维度，命中即 override。",
+    "rarity_levels": {
+      "常见": "≈ 30% 以上账单会命中",
+      "少见": "≈ 10–30%",
+      "稀有": "≈ 2–10%",
+      "传说": "< 2%"
+    },
+    "metric_glossary": {
+      "food_share": "K5 (C1+C2+C4)/total",
+      "delivery_ratio": "K6 C1/(C1+C2+C3)",
+      "beverage_per_week": "K12 C4 笔数/周数",
+      "C2_share / C3_share / C4_share / C6_share / C9_share / C10_share": "K3 各类别金额占比",
+      "distinct_C2_merchants": "C2 中不同商户数",
+      "game_share": "C8 金额中排除票务旅游家族 (M15) 后的占比",
+      "travel_share": "票务旅游家族 (M15) 金额占比",
+      "subscription_brands": "视频音乐订阅家族 (M14) 命中的不同商户数 + 说明含 会员/订阅 的不同商户数",
+      "txn_per_day": "K2 笔数/天数",
+      "small_txn_ratio": "K7 金额<=20 的笔数占比",
+      "top_category_share": "K4 最大类别金额占比",
+      "median_amount": "K8 金额中位数",
+      "big_ticket_share": "K9 金额>=200 合计占比",
+      "online_share": "K10 线上金额占比",
+      "shopping_share": "C5+C6 金额占比",
+      "commute_count_ratio": "K13 C7 笔数占比",
+      "necessity_share": "K14 必需消费金额占比",
+      "late_night_ratio": "K11 22:00–05:59 笔数占比",
+      "active_days_ratio": "有消费的天数/周期天数",
+      "max_day_share": "单日最高消费金额/total",
+      "max_day_txn_count": "消费金额最高的那一天的笔数 (区分“一天买了很多”与“一笔大额”)",
+      "period_days": "账单头部 起始时间–终止时间 的天数; 无头部时用首末交易推算",
+      "discount_txn_ratio": "支付方式含 优惠/立减/红包/券 的笔数占比 (本地计算, 不送 LLM)",
+      "transfer_count": "被 R4 剔除的转账/红包笔数 (不计入 total)",
+      "top_merchant_count_share": "笔数最多的单一商户占总笔数比例",
+      "data_level": "3.5 节 充足/勉强/不足"
+    },
+    "dimension_scoring": "score = 分段线性：anchors=[v0, v60, v100] 对应 0 / 60 / 100 分，超出两端截断；60 分 = 该轴对应人格卡的 v1 阈值。"
+  },
+  "cards": [
+    {
+      "code": "BKHZ",
+      "name": "不开火者",
+      "emoji": "🍜",
+      "group": "regular",
+      "axis": "类别·餐饮",
+      "rarity": "常见",
+      "signature": {
+        "dims": {
+          "delivery": [
+            90,
+            3
+          ],
+          "eat": [
+            75,
+            2
+          ],
+          "shopping": [
+            20,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "trigger": [
+        {
+          "metric": "food_share",
+          "op": ">=",
+          "value": 0.35
+        },
+        {
+          "metric": "delivery_ratio",
+          "op": ">=",
+          "value": 0.6
+        }
+      ],
+      "tagline": "厨房是装修，不是设施。",
+      "tone": "自嘲、温和，像朋友替你叹气",
+      "slogan_examples": [
+        "EAT WELL. SPEND HAPPILY.",
+        "KITCHEN ON VACATION."
+      ],
+      "summary_examples": [
+        "71% 的支出贡献给了餐饮，外卖比例 100%，厨房本月成功保持全勤休假。"
+      ],
+      "do_not_say": [
+        "不健康",
+        "该自己做饭",
+        "浪费",
+        "懒"
+      ],
+      "illustration_prompt": "a lazy cat lying next to a stack of takeaway boxes, retro dithered print style"
+    },
+    {
+      "code": "NCXM",
+      "name": "奶茶续命型",
+      "emoji": "🧋",
+      "group": "regular",
+      "axis": "类别·饮品",
+      "rarity": "常见",
+      "signature": {
+        "dims": {
+          "drink": [
+            90,
+            3
+          ],
+          "eat": [
+            60,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "trigger_any": [
+        [
+          {
+            "metric": "beverage_per_week",
+            "op": ">=",
+            "value": 3
+          }
+        ],
+        [
+          {
+            "metric": "C4_share",
+            "op": ">=",
+            "value": 0.08
+          }
+        ]
+      ],
+      "tagline": "没有糖分的日子是无法启动的。",
+      "tone": "撒娇、夸张",
+      "slogan_examples": [
+        "MORE SUGAR. MORE ENERGY.",
+        "LIFE RUNS ON BOBA."
+      ],
+      "summary_examples": [
+        "本月 18 杯奶茶咖啡，平均每 1.7 天一杯，你的血液里大概有 8% 是珍珠。"
+      ],
+      "do_not_say": [
+        "糖尿病",
+        "肥",
+        "戒掉"
+      ],
+      "illustration_prompt": "a cat holding a giant bubble tea with a straw, sunglasses, retro dithered print style"
+    },
+    {
+      "code": "TDJ",
+      "name": "探店家",
+      "emoji": "🍲",
+      "group": "regular",
+      "axis": "类别·堂食",
+      "rarity": "少见",
+      "signature": {
+        "dims": {
+          "eat": [
+            80,
+            3
+          ],
+          "delivery": [
+            15,
+            2
+          ]
+        },
+        "gates": [
+          {
+            "metric": "distinct_C2_merchants",
+            "op": ">=",
+            "value": 6
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "C2_share",
+          "op": ">=",
+          "value": 0.3
+        },
+        {
+          "metric": "distinct_C2_merchants",
+          "op": ">=",
+          "value": 6
+        }
+      ],
+      "tagline": "人生就是一家一家吃过去。",
+      "tone": "美食博主口吻、兴致勃勃",
+      "slogan_examples": [
+        "ONE MORE RESTAURANT.",
+        "EAT LOCAL. EAT ALL."
+      ],
+      "summary_examples": [
+        "堂食占 34%，本月打卡了 11 家不同的店，从烤肉到寿喜烧，你的地图是用胃画的。"
+      ],
+      "do_not_say": [
+        "吃货（贬义）",
+        "胖",
+        "乱吃"
+      ],
+      "illustration_prompt": "a cat with a bib and chopsticks in front of many small dishes, retro dithered print style"
+    },
+    {
+      "code": "MCDR",
+      "name": "买菜达人",
+      "emoji": "🥬",
+      "group": "regular",
+      "axis": "类别·生鲜",
+      "rarity": "少见",
+      "signature": {
+        "dims": {
+          "delivery": [
+            10,
+            3
+          ],
+          "practical": [
+            80,
+            2
+          ],
+          "eat": [
+            20,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "C3_share",
+            "op": ">=",
+            "value": 0.25
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "C3_share",
+          "op": ">=",
+          "value": 0.25
+        },
+        {
+          "metric": "delivery_ratio",
+          "op": "<=",
+          "value": 0.3
+        }
+      ],
+      "tagline": "锅铲在手，外卖靠边。",
+      "tone": "生活气息、踏实",
+      "slogan_examples": [
+        "FRESH IN. TAKEAWAY OUT.",
+        "HOME COOKED. HOME PROUD."
+      ],
+      "summary_examples": [
+        "超市与生鲜占 28%，外卖只有 12%，你家厨房这个月是真的在上班。"
+      ],
+      "do_not_say": [
+        "抠",
+        "老气",
+        "家庭主妇"
+      ],
+      "illustration_prompt": "a cat pushing a grocery cart full of vegetables, apron on, retro dithered print style"
+    },
+    {
+      "code": "WGKR",
+      "name": "网购狂热大师",
+      "emoji": "📦",
+      "group": "regular",
+      "axis": "类别·网购",
+      "rarity": "常见",
+      "signature": {
+        "dims": {
+          "shopping": [
+            75,
+            3
+          ],
+          "online": [
+            80,
+            2
+          ],
+          "eat": [
+            25,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "trigger": [
+        {
+          "metric": "online_share",
+          "op": ">=",
+          "value": 0.6
+        },
+        {
+          "metric": "shopping_share",
+          "op": ">=",
+          "value": 0.4
+        }
+      ],
+      "tagline": "快递员比朋友更了解你。",
+      "tone": "兴奋、列举",
+      "slogan_examples": [
+        "ADD TO CART. ADD TO HAPPINESS.",
+        "UNBOXING IS SELF-CARE."
+      ],
+      "summary_examples": [
+        "淘宝小红书拼多多合计 40 单，占支出 65%，快递员对你家门牌号的熟悉程度超过了你自己。"
+      ],
+      "do_not_say": [
+        "剁手",
+        "购物成瘾",
+        "冲动消费者"
+      ],
+      "illustration_prompt": "a cat surrounded by delivery boxes with heart sunglasses, retro dithered print style"
+    },
+    {
+      "code": "JZZY",
+      "name": "精致主义者",
+      "emoji": "🛍️",
+      "group": "regular",
+      "axis": "类别·美妆服饰",
+      "rarity": "常见",
+      "signature": {
+        "dims": {
+          "shopping": [
+            80,
+            2
+          ],
+          "online": [
+            70,
+            1
+          ],
+          "lavish": [
+            40,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "C6_share",
+            "op": ">=",
+            "value": 0.3
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "C6_share",
+          "op": ">=",
+          "value": 0.3
+        }
+      ],
+      "tagline": "好看是一种生产力。",
+      "tone": "时尚杂志口吻、肯定",
+      "slogan_examples": [
+        "LOOK GOOD. FEEL GOOD.",
+        "OUTFIT FIRST."
+      ],
+      "summary_examples": [
+        "美妆和服饰占了 36%，衣柜和梳妆台是本月投资最多的两个部门。"
+      ],
+      "do_not_say": [
+        "虚荣",
+        "臭美",
+        "浪费"
+      ],
+      "illustration_prompt": "a stylish cat with sunglasses and shopping bags, small mirror, retro dithered print style"
+    },
+    {
+      "code": "KJZS",
+      "name": "氪金战士",
+      "emoji": "🎮",
+      "group": "regular",
+      "axis": "类别·游戏",
+      "rarity": "少见",
+      "signature": {
+        "dims": {
+          "fun": [
+            85,
+            3
+          ],
+          "online": [
+            70,
+            1
+          ],
+          "night": [
+            55,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "game_share",
+            "op": ">=",
+            "value": 0.2
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "game_share",
+          "op": ">=",
+          "value": 0.3
+        }
+      ],
+      "tagline": "现实很贵，虚拟更贵。",
+      "tone": "中二、热血",
+      "slogan_examples": [
+        "PAY TO WIN. PAY TO LIVE.",
+        "ONE MORE PULL."
+      ],
+      "summary_examples": [
+        "47.7% 的钱去了游戏和 App，其中三笔 ¥1,200 是本月主角；剩下的时间都在地铁上。"
+      ],
+      "do_not_say": [
+        "上瘾",
+        "玩物丧志",
+        "沉迷"
+      ],
+      "illustration_prompt": "a cat with a gaming headset holding a controller, glowing eyes, retro dithered print style"
+    },
+    {
+      "code": "DYSJ",
+      "name": "订阅收藏家",
+      "emoji": "📺",
+      "group": "regular",
+      "axis": "类别·订阅",
+      "rarity": "少见",
+      "signature": {
+        "dims": {
+          "fun": [
+            50,
+            1
+          ],
+          "online": [
+            70,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "subscription_brands",
+            "op": ">=",
+            "value": 4
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "subscription_brands",
+          "op": ">=",
+          "value": 4
+        }
+      ],
+      "tagline": "会员太多，记不住哪个还没续。",
+      "tone": "无奈、清单式",
+      "slogan_examples": [
+        "SUBSCRIBED TO EVERYTHING.",
+        "AUTO-RENEW IS A LIFESTYLE."
+      ],
+      "summary_examples": [
+        "本月给 4 家平台续了会员，视频、音乐、云盘、游戏各一份，你的密码管理器比钱包还忙。"
+      ],
+      "do_not_say": [
+        "浪费钱",
+        "根本不看",
+        "冤大头"
+      ],
+      "illustration_prompt": "a cat juggling several remote controls and a phone with app icons, retro dithered print style"
+    },
+    {
+      "code": "SZJZ",
+      "name": "说走就走型",
+      "emoji": "✈️",
+      "group": "regular",
+      "axis": "类别·旅游",
+      "rarity": "少见",
+      "signature": {
+        "dims": {
+          "fun": [
+            80,
+            2
+          ],
+          "lavish": [
+            75,
+            2
+          ],
+          "petty": [
+            20,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "travel_share",
+            "op": ">=",
+            "value": 0.25
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "travel_share",
+          "op": ">=",
+          "value": 0.25
+        }
+      ],
+      "tagline": "机票是最贵的多巴胺。",
+      "tone": "旅行 vlog 口吻、雀跃",
+      "slogan_examples": [
+        "GO NOW. THINK LATER.",
+        "TICKETS OVER THINGS."
+      ],
+      "summary_examples": [
+        "酒店机票演出票占 31%，本月最大的三笔支出全都不在你家这座城市。"
+      ],
+      "do_not_say": [
+        "不务正业",
+        "乱跑",
+        "逃避"
+      ],
+      "illustration_prompt": "a cat with a backpack and passport at an airport gate, retro dithered print style"
+    },
+    {
+      "code": "TQDG",
+      "name": "通勤打工人",
+      "emoji": "🚇",
+      "group": "regular",
+      "axis": "类别·交通",
+      "rarity": "常见",
+      "signature": {
+        "dims": {
+          "commute": [
+            85,
+            4
+          ],
+          "petty": [
+            65,
+            1
+          ],
+          "lavish": [
+            15,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "trigger": [
+        {
+          "metric": "commute_count_ratio",
+          "op": ">=",
+          "value": 0.35
+        }
+      ],
+      "tagline": "每一分钱都在路上。",
+      "tone": "疲惫、励志",
+      "slogan_examples": [
+        "ALWAYS ON THE WAY.",
+        "MIND THE GAP. MIND THE BILL."
+      ],
+      "summary_examples": [
+        "63 笔交通占了 41% 的笔数，地铁 34 次、打车 29 次，你的月度轨迹可以直接画成一张地铁图。"
+      ],
+      "do_not_say": [
+        "社畜",
+        "累死",
+        "没有生活"
+      ],
+      "illustration_prompt": "a tired cat holding a metro card on a crowded train, retro dithered print style"
+    },
+    {
+      "code": "JJSH",
+      "name": "居家生活家",
+      "emoji": "🏠",
+      "group": "regular",
+      "axis": "类别·居家",
+      "rarity": "少见",
+      "signature": {
+        "dims": {
+          "practical": [
+            85,
+            2
+          ],
+          "online": [
+            30,
+            1
+          ],
+          "delivery": [
+            20,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "C9_share",
+            "op": ">=",
+            "value": 0.35
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "C9_share",
+          "op": ">=",
+          "value": 0.35
+        }
+      ],
+      "tagline": "把日子过成一份整齐的清单。",
+      "tone": "温暖、居家",
+      "slogan_examples": [
+        "HOME IS WHERE THE BILLS ARE.",
+        "TIDY HOME. TIDY BILL."
+      ],
+      "summary_examples": [
+        "日用、居家和医疗占 38%，纸巾、理发、药店，本月的钱都花在把生活维持在正常运转上。"
+      ],
+      "do_not_say": [
+        "无聊",
+        "没情趣",
+        "老了"
+      ],
+      "illustration_prompt": "a cat watering a plant in a cozy tidy living room, retro dithered print style"
+    },
+    {
+      "code": "JW",
+      "name": "卷王",
+      "emoji": "📚",
+      "group": "regular",
+      "axis": "类别·学习",
+      "rarity": "少见",
+      "signature": {
+        "dims": {
+          "practical": [
+            80,
+            2
+          ],
+          "lavish": [
+            60,
+            1
+          ],
+          "petty": [
+            30,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "C10_share",
+            "op": ">=",
+            "value": 0.25
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "C10_share",
+          "op": ">=",
+          "value": 0.25
+        }
+      ],
+      "tagline": "别人在消费，你在投资自己。",
+      "tone": "励志、微微调侃",
+      "slogan_examples": [
+        "INVEST IN YOURSELF.",
+        "STUDY HARD. PAY HARDER."
+      ],
+      "summary_examples": [
+        "教育培训与学习占 27%，本月最大的一笔是一门课程，你把钱花在了未来的自己身上。"
+      ],
+      "do_not_say": [
+        "书呆子",
+        "内卷",
+        "没用"
+      ],
+      "illustration_prompt": "a cat with glasses buried in books under a desk lamp, retro dithered print style"
+    },
+    {
+      "code": "HAO",
+      "name": "壕",
+      "emoji": "👑",
+      "group": "regular",
+      "axis": "金额·大额",
+      "rarity": "稀有",
+      "signature": {
+        "dims": {
+          "lavish": [
+            95,
+            3
+          ],
+          "petty": [
+            10,
+            2
+          ],
+          "shopping": [
+            70,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "top_category",
+            "op": "in",
+            "value": [
+              "C5",
+              "C6",
+              "C2"
+            ]
+          },
+          {
+            "metric": "median_amount",
+            "op": ">=",
+            "value": 80
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "median_amount",
+          "op": ">=",
+          "value": 80
+        },
+        {
+          "metric": "big_ticket_share",
+          "op": ">=",
+          "value": 0.5
+        },
+        {
+          "metric": "top_category",
+          "op": "in",
+          "value": [
+            "C5",
+            "C6",
+            "C2"
+          ]
+        }
+      ],
+      "tagline": "价格标签只是装饰。",
+      "tone": "羡慕、捧杀",
+      "slogan_examples": [
+        "PRICE IS JUST A NUMBER.",
+        "TREAT YOURSELF. AGAIN."
+      ],
+      "summary_examples": [
+        "中位数 ¥260 的账单，20 笔里 12 笔超过 ¥200，你买东西大概不看右下角。"
+      ],
+      "do_not_say": [
+        "炫富",
+        "败家",
+        "乱花钱"
+      ],
+      "illustration_prompt": "a cat wearing a crown sitting on shopping bags, retro dithered print style"
+    },
+    {
+      "code": "SCTZ",
+      "name": "散财童子",
+      "emoji": "💸",
+      "group": "regular",
+      "axis": "金额·小额高频",
+      "rarity": "常见",
+      "signature": {
+        "dims": {
+          "petty": [
+            90,
+            3
+          ],
+          "lavish": [
+            10,
+            2
+          ],
+          "shopping": [
+            35,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "top_category_share",
+            "op": "<",
+            "value": 0.4
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "txn_per_day",
+          "op": ">=",
+          "value": 4
+        },
+        {
+          "metric": "small_txn_ratio",
+          "op": ">=",
+          "value": 0.5
+        },
+        {
+          "metric": "top_category_share",
+          "op": "<",
+          "value": 0.4
+        }
+      ],
+      "tagline": "钱不是花没的，是漏没的。",
+      "tone": "惊讶、碎碎念",
+      "slogan_examples": [
+        "SMALL BILLS. BIG HOLE.",
+        "WHERE DID IT GO?"
+      ],
+      "summary_examples": [
+        "153 笔交易里有 79 笔不到 20 块，单看每一笔都无伤大雅，加起来 ¥11,704。"
+      ],
+      "do_not_say": [
+        "没有自控力",
+        "月光族",
+        "穷"
+      ],
+      "illustration_prompt": "a cat with coins falling out of its pockets while walking, retro dithered print style"
+    },
+    {
+      "code": "SQDS",
+      "name": "省钱大师",
+      "emoji": "🐿️",
+      "group": "regular",
+      "axis": "金额·低消费",
+      "rarity": "少见",
+      "signature": {
+        "dims": {
+          "practical": [
+            80,
+            3
+          ],
+          "lavish": [
+            5,
+            2
+          ],
+          "petty": [
+            55,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "median_amount",
+            "op": "<=",
+            "value": 25
+          }
+        ]
+      },
+      "trigger": [
+        {
+          "metric": "necessity_share",
+          "op": ">=",
+          "value": 0.6
+        },
+        {
+          "metric": "median_amount",
+          "op": "<=",
+          "value": 25
+        },
+        {
+          "metric": "big_ticket_share",
+          "op": "<=",
+          "value": 0.15
+        }
+      ],
+      "tagline": "理性消费，快乐加倍。",
+      "tone": "佩服、鼓励",
+      "slogan_examples": [
+        "SAVE TODAY. RICHER TOMORROW.",
+        "SMALL STEPS. BIG FREEDOM."
+      ],
+      "summary_examples": [
+        "必需消费占 68%，中位数 ¥12，没有一笔超过 ¥200，你把钱花得像一份整齐的作业。"
+      ],
+      "do_not_say": [
+        "抠门",
+        "小气",
+        "省得过头"
+      ],
+      "illustration_prompt": "a squirrel-like cat hugging a jar of coins, content smile, retro dithered print style"
+    },
+    {
+      "code": "YXDW",
+      "name": "夜行动物",
+      "emoji": "🌙",
+      "group": "regular",
+      "axis": "时间·深夜",
+      "rarity": "少见",
+      "signature": {
+        "dims": {
+          "night": [
+            90,
+            3
+          ],
+          "fun": [
+            50,
+            1
+          ],
+          "online": [
+            60,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "trigger": [
+        {
+          "metric": "late_night_ratio",
+          "op": ">=",
+          "value": 0.35
+        }
+      ],
+      "tagline": "白天的钱是钱，凌晨的钱是冲动。",
+      "tone": "神秘、夜话口吻",
+      "slogan_examples": [
+        "OPEN 24/7. ESPECIALLY 2AM.",
+        "NIGHT OWL. NIGHT ORDER."
+      ],
+      "summary_examples": [
+        "38% 的交易发生在 22 点到 6 点之间，本月最活跃的时段是凌晨 1 点，闹钟没响，购物车先响了。"
+      ],
+      "do_not_say": [
+        "熬夜伤身",
+        "作息混乱",
+        "失眠"
+      ],
+      "illustration_prompt": "a cat with glowing eyes holding a phone in bed at night, moon in window, retro dithered print style"
+    },
+    {
+      "code": "QQDK",
+      "name": "全勤打卡王",
+      "emoji": "🏆",
+      "group": "special",
+      "override": true,
+      "rarity": "稀有",
+      "trigger": [
+        {
+          "metric": "active_days_ratio",
+          "op": ">=",
+          "value": 0.95
+        },
+        {
+          "metric": "period_days",
+          "op": ">=",
+          "value": 28
+        }
+      ],
+      "tagline": "一个月，没有一天让钱包休息。",
+      "tone": "颁奖典礼口吻、郑重其事",
+      "slogan_examples": [
+        "31 DAYS. 31 RECEIPTS.",
+        "PERFECT ATTENDANCE."
+      ],
+      "summary_examples": [
+        "31 天里 31 天都有消费，连续打卡从未断签，本月成就：全勤。副人格：通勤打工人。"
+      ],
+      "do_not_say": [
+        "停不下来",
+        "控制不住",
+        "病"
+      ],
+      "illustration_prompt": "a cat holding a gold trophy on a podium with a calendar full of check marks, retro dithered print style"
+    },
+    {
+      "code": "YRBZ",
+      "name": "一日暴走型",
+      "emoji": "🎰",
+      "group": "special",
+      "override": true,
+      "rarity": "稀有",
+      "trigger": [
+        {
+          "metric": "max_day_share",
+          "op": ">=",
+          "value": 0.5
+        },
+        {
+          "metric": "max_day_txn_count",
+          "op": ">=",
+          "value": 5
+        },
+        {
+          "metric": "txn_count",
+          "op": ">=",
+          "value": 10
+        }
+      ],
+      "tagline": "平时很省，直到那一天。",
+      "tone": "悬疑纪录片口吻",
+      "slogan_examples": [
+        "ONE DAY TO RULE THEM ALL.",
+        "THE DAY IT HAPPENED."
+      ],
+      "summary_examples": [
+        "7 月 24 日一天花掉了本月 58% 的钱，其余 30 天加起来都没它多，那天到底发生了什么。"
+      ],
+      "do_not_say": [
+        "失控",
+        "报复性",
+        "疯了"
+      ],
+      "illustration_prompt": "a cat in front of a giant slot machine with one glowing calendar date, retro dithered print style"
+    },
+    {
+      "code": "HYM",
+      "name": "薅羊毛大师",
+      "emoji": "🐑",
+      "group": "special",
+      "override": true,
+      "rarity": "稀有",
+      "trigger": [
+        {
+          "metric": "discount_txn_ratio",
+          "op": ">=",
+          "value": 0.2
+        },
+        {
+          "metric": "txn_count",
+          "op": ">=",
+          "value": 20
+        }
+      ],
+      "tagline": "没有优惠的订单不配被支付。",
+      "tone": "精明、得意",
+      "slogan_examples": [
+        "NEVER PAY FULL PRICE.",
+        "COUPON IS A SKILL."
+      ],
+      "summary_examples": [
+        "23% 的交易用了立减金、红包或优惠券，本月你和平台的每一次交手都赢了一点点。"
+      ],
+      "do_not_say": [
+        "占便宜",
+        "小气",
+        "贪"
+      ],
+      "illustration_prompt": "a cat in a sheep costume holding a stack of coupons, sly smile, retro dithered print style"
+    },
+    {
+      "code": "RQWL",
+      "name": "人情往来大师",
+      "emoji": "🧧",
+      "group": "special",
+      "override": true,
+      "rarity": "稀有",
+      "trigger": [
+        {
+          "metric": "transfer_count",
+          "op": ">=",
+          "value": 10
+        }
+      ],
+      "tagline": "钱是流动的，人情也是。",
+      "tone": "长辈式温情、略调侃",
+      "slogan_examples": [
+        "FRIENDS FIRST. BILLS LATER.",
+        "SOCIAL CAPITAL PAID."
+      ],
+      "summary_examples": [
+        "本月 14 笔转账和红包（不计入消费总额），AA 制、代付、随礼，你是朋友圈里的结算中心。"
+      ],
+      "do_not_say": [
+        "冤大头",
+        "被薅",
+        "借钱不还"
+      ],
+      "illustration_prompt": "a cat handing out red envelopes to a circle of cat friends, retro dithered print style"
+    },
+    {
+      "code": "ZYX",
+      "name": "专一型",
+      "emoji": "❤️",
+      "group": "special",
+      "override": true,
+      "rarity": "稀有",
+      "trigger": [
+        {
+          "metric": "top_merchant_count_share",
+          "op": ">=",
+          "value": 0.5
+        },
+        {
+          "metric": "txn_count",
+          "op": ">=",
+          "value": 20
+        }
+      ],
+      "tagline": "认准一家，绝不换。",
+      "tone": "深情、告白式",
+      "slogan_examples": [
+        "ONE STORE. ONE HEART.",
+        "LOYALTY LEVEL: MAX."
+      ],
+      "summary_examples": [
+        "91 笔里有 42 笔都给了同一家，46% 的忠诚度，如果它有会员等级，你已经是至尊了。"
+      ],
+      "do_not_say": [
+        "单调",
+        "没得选",
+        "傻"
+      ],
+      "illustration_prompt": "a cat hugging a storefront sign with hearts floating, retro dithered print style"
+    },
+    {
+      "code": "LBX",
+      "name": "六边形消费者",
+      "emoji": "🐙",
+      "group": "fallback",
+      "rarity": "少见",
+      "trigger": [
+        {
+          "metric": "rule_hits",
+          "op": "==",
+          "value": 0
+        },
+        {
+          "metric": "top_category_share",
+          "op": "<",
+          "value": 0.3
+        }
+      ],
+      "tagline": "什么都花一点，什么都不上头。",
+      "tone": "平和、总结",
+      "slogan_examples": [
+        "BALANCED. MOSTLY.",
+        "A LITTLE OF EVERYTHING."
+      ],
+      "summary_examples": [
+        "十个类别里没有一个超过 30%，餐饮 22%、购物 19%、交通 15%，你是那种什么都点一份的人。"
+      ],
+      "do_not_say": [
+        "平庸",
+        "没特点",
+        "无聊"
+      ],
+      "illustration_prompt": "an octopus-like cat juggling a coffee, a bag, a metro card and a controller, retro dithered print style"
+    },
+    {
+      "code": "SMR",
+      "name": "神秘人",
+      "emoji": "🕵️",
+      "group": "fallback",
+      "rarity": "传说",
+      "trigger": [
+        {
+          "metric": "data_level",
+          "op": "==",
+          "value": "不足"
+        }
+      ],
+      "tagline": "账单太薄，看不透你。",
+      "tone": "好奇、邀请",
+      "slogan_examples": [
+        "NOT ENOUGH DATA. YET.",
+        "COME BACK WITH MORE."
+      ],
+      "summary_examples": [
+        "这份账单只有 4 笔有效交易，判断人格需要至少 10 笔、跨 3 个类别。换一份月账单再来一次？"
+      ],
+      "do_not_say": [
+        "没钱",
+        "不消费",
+        "可疑"
+      ],
+      "illustration_prompt": "a cat in a trench coat and sunglasses holding a magnifying glass, retro dithered print style"
+    }
+  ],
+  "modifier_tags": [
+    {
+      "tag": "🎉 周末爆发",
+      "vip_only": true,
+      "trigger": [
+        {
+          "metric": "weekend_share",
+          "op": ">=",
+          "value": 0.45
+        }
+      ]
+    },
+    {
+      "tag": "📅 月初豪爽",
+      "vip_only": true,
+      "trigger": [
+        {
+          "metric": "front_loading",
+          "op": ">=",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "tag": "🌆 下班放纵",
+      "vip_only": true,
+      "trigger": [
+        {
+          "metric": "after_work_share",
+          "op": ">=",
+          "value": 0.4
+        }
+      ]
+    },
+    {
+      "tag": "⚡ 冲动派",
+      "vip_only": true,
+      "trigger": [
+        {
+          "metric": "impulse_share",
+          "op": ">=",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "tag": "🍢 夜宵党",
+      "vip_only": true,
+      "trigger": [
+        {
+          "metric": "late_meal_ratio",
+          "op": ">=",
+          "value": 0.3
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "eat",
+      "name": "吃",
+      "emoji": "🍜",
+      "metric": "food_share",
+      "anchors": [
+        0,
+        0.35,
+        0.6
+      ],
+      "desc": "餐饮 (C1+C2+C4) 金额占比"
+    },
+    {
+      "id": "delivery",
+      "name": "外卖化",
+      "emoji": "🛵",
+      "metric": "delivery_ratio",
+      "anchors": [
+        0,
+        0.6,
+        1.0
+      ],
+      "desc": "外卖 / (外卖+堂食+生鲜)"
+    },
+    {
+      "id": "drink",
+      "name": "饮品",
+      "emoji": "🧋",
+      "metric": "beverage_per_week",
+      "anchors": [
+        0,
+        3,
+        6
+      ],
+      "desc": "咖啡奶茶每周杯数"
+    },
+    {
+      "id": "shopping",
+      "name": "购物",
+      "emoji": "🛍️",
+      "metric": "shopping_share",
+      "anchors": [
+        0,
+        0.4,
+        0.7
+      ],
+      "desc": "网购 + 美妆服饰金额占比"
+    },
+    {
+      "id": "online",
+      "name": "线上化",
+      "emoji": "📦",
+      "metric": "online_share",
+      "anchors": [
+        0,
+        0.6,
+        0.95
+      ],
+      "desc": "线上支付金额占比"
+    },
+    {
+      "id": "fun",
+      "name": "娱乐",
+      "emoji": "🎮",
+      "metric": "C8_share",
+      "anchors": [
+        0,
+        0.3,
+        0.6
+      ],
+      "desc": "娱乐氪金金额占比"
+    },
+    {
+      "id": "commute",
+      "name": "在路上",
+      "emoji": "🚇",
+      "metric": "commute_count_ratio",
+      "anchors": [
+        0,
+        0.35,
+        0.6
+      ],
+      "desc": "交通笔数占比"
+    },
+    {
+      "id": "practical",
+      "name": "务实",
+      "emoji": "🐿️",
+      "metric": "necessity_share",
+      "anchors": [
+        0,
+        0.6,
+        0.9
+      ],
+      "desc": "必需消费金额占比"
+    },
+    {
+      "id": "lavish",
+      "name": "阔绰",
+      "emoji": "👑",
+      "metric": "big_ticket_share",
+      "anchors": [
+        0,
+        0.5,
+        0.9
+      ],
+      "desc": "单笔 ≥ ¥200 金额占比"
+    },
+    {
+      "id": "petty",
+      "name": "碎花",
+      "emoji": "💸",
+      "metric": "petty_index",
+      "anchors": [
+        0,
+        0.5,
+        0.85
+      ],
+      "desc": "小额笔数占比 × min(1, 日均笔数/4)"
+    },
+    {
+      "id": "night",
+      "name": "夜行",
+      "emoji": "🌙",
+      "metric": "late_night_ratio",
+      "anchors": [
+        0,
+        0.35,
+        0.6
+      ],
+      "desc": "22:00–05:59 笔数占比"
+    },
+    {
+      "id": "impulse",
+      "name": "冲动",
+      "emoji": "⚡",
+      "metric": "impulse_share",
+      "anchors": [
+        0,
+        0.3,
+        0.6
+      ],
+      "desc": "冲动指数 ≥ 0.7 的金额占比（VIP，M3 输出）",
+      "vip_only": true
+    }
+  ]
+}

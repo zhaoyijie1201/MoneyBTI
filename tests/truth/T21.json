@@ -1,0 +1,372 @@
+{
+ "id": "T21",
+ "expected": {
+  "group": "正常",
+  "primary": [
+   "MHZT"
+  ],
+  "note": "宠物 9 笔跨 4 周（食品 / 医疗 / 洗护 / 用品），其余日常"
+ },
+ "report": {
+  "raw": 74,
+  "valid": 74,
+  "source": "alipay",
+  "period_from_header": true,
+  "period_start": "2026-08-01",
+  "period_end": "2026-08-31",
+  "period_days": 31
+ },
+ "metrics": {
+  "total": 2640.0,
+  "txn_count": 74,
+  "txn_per_day": 2.39,
+  "active_days": 26,
+  "period_days": 31,
+  "period_start": "2026-08-01",
+  "period_end": "2026-08-31",
+  "category_share": {
+   "C11": 0.341,
+   "C1": 0.17,
+   "C2": 0.152,
+   "C5": 0.114,
+   "C3": 0.083,
+   "C9": 0.076,
+   "C7": 0.034,
+   "C4": 0.03
+  },
+  "category_amount": {
+   "C11": 900.0,
+   "C1": 450.0,
+   "C2": 400.0,
+   "C5": 300.0,
+   "C3": 220.0,
+   "C9": 200.0,
+   "C7": 90.0,
+   "C4": 80.0
+  },
+  "category_count": {
+   "C11": 9,
+   "C3": 8,
+   "C7": 22,
+   "C9": 4,
+   "C1": 12,
+   "C5": 6,
+   "C2": 8,
+   "C4": 5
+  },
+  "unclassified_ratio": 0.0,
+  "unclassified_amount": 0.0,
+  "top_category": "C11",
+  "top_category_share": 0.341,
+  "food_share": 0.352,
+  "delivery_ratio": 0.421,
+  "small_txn_ratio": 0.432,
+  "median_amount": 26.97,
+  "big_ticket_share": 0.092,
+  "online_share": 0.377,
+  "shopping_share": 0.114,
+  "C4_share": 0.03,
+  "C8_share": 0,
+  "late_night_ratio": 0.014,
+  "beverage_per_week": 1.13,
+  "commute_count_ratio": 0.297,
+  "necessity_share": 0.193,
+  "weekend_share": 0.221,
+  "front_loading": 0.369,
+  "C2_share": 0.152,
+  "C3_share": 0.083,
+  "C6_share": 0,
+  "C9_share": 0.076,
+  "C10_share": 0,
+  "distinct_C2_merchants": 6,
+  "game_share": 0.0,
+  "travel_share": 0.0,
+  "subscription_brands": 0,
+  "active_days_ratio": 0.839,
+  "max_day_share": 0.151,
+  "max_day": "2026-08-25",
+  "max_day_txn_count": 5,
+  "discount_txn_ratio": 0.0,
+  "transfer_count": 0,
+  "top_merchant_count_share": 0.095,
+  "after_work_share": 0.318,
+  "top_merchants": [
+   [
+    "苏州轨道交通运营有限公司",
+    7
+   ],
+   [
+    "淘宝闪购",
+    6
+   ],
+   [
+    "高德打车",
+    6
+   ],
+   [
+    "京东",
+    5
+   ],
+   [
+    "滴滴出行",
+    5
+   ]
+  ],
+  "outliers": [],
+  "ambiguous_count": 0,
+  "ambiguous_amount_share": 0.0,
+  "ambiguous_rows": [],
+  "masked_count": 0,
+  "data_level": "充足",
+  "petty_index": 0.258,
+  "fixed_amount": 0,
+  "nonfixed_amount": 2640.0,
+  "weeks_total": 5,
+  "delivery_cnt": 12,
+  "delivery_food_share": 0.391,
+  "weeks_C1": 4,
+  "delivery_meal_slots": 2,
+  "delivery_vs_grocery": 1.5,
+  "tea_cnt": 5,
+  "weeks_C4": 3,
+  "per_week_C4": 1.0,
+  "tea_max_repeat": 2,
+  "snack_cnt": 0,
+  "tea_vs_snack": 5.0,
+  "dinein_cnt": 8,
+  "c2_top_merchant_share": 0.25,
+  "dinein_experience_share": 0.481,
+  "online_shop_cnt": 9,
+  "weeks_online_shop": 4,
+  "online_shop_nonfixed_share": 0.207,
+  "online_product_categories": 3,
+  "online_distinct_merchants": 4,
+  "grocery_cnt": 8,
+  "weeks_grocery": 3,
+  "grocery_food_share": 0.191,
+  "grocery_categories": 2,
+  "grocery_vs_delivery": 0.67,
+  "beauty_cnt": 0,
+  "weeks_C6": 0,
+  "beauty_nonfixed_share": 0.0,
+  "beauty_categories": 0,
+  "beauty_service_cnt": 0,
+  "subscription_categories": 0,
+  "subscription_digital_share": 0.0,
+  "game_cnt": 0,
+  "weeks_game": 0,
+  "game_entertainment_share": 0.0,
+  "game_platform_max_repeat": 0,
+  "virtual_item_cnt": 0,
+  "travel_categories": 0,
+  "travel_nonfixed_share": 0.0,
+  "travel_chain": 0,
+  "commute_cnt": 22,
+  "weeks_C7": 4,
+  "per_week_C7": 4.4,
+  "commute_nonfixed_share": 0.034,
+  "transport_modes": 3,
+  "weekday_commute_ratio": 0.524,
+  "days_with_2plus_commute": 5,
+  "pet_cnt": 9,
+  "weeks_C11": 5,
+  "pet_categories": 3,
+  "pet_nonfixed_share": 0.341,
+  "pet_max_repeat": 3,
+  "study_cnt": 0,
+  "study_share": 0.0,
+  "study_cnt_or_top3": 0,
+  "early_cnt": 5,
+  "under30_ratio": 0.541,
+  "big_nonnecessity_share": 0.092,
+  "daily_le50_streak": 1,
+  "weeks_le350": 0,
+  "late_night_cnt": 1,
+  "max_daily_late_cnt": 1,
+  "days_with_3plus_late": 0,
+  "front10_days": 9,
+  "last10_days": 8,
+  "last10_share": 0.284,
+  "tail_vs_front": 0.77,
+  "merchant_max_daily_cnt": 2,
+  "merchant_streak_days": 1,
+  "merchant_max_cnt_ex_platform": 4,
+  "dimensions": {
+   "eat": 60,
+   "delivery": 42,
+   "drink": 23,
+   "shopping": 17,
+   "online": 38,
+   "fun": 0,
+   "commute": 51,
+   "practical": 19,
+   "lavish": 11,
+   "petty": 31,
+   "night": 3
+  },
+  "highlights_candidates": [
+   {
+    "id": "t059",
+    "kind": "largest",
+    "date": "08-25",
+    "time": "10:43",
+    "merchant": "E宠商城",
+    "amount": 243.41,
+    "category": "C11",
+    "brand": null,
+    "note": "大额"
+   },
+   {
+    "id": "t001",
+    "kind": "largest",
+    "date": "08-01",
+    "time": "10:10",
+    "merchant": "E宠商城",
+    "amount": 145.46,
+    "category": "C11",
+    "brand": null,
+    "note": "大额"
+   },
+   {
+    "id": "t038",
+    "kind": "largest",
+    "date": "08-13",
+    "time": "20:32",
+    "merchant": "爪爪宠物店",
+    "amount": 112.4,
+    "category": "C11",
+    "brand": null,
+    "note": "大额"
+   },
+   {
+    "id": "t021",
+    "kind": "busiest_day",
+    "date": "08-08",
+    "time": "13:56",
+    "merchant": "肯德基",
+    "amount": 86.51,
+    "category": "C2",
+    "brand": null,
+    "note": "当天 6 笔，合计 ¥138.50"
+   },
+   {
+    "id": "t039",
+    "kind": "latest",
+    "date": "08-13",
+    "time": "21:48",
+    "merchant": "淘宝",
+    "amount": 97.68,
+    "category": "C5",
+    "brand": null,
+    "note": "本月最晚一笔"
+   }
+  ],
+  "rule_hits": 4
+ },
+ "retrieval": {
+  "candidates": [
+   {
+    "code": "MHZT",
+    "match": 88.2,
+    "hit": true,
+    "override": false
+   },
+   {
+    "code": "TDLD",
+    "match": 63.0,
+    "hit": true,
+    "override": false
+   },
+   {
+    "code": "KDZH",
+    "match": 62.5,
+    "hit": true,
+    "override": false
+   }
+  ],
+  "hits": 4,
+  "special": null,
+  "close_call": false,
+  "modifier_tags": [],
+  "badges": [],
+  "dimensions": {
+   "eat": 60,
+   "delivery": 42,
+   "drink": 23,
+   "shopping": 17,
+   "online": 38,
+   "fun": 0,
+   "commute": 51,
+   "practical": 19,
+   "lavish": 11,
+   "petty": 31,
+   "night": 3
+  },
+  "all_matches": [
+   [
+    "MHZT",
+    88.2
+   ],
+   [
+    "TDLD",
+    63.0
+   ],
+   [
+    "KDZH",
+    62.5
+   ],
+   [
+    "WMBY",
+    61.9
+   ],
+   [
+    "TQYD",
+    56.7
+   ],
+   [
+    "SCTZ",
+    55.2
+   ],
+   [
+    "NCXM",
+    50.8
+   ],
+   [
+    "CCLJ",
+    49.3
+   ],
+   [
+    "SQDS",
+    44.5
+   ],
+   [
+    "YXDW",
+    35.2
+   ],
+   [
+    "JW",
+    30.0
+   ],
+   [
+    "HAO",
+    29.0
+   ],
+   [
+    "JZZY",
+    0.0
+   ],
+   [
+    "DYSJ",
+    0.0
+   ],
+   [
+    "KJZS",
+    0.0
+   ],
+   [
+    "DQOL",
+    0.0
+   ]
+  ]
+ }
+}

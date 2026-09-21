@@ -1,0 +1,3396 @@
+{
+  "_meta": {
+    "version": "4.0",
+    "date": "2026-09-10",
+    "description": "MoneyBTI 钱格 人格卡知识库 v4。22 张卡来自组员的《人格设计 1 / 2》：类别型 11 张用 mode=count（5 条条件满足 ≥ 3 条即命中；需历史账单的条件在单月数据上不计入分母），金额 / 时间 / 特别 / 兜底 11 张用 mode=any（任一规则组全部满足）。每条条件按分段线性打成 0–100 分（阈值 = 60 分），卡匹配度 = 条件分的加权平均（条件即维度）。special 卡 override=true 时命中即主人格；月底渡劫人 special 但不覆盖，作为并列人格。全勤 / 一日暴走 / 薅羊毛为成就徽章，不作人格。signature 字段是 v3 的 12 维原型，只用于评估对照 B'。",
+    "categories_note": "C11 宠物 为 v4 新增类别",
+    "rarity_levels": {
+      "常见": "≈ 30% 以上账单会命中",
+      "少见": "≈ 10–30%",
+      "稀有": "≈ 2–10%",
+      "传说": "< 2%"
+    },
+    "i18n": "字段 *_en 为英文版（名称取设计稿英文名，其余由 eval/translate_kb.py 翻译后人工抽查）；M6 / M7 按 lang 参数选用中文或英文字段。"
+  },
+  "dimensions": [
+    {
+      "id": "eat",
+      "name": "吃",
+      "emoji": "🍜",
+      "metric": "food_share",
+      "anchors": [
+        0,
+        0.35,
+        0.6
+      ],
+      "desc": "餐饮 (C1+C2+C4) 金额占比",
+      "name_en": "Food"
+    },
+    {
+      "id": "delivery",
+      "name": "外卖化",
+      "emoji": "🛵",
+      "metric": "delivery_ratio",
+      "anchors": [
+        0,
+        0.6,
+        1.0
+      ],
+      "desc": "外卖 / (外卖+堂食+生鲜)",
+      "name_en": "Delivery"
+    },
+    {
+      "id": "drink",
+      "name": "饮品",
+      "emoji": "🧋",
+      "metric": "beverage_per_week",
+      "anchors": [
+        0,
+        3,
+        6
+      ],
+      "desc": "咖啡奶茶每周杯数",
+      "name_en": "Drinks"
+    },
+    {
+      "id": "shopping",
+      "name": "购物",
+      "emoji": "🛍️",
+      "metric": "shopping_share",
+      "anchors": [
+        0,
+        0.4,
+        0.7
+      ],
+      "desc": "网购 + 美妆服饰金额占比",
+      "name_en": "Shopping"
+    },
+    {
+      "id": "online",
+      "name": "线上化",
+      "emoji": "📦",
+      "metric": "online_share",
+      "anchors": [
+        0,
+        0.6,
+        0.95
+      ],
+      "desc": "线上支付金额占比",
+      "name_en": "Online"
+    },
+    {
+      "id": "fun",
+      "name": "娱乐",
+      "emoji": "🎮",
+      "metric": "C8_share",
+      "anchors": [
+        0,
+        0.3,
+        0.6
+      ],
+      "desc": "娱乐氪金金额占比",
+      "name_en": "Fun"
+    },
+    {
+      "id": "commute",
+      "name": "在路上",
+      "emoji": "🚇",
+      "metric": "commute_count_ratio",
+      "anchors": [
+        0,
+        0.35,
+        0.6
+      ],
+      "desc": "交通笔数占比",
+      "name_en": "On the move"
+    },
+    {
+      "id": "practical",
+      "name": "务实",
+      "emoji": "🐿️",
+      "metric": "necessity_share",
+      "anchors": [
+        0,
+        0.6,
+        0.9
+      ],
+      "desc": "必需消费金额占比",
+      "name_en": "Essentials"
+    },
+    {
+      "id": "lavish",
+      "name": "阔绰",
+      "emoji": "👑",
+      "metric": "big_ticket_share",
+      "anchors": [
+        0,
+        0.5,
+        0.9
+      ],
+      "desc": "单笔 ≥ ¥200 金额占比",
+      "name_en": "Big-ticket"
+    },
+    {
+      "id": "petty",
+      "name": "碎花",
+      "emoji": "💸",
+      "metric": "petty_index",
+      "anchors": [
+        0,
+        0.5,
+        0.85
+      ],
+      "desc": "小额笔数占比 × min(1, 日均笔数/4)",
+      "name_en": "Petty"
+    },
+    {
+      "id": "night",
+      "name": "夜行",
+      "emoji": "🌙",
+      "metric": "late_night_ratio",
+      "anchors": [
+        0,
+        0.3,
+        0.6
+      ],
+      "desc": "21:00–04:59 笔数占比",
+      "name_en": "Night owl"
+    },
+    {
+      "id": "impulse",
+      "name": "冲动",
+      "emoji": "⚡",
+      "metric": "impulse_share",
+      "anchors": [
+        0,
+        0.3,
+        0.6
+      ],
+      "desc": "冲动指数 ≥ 0.7 的金额占比（VIP，M3 输出）",
+      "vip_only": true,
+      "name_en": "Impulse"
+    }
+  ],
+  "cards": [
+    {
+      "code": "WMBY",
+      "name": "外卖包月户",
+      "emoji": "🥡",
+      "group": "regular",
+      "axis": "类别·外卖",
+      "rarity": "常见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "freq",
+          "label": "外卖订单 ≥ 12 次",
+          "metric": "delivery_cnt",
+          "op": ">=",
+          "value": 12,
+          "weight": 2,
+          "label_en": "Delivery orders ≥ 12 times"
+        },
+        {
+          "id": "share",
+          "label": "外卖占餐饮支出 ≥ 50%",
+          "metric": "delivery_food_share",
+          "op": ">=",
+          "value": 0.5,
+          "weight": 1,
+          "label_en": "Delivery accounts for ≥ 50% of dining spend"
+        },
+        {
+          "id": "persist",
+          "label": "至少 3 周出现外卖",
+          "metric": "weeks_C1",
+          "op": ">=",
+          "value": 3,
+          "weight": 2,
+          "label_en": "Delivery appears in at least 3 weeks"
+        },
+        {
+          "id": "scenes",
+          "label": "覆盖 ≥ 2 个餐次",
+          "metric": "delivery_meal_slots",
+          "op": ">=",
+          "value": 2,
+          "weight": 1,
+          "label_en": "Covers ≥ 2 meal periods"
+        },
+        {
+          "id": "vs_grocery",
+          "label": "外卖笔数明显高于生鲜（≥ 1.5 倍）",
+          "metric": "delivery_vs_grocery",
+          "op": ">=",
+          "value": 1.5,
+          "weight": 1,
+          "label_en": "Delivery order count significantly higher than groceries (≥ 1.5x)"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "厨房可以不开火，外卖软件不能没会员。",
+      "tagline_en": "The kitchen can stay cold. Your delivery app can’t.",
+      "interpretation": "你不是不会做饭，只是觉得人生已经够忙了，没必要再为“今天吃什么”多开一个副本。对你而言，外卖软件是第二食堂，骑手是最熟悉的陌生人，从工作日午餐到凌晨夜宵，总有一单正在路上。",
+      "interpretation_en": "It’s not that you can’t cook—life is just busy enough without the “What should I eat?” side quest. Delivery apps are your second kitchen, and your rider might be the most familiar stranger in your life. From weekday lunches to midnight cravings, there’s always something on the way.",
+      "traits": [
+        "便利至上",
+        "高频点单",
+        "时间优先",
+        "选择丰富",
+        "即时满足"
+      ],
+      "core_categories": "通过外卖平台、餐饮配送平台产生的正餐、快餐、早餐、夜宵等配送型餐饮消费。",
+      "focus": "高频 + 持续 + 配送型餐饮 + 明显的外卖使用习惯",
+      "distinguish": [
+        "通过外卖平台购买奶茶时，如果能够识别具体商户属于茶饮品牌，应优先计入奶茶消费特征。"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "The kitchen can stay cold. Your delivery app can’t."
+      ],
+      "do_not_say": [
+        "购物狂",
+        "购物成瘾",
+        "剁手党",
+        "败家",
+        "乱花钱",
+        "冲动消费",
+        "管不住手",
+        "物质主义",
+        "买一堆没用的东西"
+      ],
+      "guardrails": [
+        "不根据高频网购直接判断用户存在“购物成瘾”或缺乏自制力",
+        "不把网购频繁描述为“败家”“乱花钱”",
+        "不默认用户购买的商品是不必要的或没有实际用途",
+        "不根据购物金额推断用户收入、财富或经济状况",
+        "不根据购买的商品推断用户性别、职业或社会身份",
+        "不将高频小额订单直接定义为“冲动消费”，除非存在其他明确行为数据支持",
+        "可以调侃购物车、凑单、优惠券、快递通知等典型网购场景，但保持轻松、有共鸣、不带消费羞辱"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "厨房可以不开火，外卖软件不能没会员。",
+        "你不是不会做饭，只是觉得人生已经够忙了，没必要再为“今天吃什么”多开一个副本。对你而言，外卖软件是第二食堂，骑手是最熟悉"
+      ],
+      "signature": {
+        "dims": {
+          "delivery": [
+            90,
+            3
+          ],
+          "eat": [
+            75,
+            2
+          ],
+          "shopping": [
+            20,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "name_en": "Delivery Regular",
+      "axis_en": "Category·Delivery",
+      "tone_en": "Light, relatable, non-shaming",
+      "traits_en": [
+        "Convenience First",
+        "High-Frequency Ordering",
+        "Time Priority",
+        "Variety Seeker",
+        "Instant Gratification"
+      ],
+      "core_categories_en": "Meals, fast food, breakfast, late-night snacks, and other delivery-based dining purchases made through delivery platforms or food delivery apps.",
+      "do_not_say_en": [
+        "shopaholic",
+        "shopping addiction",
+        "impulse buyer",
+        "wasteful",
+        "reckless spender",
+        "impulsive shopper",
+        "can't control spending",
+        "materialistic",
+        "buying useless stuff"
+      ],
+      "guardrails_en": [
+        "Do not assume high-frequency online shopping indicates 'shopping addiction' or lack of self-control.",
+        "Do not describe frequent online shopping as 'wasteful' or 'reckless spending'.",
+        "Do not assume purchased items are unnecessary or have no practical use.",
+        "Do not infer user income, wealth, or financial status from purchase amounts.",
+        "Do not infer user gender, occupation, or social status from purchased items.",
+        "Do not label high-frequency small orders as 'impulsive shopping' unless supported by other clear behavioral data.",
+        "It's okay to playfully reference typical online shopping scenarios like cart, bundling, coupons, and delivery notifications, but keep it light, relatable, and non-shaming."
+      ],
+      "distinguish_en": [
+        "When purchasing milk tea via delivery platforms, if the specific merchant can be identified as a tea brand, prioritize counting it under milk tea consumption traits."
+      ],
+      "focus_en": "High frequency + consistency + delivery-based dining + clear delivery usage habits"
+    },
+    {
+      "code": "NCXM",
+      "name": "奶茶续命体",
+      "emoji": "🥤",
+      "group": "regular",
+      "axis": "类别·饮品",
+      "rarity": "常见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "freq",
+          "label": "现制茶饮 ≥ 8 次",
+          "metric": "tea_cnt",
+          "op": ">=",
+          "value": 8,
+          "weight": 2,
+          "label_en": "Freshly made tea drinks ≥ 8 times"
+        },
+        {
+          "id": "persist",
+          "label": "至少 3 周出现茶饮",
+          "metric": "weeks_C4",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "Tea drinks appear in at least 3 weeks"
+        },
+        {
+          "id": "per_week",
+          "label": "每周茶饮 ≥ 2 次",
+          "metric": "per_week_C4",
+          "op": ">=",
+          "value": 2,
+          "weight": 1,
+          "label_en": "Weekly tea drinks ≥ 2 times"
+        },
+        {
+          "id": "repeat",
+          "label": "同一茶饮商户复购 ≥ 3 次",
+          "metric": "tea_max_repeat",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "Repeat purchase at same tea shop ≥ 3 times"
+        },
+        {
+          "id": "vs_snack",
+          "label": "茶饮笔数明显高于零食甜品（≥ 1.5 倍）",
+          "metric": "tea_vs_snack",
+          "op": ">=",
+          "value": 1.5,
+          "weight": 1,
+          "label_en": "Tea drink orders significantly higher than snacks/desserts (≥ 1.5x)"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "生活可以偶尔有点苦，手里的奶茶必须是甜的。",
+      "tagline_en": "Life can be bitter. Your milk tea doesn’t have to be.",
+      "interpretation": "对你来说，奶茶不是一笔普通的支出，而是生活里的小型快乐补给站。你懂得用一杯喜欢的味道，给普通的一天加点仪式感：上课前来一杯、工作累了来一杯、朋友见面再来一杯。别人靠充电宝续航，你靠的是三分糖、少冰和加珍珠。",
+      "interpretation_en": "Milk tea isn’t just another expense—it’s your little happiness refill. Before class, after a long day, or when meeting friends, there’s always a good reason for a cup. Some people carry a power bank to stay charged. You? 30% sugar, less ice, extra pearls.",
+      "traits": [
+        "小额高频",
+        "快乐续杯",
+        "口味偏爱",
+        "日常仪式感",
+        "即时满足"
+      ],
+      "core_categories": "奶茶、新式茶饮、果茶、鲜奶茶等现制茶饮消费。",
+      "focus": "消费频次 > 持续性 > 重复购买 > 消费金额",
+      "distinguish": [
+        "奶茶续命体 ≠ 外卖包月户，如果通过外卖平台购买奶茶，以奶茶特征优先，遵“具体消费类别 > 消费渠道”，不因为用户喜欢叫奶茶外卖，就同时过度提高“外卖包月户”的得分。"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "Life can be bitter. Your milk tea doesn’t have to be."
+      ],
+      "do_not_say": [
+        "上瘾",
+        "成瘾",
+        "管不住嘴",
+        "戒奶茶",
+        "不健康",
+        "发胖",
+        "肥胖",
+        "浪费钱",
+        "乱花钱",
+        "没有自制力"
+      ],
+      "guardrails": [
+        "不根据奶茶消费频率判断用户存在“成瘾”",
+        "不根据茶饮账单推断用户的体重、健康状况或饮食问题",
+        "不评价用户喝奶茶“太多”“应该少喝”",
+        "不将高频小额茶饮消费描述为浪费",
+        "不默认用户购买奶茶是因为压力大、疲劳或情绪问题",
+        "不根据消费品牌推断用户收入或经济水平",
+        "可以使用“续命”“快乐 Buff”“续杯”等轻松网络表达",
+        "人格解读重点突出小额悦己、日常仪式感和高频茶饮习惯"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "生活可以偶尔有点苦，手里的奶茶必须是甜的。",
+        "对你来说，奶茶不是一笔普通的支出，而是生活里的小型快乐补给站。你懂得用一杯喜欢的味道，给普通的一天加点仪式感：上课前来一"
+      ],
+      "signature": {
+        "dims": {
+          "drink": [
+            90,
+            3
+          ],
+          "eat": [
+            60,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "name_en": "Milk Tea Lifeline",
+      "axis_en": "Category · Drinks",
+      "tone_en": "Lighthearted, relatable, no spending shame",
+      "traits_en": [
+        "Small, frequent spending",
+        "Happiness refill",
+        "Flavor preference",
+        "Daily ritual",
+        "Instant gratification"
+      ],
+      "core_categories_en": "Consumption of freshly made tea drinks: milk tea, new-style tea, fruit tea, fresh milk tea, etc.",
+      "do_not_say_en": [
+        "addicted",
+        "habit-forming",
+        "can't control yourself",
+        "quit milk tea",
+        "unhealthy",
+        "gain weight",
+        "obese",
+        "waste money",
+        "squander money",
+        "no self-discipline"
+      ],
+      "guardrails_en": [
+        "Do not judge users as 'addicted' based on milk tea purchase frequency",
+        "Do not infer users' weight, health status, or dietary issues from tea drink bills",
+        "Do not comment that users drink 'too much' milk tea or 'should drink less'",
+        "Do not describe frequent small-amount tea purchases as wasteful",
+        "Do not assume users buy milk tea due to stress, fatigue, or emotional issues",
+        "Do not infer users' income or economic level from the brands they buy",
+        "May use lighthearted internet expressions like 'life-saving', 'happiness buff', 'refill'",
+        "Personality interpretation should highlight small self-indulgence, daily rituals, and frequent tea-drinking habits"
+      ],
+      "distinguish_en": [
+        "Milk Tea Lifeline ≠ Takeout Monthly Subscriber: if users buy milk tea via delivery platforms, prioritize milk tea traits. Follow 'specific consumption category > consumption channel' — do not over-score 'Takeout Monthly Subscriber' just because users order milk tea delivery."
+      ],
+      "focus_en": "Purchase frequency > Consistency > Repeat purchases > Spending amount"
+    },
+    {
+      "code": "TDLD",
+      "name": "探店雷达",
+      "emoji": "🍴",
+      "group": "regular",
+      "axis": "类别·堂食",
+      "rarity": "少见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "freq",
+          "label": "线下餐饮 ≥ 8 次",
+          "metric": "dinein_cnt",
+          "op": ">=",
+          "value": 8,
+          "weight": 1,
+          "label_en": "Dine-in ≥ 8 times"
+        },
+        {
+          "id": "diversity",
+          "label": "≥ 6 家不同餐饮商户",
+          "metric": "distinct_C2_merchants",
+          "op": ">=",
+          "value": 6,
+          "weight": 2,
+          "label_en": "≥ 6 different restaurants"
+        },
+        {
+          "id": "new_rate",
+          "label": "新店率 ≥ 50%（需历史账单）",
+          "metric": "new_store_rate",
+          "op": ">=",
+          "value": 0.5,
+          "weight": 1,
+          "requires_history": true,
+          "label_en": "New store rate ≥ 50% (requires history)"
+        },
+        {
+          "id": "low_repeat",
+          "label": "单一商户 ≤ 30% 的堂食笔数",
+          "metric": "c2_top_merchant_share",
+          "op": "<=",
+          "value": 0.3,
+          "weight": 1,
+          "label_en": "Single store ≤ 30% of dine-in visits"
+        },
+        {
+          "id": "experience",
+          "label": "非快餐连锁占线下餐饮 ≥ 40%",
+          "metric": "dinein_experience_share",
+          "op": ">=",
+          "value": 0.4,
+          "weight": 1,
+          "label_en": "Non-fast-food chains ≥ 40% of dine-in"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "你的美食地图没有终点，只有下一个新坐标。",
+      "tagline_en": "Same city, new table.",
+      "interpretation": "你的美食地图永远处于更新状态。比起反复光顾熟悉的老地方，你更容易被一家没吃过的新店勾起兴趣：新开的 Brunch、藏在巷子里的小馆、朋友刚推荐的餐厅，都可能成为你的下一站。对你来说，吃饭不只是解决一餐，更像是在城市里不断解锁新的坐标。好吃就加入收藏，偶尔踩雷也是体验——毕竟宝藏小店，都是一家一家试出来的。",
+      "interpretation_en": "Your food map is always getting new pins. A new café, a hidden restaurant, or a friend’s latest recommendation—you’re ready to try it. For you, eating out is more than just getting fed. It’s a tiny adventure around the city. Some become favorites, some become funny mistakes. That’s the deal—hidden gems don’t find themselves.",
+      "traits": [
+        "尝鲜优先",
+        "新店雷达",
+        "口味探索",
+        "体验导向",
+        "低重复率"
+      ],
+      "core_categories": "线下餐厅、特色餐饮、咖啡馆、Brunch、甜品店、餐酒馆等具有一定体验属性的餐饮消费。",
+      "focus": "商户多样性 + 新店率 + 持续探索行为",
+      "distinguish": [
+        "探店雷达 ≠ 外卖包月户，外卖包月户强调的是配送、高频和便利性；探店雷达强调的是线下、多商户和探索性。",
+        "探店雷达 ≠ 奶茶续命体，消费涉及多个品牌的奶茶、果茶等现制茶饮，应优先计入「奶茶续命体」的识别范围。",
+        "如果用户长期在同一家连锁咖啡店高频消费，不应该仅因为消费频繁就判断为探店；如果用户持续前往不同独立 Cafe、Brunch 店等，则可以增强「探店雷达」得分。"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "Same city, new table."
+      ],
+      "do_not_say": [
+        "贪吃",
+        "乱花钱",
+        "浪费钱",
+        "不会省钱",
+        "跟风",
+        "网红打卡",
+        "虚荣",
+        "爱炫耀",
+        "为了拍照",
+        "不会过日子"
+      ],
+      "guardrails": [
+        "不将频繁尝试新餐厅描述为“跟风消费”",
+        "不默认用户探店是为了拍照、发社交媒体或追逐网红店",
+        "不因为线下餐饮支出较高而评价用户“浪费钱”或“不会过日子”",
+        "不根据餐厅档次或消费金额推断用户收入、财富或社会地位",
+        "不根据餐饮频率推断用户体重、健康状况或饮食问题",
+        "不默认“新店率高”意味着用户喜新厌旧",
+        "可以使用“踩雷”“宝藏店”“解锁新坐标”等轻松表达",
+        "人格解读重点突出探索欲、尝鲜倾向、商户多样性和体验导向"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "你的美食地图没有终点，只有下一个新坐标。",
+        "你的美食地图永远处于更新状态。比起反复光顾熟悉的老地方，你更容易被一家没吃过的新店勾起兴趣：新开的 Brunch、藏在巷"
+      ],
+      "signature": {
+        "dims": {
+          "eat": [
+            80,
+            3
+          ],
+          "delivery": [
+            15,
+            2
+          ]
+        },
+        "gates": [
+          {
+            "metric": "distinct_C2_merchants",
+            "op": ">=",
+            "value": 6
+          }
+        ]
+      },
+      "name_en": "Restaurant Radar",
+      "axis_en": "Category · Dine-In",
+      "tone_en": "Light, relatable, no spending shame",
+      "traits_en": [
+        "First to try",
+        "New spot radar",
+        "Flavor explorer",
+        "Experience-driven",
+        "Low revisit rate"
+      ],
+      "core_categories_en": "Dine-in restaurants, specialty dining, cafés, brunch spots, dessert shops, bistro bars — any food & drink experience with a vibe.",
+      "do_not_say_en": [
+        "gluttonous",
+        "wasting money",
+        "throwing money away",
+        "can't save",
+        "trend-following",
+        "Instagram trap",
+        "vain",
+        "show-off",
+        "just for the photo",
+        "can't manage life"
+      ],
+      "guardrails_en": [
+        "Don't label frequent new restaurant visits as 'trend-following'",
+        "Don't assume users dine out just for photos, social media, or hype spots",
+        "Don't judge users as 'wasting money' or 'can't manage life' based on higher dine-in spending",
+        "Don't infer income, wealth, or social status from restaurant tier or spending amount",
+        "Don't infer weight, health, or eating habits from dining frequency",
+        "Don't assume a high new-store rate means users are fickle",
+        "Light expressions like 'hit or miss', 'hidden gem', 'unlock a new spot' are fine",
+        "Focus interpretation on curiosity, novelty-seeking, merchant diversity, and experience orientation"
+      ],
+      "distinguish_en": [
+        "Restaurant Radar ≠ Delivery Devotee — Delivery Devotee is about convenience, frequency, and ordering in; Restaurant Radar is about dine-in, variety, and exploration.",
+        "Restaurant Radar ≠ Boba Lifeline — if consumption involves multiple brands of milk tea, fruit tea, or other made-to-order drinks, prioritize Boba Lifeline identification.",
+        "If a user frequently visits the same chain coffee shop, don't label them as a spot-hunter just because of high frequency; if they consistently visit different independent cafés, brunch spots, etc., that strengthens the Restaurant Radar score."
+      ],
+      "focus_en": "Merchant diversity + new-store rate + sustained exploration behavior"
+    },
+    {
+      "code": "KDZH",
+      "name": "快递召唤师",
+      "emoji": "🛍️",
+      "group": "regular",
+      "axis": "类别·网购",
+      "rarity": "常见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "freq",
+          "label": "实物网购订单 ≥ 10 笔",
+          "metric": "online_shop_cnt",
+          "op": ">=",
+          "value": 10,
+          "weight": 2,
+          "label_en": "≥ 10 physical online orders"
+        },
+        {
+          "id": "persist",
+          "label": "至少 3 周有网购",
+          "metric": "weeks_online_shop",
+          "op": ">=",
+          "value": 3,
+          "weight": 2,
+          "label_en": "Online shopping in at least 3 weeks"
+        },
+        {
+          "id": "share",
+          "label": "网购占非固定消费 ≥ 25%",
+          "metric": "online_shop_nonfixed_share",
+          "op": ">=",
+          "value": 0.25,
+          "weight": 1,
+          "label_en": "Online shopping ≥ 25% of non-fixed spending"
+        },
+        {
+          "id": "categories",
+          "label": "覆盖 ≥ 3 个商品品类",
+          "metric": "online_product_categories",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "Covers ≥ 3 product categories"
+        },
+        {
+          "id": "merchants",
+          "label": "≥ 3 个不同商户 / 品牌",
+          "metric": "online_distinct_merchants",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "≥ 3 different merchants/brands"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "世界那么大，你选择让它包邮到家。",
+      "tagline_en": "The world is huge. You prefer it delivered.",
+      "interpretation": "你的购物车很少真正空过，生活里缺什么，第一反应就是上网搜一搜。日用品该补就补，喜欢的衣服先加购，偶尔刷到有意思的小玩意，也很容易顺手带回家。对你来说，网购早就不只是买东西，更像是一套熟练的生活补给系统：挑一挑、比比价、领个券，再等着包裹陆续上门。别人出门逛世界，你更擅长让世界打包好，自己送到门口。",
+      "interpretation_en": "Your shopping cart is rarely truly empty. Need something for daily life? Search it online. See an outfit you like? Add to cart. Find a random little thing that looks useful or fun? It might be coming home too. Online shopping has become your personal supply system: browse, compare, grab a deal, and wait for the packages to roll in. Some people go out to shop the world. You prefer having the world delivered to your door.",
+      "traits": [
+        "网购高频",
+        "选择丰富",
+        "好物雷达",
+        "即时消费",
+        "线上消费派"
+      ],
+      "core_categories": "综合电商、品牌线上商城、社交电商等产生的实物商品网购消费，例如服饰、家居用品、数码配件、日用品、文具、小商品等。",
+      "focus": "网购频次和持续性 > 单纯网购金额",
+      "distinguish": [],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "The world is huge. You prefer it delivered."
+      ],
+      "do_not_say": [
+        "购物狂",
+        "购物成瘾",
+        "剁手党",
+        "败家",
+        "乱花钱",
+        "冲动消费",
+        "管不住手",
+        "物质主义",
+        "买一堆没用的东西"
+      ],
+      "guardrails": [
+        "不根据高频网购直接判断用户存在“购物成瘾”或缺乏自制力",
+        "不把网购频繁描述为“败家”“乱花钱”",
+        "不默认用户购买的商品是不必要的或没有实际用途",
+        "不根据购物金额推断用户收入、财富或经济状况",
+        "不根据购买的商品推断用户性别、职业或社会身份",
+        "不将高频小额订单直接定义为“冲动消费”，除非存在其他明确行为数据支持",
+        "可以调侃购物车、凑单、优惠券、快递通知等典型网购场景，但保持轻松、有共鸣、不带消费羞辱"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "世界那么大，你选择让它包邮到家。",
+        "你的购物车很少真正空过，生活里缺什么，第一反应就是上网搜一搜。日用品该补就补，喜欢的衣服先加购，偶尔刷到有意思的小玩意，"
+      ],
+      "signature": {
+        "dims": {
+          "shopping": [
+            75,
+            3
+          ],
+          "online": [
+            80,
+            2
+          ],
+          "eat": [
+            25,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "name_en": "Parcel Summoner",
+      "axis_en": "Category: Online Shopping",
+      "tone_en": "Light, relatable, no spending shame",
+      "traits_en": [
+        "High-frequency online shopper",
+        "Loves variety",
+        "Deal spotter",
+        "Instant buyer",
+        "Digital spender"
+      ],
+      "core_categories_en": "Online purchases of physical goods from general e-commerce, brand online stores, social commerce, etc., such as clothing, home goods, digital accessories, daily necessities, stationery, small items.",
+      "do_not_say_en": [
+        "Shopaholic",
+        "Shopping addiction",
+        "Impulse buyer",
+        "Wasteful",
+        "Overspender",
+        "Impulsive spender",
+        "Can't control yourself",
+        "Materialistic",
+        "Buying useless stuff"
+      ],
+      "guardrails_en": [
+        "Don't assume high-frequency shopping equals addiction or lack of self-control",
+        "Don't describe frequent online shopping as 'wasteful' or 'overspending'",
+        "Don't assume purchased items are unnecessary or useless",
+        "Don't infer income, wealth, or financial status from spending amounts",
+        "Don't infer gender, occupation, or social identity from purchased items",
+        "Don't label small frequent orders as 'impulsive spending' without clear behavioral data",
+        "It's okay to joke about carts, bundling, coupons, delivery notifications, etc., but keep it light, relatable, and shame-free"
+      ],
+      "distinguish_en": [],
+      "focus_en": "Shopping frequency and consistency > total spending amount"
+    },
+    {
+      "code": "CCLJ",
+      "name": "菜场理财家",
+      "emoji": "🌽",
+      "group": "regular",
+      "axis": "类别·生鲜",
+      "rarity": "少见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "freq",
+          "label": "食材消费 ≥ 8 次",
+          "metric": "grocery_cnt",
+          "op": ">=",
+          "value": 8,
+          "weight": 2,
+          "label_en": "Grocery purchases ≥ 8 times"
+        },
+        {
+          "id": "persist",
+          "label": "至少 3 周采购食材",
+          "metric": "weeks_grocery",
+          "op": ">=",
+          "value": 3,
+          "weight": 2,
+          "label_en": "Bought groceries at least 3 weeks"
+        },
+        {
+          "id": "share",
+          "label": "食材占餐饮支出 ≥ 30%",
+          "metric": "grocery_food_share",
+          "op": ">=",
+          "value": 0.3,
+          "weight": 1,
+          "label_en": "Groceries account for ≥ 30% of food & drink spending"
+        },
+        {
+          "id": "categories",
+          "label": "食材覆盖 ≥ 3 类",
+          "metric": "grocery_categories",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "Groceries cover ≥ 3 categories"
+        },
+        {
+          "id": "vs_delivery",
+          "label": "食材笔数明显高于外卖（≥ 1.5 倍）",
+          "metric": "grocery_vs_delivery",
+          "op": ">=",
+          "value": 1.5,
+          "weight": 1,
+          "label_en": "Grocery trips clearly outnumber takeout orders (≥ 1.5x)"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "不是舍不得花，是每一块钱都要花得明白。",
+      "tagline_en": "Not cheap. Just making every dollar count.",
+      "interpretation": "你的账单里藏着最真实的人间烟火：今天买菜，明天补水果，路过超市还不忘看看鸡蛋有没有打折。比起把三餐交给外卖，你更喜欢自己掌握生活的节奏。你知道什么值得囤货、什么现买更新鲜，也清楚什么值得买、怎么买更划算。对你来说，把日子过好不一定需要大手笔，会买、会挑、会安排，本身就是一种生活能力。",
+      "interpretation_en": "Your spending is full of everyday life: veggies today, fruit tomorrow, and maybe eggs if they’re on sale. Instead of leaving every meal to a delivery app, you like having a little more control over your daily routine. You know what’s worth stocking up on, what’s better fresh, and how to get the best value for your money. For you, living well doesn’t have to cost a lot—knowing what to buy, how to choose, and how to plan is a skill of its own.",
+      "traits": [
+        "精打细算",
+        "烟火气十足",
+        "计划消费",
+        "性价比导向",
+        "生活掌控感"
+      ],
+      "core_categories": "菜市场 / 生鲜超市 / 社区生鲜 / 水果店 / 肉禽蛋奶 / 粮油调味 / 线上生鲜平台等家庭食材类消费。",
+      "focus": "购买频次 + 持续性 > 单次消费金额",
+      "distinguish": [
+        "菜场理财家 ≠ 外卖包月户",
+        "高频购买食材、外卖频率较低 → 「菜场理财家」特征更强高频点外卖、食材采购较少 → 「外卖包月户」特征更强",
+        "两者不必完全互斥。如果用户工作日经常点外卖、周末又规律买菜，可以分别计算钱格匹配度。",
+        "菜场理财家 ≠ 快递召唤师",
+        "即使通过线上平台购买蔬菜、水果、肉类、米面粮油等，也应该优先识别为食材消费，而不是普通网购"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "Not cheap. Just making every dollar count."
+      ],
+      "do_not_say": [
+        "抠门",
+        "小气",
+        "穷",
+        "买不起",
+        "省钱精",
+        "爱占便宜",
+        "斤斤计较",
+        "家庭主妇",
+        "家庭煮夫",
+        "过度节省"
+      ],
+      "guardrails": [
+        "不将关注价格、折扣和性价比描述为“抠门”或“小气”",
+        "不根据食材采购行为推断用户收入较低、经济困难或消费能力有限",
+        "不根据买菜频率推断用户的性别、婚姻状态或家庭角色",
+        "不默认高频购买食材意味着用户本人每天做饭",
+        "不将购买促销、折扣商品描述为“贪便宜”",
+        "不因为用户外卖消费较少，就评价其生活方式“更健康”或“更自律”",
+        "可以轻松调侃买菜、看价格、挑食材、囤货等场景，但应突出会规划、懂生活和消费有掌控感"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "不是舍不得花，是每一块钱都要花得明白。",
+        "你的账单里藏着最真实的人间烟火：今天买菜，明天补水果，路过超市还不忘看看鸡蛋有没有打折。比起把三餐交给外卖，你更喜欢自己"
+      ],
+      "signature": {
+        "dims": {
+          "delivery": [
+            10,
+            3
+          ],
+          "practical": [
+            80,
+            2
+          ],
+          "eat": [
+            20,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "C3_share",
+            "op": ">=",
+            "value": 0.25
+          }
+        ]
+      },
+      "name_en": "Market Money Manager",
+      "axis_en": "Category · Fresh Food",
+      "tone_en": "Lighthearted, relatable, no spending shame",
+      "traits_en": [
+        "Thrifty",
+        "Down-to-earth",
+        "Planned spending",
+        "Value-oriented",
+        "In control of daily life"
+      ],
+      "core_categories_en": "Wet markets / fresh supermarkets / community grocery stores / fruit shops / meat, poultry, eggs & dairy / grains, oils & condiments / online fresh food platforms — any household grocery spending.",
+      "do_not_say_en": [
+        "stingy",
+        "cheap",
+        "poor",
+        "can't afford it",
+        "penny-pincher",
+        "always looking for a deal",
+        "nickel-and-diming",
+        "housewife",
+        "househusband",
+        "overly frugal"
+      ],
+      "guardrails_en": [
+        "Don't describe price-checking, discounts, or value-seeking as 'stingy' or 'cheap'",
+        "Don't infer low income, financial hardship, or limited spending power from grocery buying behavior",
+        "Don't infer gender, marital status, or family role from grocery shopping frequency",
+        "Don't assume frequent grocery buyers cook every day themselves",
+        "Don't describe buying discounted or promotional items as 'being greedy for a bargain'",
+        "Don't judge a lifestyle as 'healthier' or 'more disciplined' just because takeout spending is low",
+        "Feel free to playfully reference scenes like grocery shopping, price-checking, picking produce, or stocking up — but highlight planning skills, life savvy, and a sense of control over spending"
+      ],
+      "distinguish_en": [
+        "Market Money Manager ≠ Takeout Monthly Pass Holder",
+        "Frequent grocery buying, low takeout frequency → stronger 'Market Money Manager' traits. Frequent takeout, little grocery buying → stronger 'Takeout Monthly Pass Holder' traits.",
+        "The two aren't mutually exclusive. If a user orders takeout often on weekdays but regularly buys groceries on weekends, calculate Money Personality match separately.",
+        "Market Money Manager ≠ Delivery Summoner",
+        "Even if groceries (vegetables, fruit, meat, rice, oil, etc.) are bought through online platforms, they should still be identified as grocery spending, not general online shopping."
+      ],
+      "focus_en": "Purchase frequency + consistency > single transaction amount"
+    },
+    {
+      "code": "JZZY",
+      "name": "精致主义者",
+      "emoji": "💄",
+      "group": "regular",
+      "axis": "类别·美妆服饰",
+      "rarity": "常见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "freq",
+          "label": "品质 / 形象类消费 ≥ 6 次",
+          "metric": "beauty_cnt",
+          "op": ">=",
+          "value": 6,
+          "weight": 1,
+          "label_en": "Quality/image spending ≥ 6 times"
+        },
+        {
+          "id": "share",
+          "label": "占非固定支出 ≥ 20%",
+          "metric": "beauty_nonfixed_share",
+          "op": ">=",
+          "value": 0.2,
+          "weight": 2,
+          "label_en": "≥ 20% of non-fixed expenses"
+        },
+        {
+          "id": "categories",
+          "label": "覆盖 ≥ 3 个品质类别",
+          "metric": "beauty_categories",
+          "op": ">=",
+          "value": 3,
+          "weight": 2,
+          "label_en": "Covers ≥ 3 quality categories"
+        },
+        {
+          "id": "persist",
+          "label": "至少 3 周出现",
+          "metric": "weeks_C6",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "Appears at least 3 weeks"
+        },
+        {
+          "id": "service",
+          "label": "美发 / 美甲 / 美容服务 ≥ 2 次",
+          "metric": "beauty_service_cnt",
+          "op": ">=",
+          "value": 2,
+          "weight": 1,
+          "label_en": "Hair/nail/beauty services ≥ 2 times"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "钱可以少花，但生活不能将就。",
+      "tagline_en": "Spend less? Maybe. Settle for less? Never.",
+      "interpretation": "你愿意为生活里的“质感”买单。护肤、美妆、穿搭、香水，或是那些让日常变得更精致舒适的小物，都可能出现在你的账单里。你不一定追求最贵，但会在意品质、设计和体验感。对你来说，精致不是把生活堆满昂贵的东西，而是在能力范围内认真选择自己喜欢的生活方式。该省的可以省，该讲究的绝不将就。",
+      "interpretation_en": "You're willing to pay for 'texture' in life. Skincare, makeup, fashion, perfume, or those little things that make everyday life more refined and comfortable — they might all show up on your bill. You don't necessarily go for the priciest, but you care about quality, design, and experience. For you, being refined isn't about filling life with expensive stuff — it's about thoughtfully choosing the lifestyle you love within your means. You can save where it counts, but you never settle when it matters.",
+      "traits": [
+        "品质导向",
+        "注重细节",
+        "悦己消费",
+        "审美在线",
+        "体验优先"
+      ],
+      "core_categories": "护肤 / 美妆 / 香水香氛 / 服饰穿搭 / 饰品配件 / 美发 / 美甲 / 美容护理 / 精品生活用品 / 设计感家居等具有明显个人形象、审美或品质提升属性的消费。",
+      "focus": "消费类别丰富度 + 持续性 + 品质生活消费占比 > 单件商品价格",
+      "distinguish": [
+        "精致主义者 ≠ 快递召唤师",
+        "「快递召唤师」重点是高频线上实物购物行为；",
+        "「精致主义者」重点是购买的商品/服务类型及品质生活倾向。",
+        "一个月网购 20 笔，包含日用品、文具、数码配件等 → 快递召唤师特征更强持续购买护肤、香氛、服饰，并产生美发、美甲等消费 → 精致主义者特征更强",
+        "如果用户在线购买护肤品，可以同时保留“线上购物”和“品质消费”两个特征，再通过最终得分判断主钱格。",
+        "精致主义者 ≠ 菜场理财家",
+        "即使用户经常购买进口食材、有机蔬果或精品超市商品，只要消费对象本质上仍属于家庭食材，应优先计入「菜场理财家」。"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "Spend less? Maybe. Settle for less? Never."
+      ],
+      "do_not_say": [
+        "虚荣",
+        "爱攀比",
+        "物质",
+        "拜金",
+        "败家",
+        "爱面子",
+        "装精致",
+        "乱花钱",
+        "奢侈",
+        "娇气",
+        "追求名牌",
+        "消费主义"
+      ],
+      "guardrails": [
+        "不将品质和个人形象消费描述为“虚荣”“拜金”或“爱攀比”",
+        "不根据品牌、商品价格或消费金额推断用户收入高、家庭条件好或社会阶层",
+        "不默认用户购买美妆、服饰、香氛等商品是为了获得他人认可",
+        "不根据美妆、美发、美甲等消费推断用户性别",
+        "不将“精致”与昂贵、奢侈品或名牌直接绑定",
+        "不因为用户品质类消费较多，就评价其存在消费主义或过度消费",
+        "可以使用“仪式感”“质感”“悦己”“讲究”等正向表达",
+        "人格解读重点突出审美选择、品质意识、细节关注和生活体验"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "钱可以少花，但生活不能将就。",
+        "你愿意为生活里的“质感”买单。护肤、美妆、穿搭、香水，或是那些让日常变得更精致舒适的小物，都可能出现在你的账单里。你不一"
+      ],
+      "signature": {
+        "dims": {
+          "shopping": [
+            80,
+            2
+          ],
+          "online": [
+            70,
+            1
+          ],
+          "lavish": [
+            40,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "C6_share",
+            "op": ">=",
+            "value": 0.3
+          }
+        ]
+      },
+      "name_en": "Refined Living Curator",
+      "axis_en": "Category: Beauty & Fashion",
+      "tone_en": "Light, relatable, no spending shame",
+      "traits_en": [
+        "Quality-driven",
+        "Detail-oriented",
+        "Self-care spender",
+        "Good taste",
+        "Experience-first"
+      ],
+      "core_categories_en": "Skincare / Makeup / Perfume & Fragrance / Apparel & Fashion / Accessories / Hair / Nails / Beauty treatments / Premium lifestyle items / Designer home goods — any spending that clearly boosts personal image, aesthetic, or quality of life.",
+      "do_not_say_en": [
+        "vain",
+        "competitive",
+        "materialistic",
+        "gold-digger",
+        "wasteful",
+        "face-conscious",
+        "fake fancy",
+        "reckless spender",
+        "luxury",
+        "pampered",
+        "brand-chaser",
+        "consumerist"
+      ],
+      "guardrails_en": [
+        "Don't describe quality or image spending as 'vain', 'gold-digging', or 'competitive'",
+        "Don't infer income, family background, or social class from brand, price, or spending amount",
+        "Don't assume users buy beauty, fashion, or fragrance for others' approval",
+        "Don't infer gender from beauty, hair, or nail spending",
+        "Don't equate 'refined' with expensive, luxury, or designer brands",
+        "Don't label users as consumerist or overspenders just because they spend more on quality",
+        "Use positive terms like 'ritual', 'texture', 'self-care', 'discerning'",
+        "Interpretation should highlight aesthetic choices, quality awareness, attention to detail, and life experience"
+      ],
+      "distinguish_en": [
+        "Refined Living Curator ≠ Delivery Summoner",
+        "'Delivery Summoner' focuses on high-frequency online physical goods purchases;",
+        "'Refined Living Curator' focuses on the type of goods/services bought and a quality lifestyle tendency.",
+        "20 online purchases in a month including daily essentials, stationery, digital accessories → stronger Delivery Summoner trait. Consistent purchases of skincare, fragrance, fashion, plus hair/nail spending → stronger Refined Living Curator trait.",
+        "If a user buys skincare online, both 'online shopping' and 'quality spending' traits can coexist; final score determines the dominant persona.",
+        "Refined Living Curator ≠ Grocery Investor",
+        "Even if a user frequently buys imported ingredients, organic produce, or premium supermarket items, as long as the spending is essentially on household groceries, it should be prioritized under 'Grocery Investor'."
+      ],
+      "focus_en": "Category diversity + consistency + quality lifestyle spending share > single item price"
+    },
+    {
+      "code": "DYSJ",
+      "name": "订阅收藏家",
+      "emoji": "📱",
+      "group": "regular",
+      "axis": "类别·订阅",
+      "rarity": "少见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "count",
+          "label": "≥ 5 个不同订阅服务",
+          "metric": "subscription_brands",
+          "op": ">=",
+          "value": 5,
+          "weight": 2,
+          "label_en": "≥ 5 different subscription services"
+        },
+        {
+          "id": "periodic",
+          "label": "同一商户规律扣费（需历史账单）",
+          "metric": "subscription_periodic",
+          "op": ">=",
+          "value": 1,
+          "weight": 1,
+          "requires_history": true,
+          "label_en": "Regular charges from the same merchant (requires billing history)"
+        },
+        {
+          "id": "categories",
+          "label": "订阅覆盖 ≥ 3 个类别",
+          "metric": "subscription_categories",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "Subscriptions span ≥ 3 categories"
+        },
+        {
+          "id": "streak",
+          "label": "≥ 3 项连续扣费 3 个周期（需历史账单）",
+          "metric": "subscription_streak3",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "requires_history": true,
+          "label_en": "≥ 3 consecutive charges for 3 billing cycles (requires billing history)"
+        },
+        {
+          "id": "share",
+          "label": "订阅占数字服务消费 ≥ 40%",
+          "metric": "subscription_digital_share",
+          "op": ">=",
+          "value": 0.4,
+          "weight": 1,
+          "label_en": "Subscriptions account for ≥ 40% of digital service spending"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "每笔都是小钱，每月都是固定见面。",
+      "tagline_en": "Small charges. Same faces. Every month.",
+      "interpretation": "你的快乐，往往藏在一笔笔不起眼的自动续费里。音乐要无广告，追剧要高清，云盘要扩容，常用的软件最好也解锁完整版。对你来说，会员不是摆设，而是让生活少一点限制、多一点顺手——能用 Premium 解决的事，何必委屈自己用 Basic。",
+      "interpretation_en": "Your happiness often hides in those little auto-renewals. Music without ads, shows in HD, extra cloud space, and full access to your favorite apps—you like your digital life with fewer limits. Subscriptions aren’t just extras; they make everything a little smoother. If Premium can fix it, why settle for Basic?",
+      "traits": [
+        "数字生活派",
+        "固定续费",
+        "便利导向",
+        "会员常驻",
+        "小额高频"
+      ],
+      "core_categories": "影音会员 / 音乐会员 / 云存储 / 软件订阅 / AI 工具 / 阅读会员 / 学习平台 / 健身或生活服务会员等具有周期性付费特征的订阅型消费。",
+      "focus": "活跃订阅数量 + 周期性 + 持续性 > 订阅总金额",
+      "distinguish": [
+        "订阅收藏家 ≠ 氪金战士",
+        "游戏会员、Battle Pass、月卡等可能同时具有订阅和游戏消费属性。",
+        "如果账单能够明确识别为游戏相关付费，优先增强「氪金战士」特征；普通影音、软件、云服务等周期订阅则进入「订阅收藏家」。"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "Small charges. Same faces. Every month."
+      ],
+      "do_not_say": [
+        "冤大头",
+        "忘记取消",
+        "白花钱",
+        "浪费钱",
+        "乱订阅",
+        "会员上瘾",
+        "被割韭菜",
+        "人傻钱多",
+        "不会省钱",
+        "自动扣费受害者",
+        "交智商税"
+      ],
+      "guardrails": [
+        "不默认用户忘记取消订阅或不知道自己正在被扣费",
+        "不将多项会员订阅描述为“浪费钱”“被割韭菜”或“交智商税”",
+        "不默认用户实际没有使用这些订阅服务",
+        "不根据订阅数量或价格推断用户收入或经济状况",
+        "不把订阅服务的价值简单判断为“值得”或“不值得”",
+        "不因为存在大量自动续费，就推断用户缺乏财务管理能力",
+        "可以调侃 Premium、自动续费、会员数量等典型场景，但避免消费羞辱",
+        "人格解读重点突出数字生活、便利性、服务体验和持续订阅习惯"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "每笔都是小钱，每月都是固定见面。",
+        "你的快乐，往往藏在一笔笔不起眼的自动续费里。音乐要无广告，追剧要高清，云盘要扩容，常用的软件最好也解锁完整版。对你来说，"
+      ],
+      "signature": {
+        "dims": {
+          "fun": [
+            50,
+            1
+          ],
+          "online": [
+            70,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "subscription_brands",
+            "op": ">=",
+            "value": 4
+          }
+        ]
+      },
+      "name_en": "Subscription Collector",
+      "axis_en": "Category · Subscriptions",
+      "tone_en": "Lighthearted, empathetic, no spending shame",
+      "traits_en": [
+        "Digital lifestyle",
+        "Recurring payments",
+        "Convenience-oriented",
+        "Always a member",
+        "Small frequent charges"
+      ],
+      "core_categories_en": "Streaming memberships / music subscriptions / cloud storage / software subscriptions / AI tools / reading memberships / learning platforms / fitness or lifestyle service memberships—any subscription-based spending with recurring payment characteristics.",
+      "do_not_say_en": [
+        "sucker",
+        "forgot to cancel",
+        "wasting money",
+        "throwing money away",
+        "subscribing randomly",
+        "membership addict",
+        "getting ripped off",
+        "more money than sense",
+        "doesn't know how to save",
+        "victim of auto-renewal",
+        "paying the stupid tax"
+      ],
+      "guardrails_en": [
+        "Do not assume users forgot to cancel or are unaware of being charged",
+        "Do not describe multiple memberships as 'wasting money,' 'getting ripped off,' or 'paying the stupid tax'",
+        "Do not assume users don't actually use these subscriptions",
+        "Do not infer income or financial status based on number or price of subscriptions",
+        "Do not judge subscription value as simply 'worth it' or 'not worth it'",
+        "Do not infer lack of financial management skills just because of many auto-renewals",
+        "It's okay to poke fun at typical scenarios like Premium, auto-renewal, or membership count, but avoid spending shame",
+        "Personality interpretation should highlight digital lifestyle, convenience, service experience, and ongoing subscription habits"
+      ],
+      "distinguish_en": [
+        "Subscription Collector ≠ Whale Spender",
+        "Game memberships, Battle Passes, monthly cards, etc., may have both subscription and gaming spending attributes.",
+        "If the bill clearly identifies gaming-related payments, prioritize enhancing the 'Whale Spender' trait; regular subscriptions like streaming, software, or cloud services fall under 'Subscription Collector'."
+      ],
+      "focus_en": "Active subscription count + recurrence + continuity > total subscription amount"
+    },
+    {
+      "code": "KJZS",
+      "name": "氪金战士",
+      "emoji": "🎮",
+      "group": "regular",
+      "axis": "类别·游戏",
+      "rarity": "少见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "freq",
+          "label": "游戏充值 / 内购 ≥ 5 次",
+          "metric": "game_cnt",
+          "op": ">=",
+          "value": 5,
+          "weight": 2,
+          "label_en": "Game top-ups / in-app purchases ≥ 5 times"
+        },
+        {
+          "id": "persist",
+          "label": "至少 3 周出现游戏付费",
+          "metric": "weeks_game",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "Game spending appears in at least 3 weeks"
+        },
+        {
+          "id": "share",
+          "label": "游戏占娱乐类消费 ≥ 30%",
+          "metric": "game_entertainment_share",
+          "op": ">=",
+          "value": 0.3,
+          "weight": 2,
+          "label_en": "Gaming accounts for ≥ 30% of entertainment spending"
+        },
+        {
+          "id": "repeat",
+          "label": "同一游戏 / 平台 ≥ 3 笔",
+          "metric": "game_platform_max_repeat",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "≥ 3 transactions on the same game / platform"
+        },
+        {
+          "id": "virtual",
+          "label": "点券 / 皮肤 / 通行证等虚拟内容 ≥ 3 笔",
+          "metric": "virtual_item_cnt",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "label_en": "≥ 3 purchases of virtual content (e.g., points, skins, battle passes)"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "嘴上说着零氪，账单从不配合。",
+      "tagline_en": "You say “free to play.” Your bank statement says otherwise.",
+      "interpretation": "对你来说，游戏不只是消遣，也是值得认真投入的快乐主场。新皮肤上线、赛季通行证更新、限定角色登场，总有那么一刻让你心甘情愿按下“充值”。你愿意为喜欢的角色、装备和游戏体验买单，毕竟技术带来胜负，氪金带来的是另一种快乐。别人研究怎么零氪通关，你研究这一单到底充哪个档。",
+      "interpretation_en": "Gaming isn’t just a hobby—it’s where some of your fun money goes. New skin? Battle pass? Limited character? Your wallet knows the drill. You’re happy to pay for the characters, gear, and experiences you enjoy. While others go free-to-play, you’re deciding which pack to get.",
+      "traits": [
+        "游戏热爱",
+        "虚拟消费",
+        "限定敏感",
+        "体验投入",
+        "快乐充值"
+      ],
+      "core_categories": "手游充值 / PC 游戏内购 / 主机游戏数字消费 / 游戏点券 / 虚拟货币 / 皮肤 / 角色 / 装备 / Battle Pass / Season Pass / 游戏月卡等游戏相关虚拟消费。",
+      "focus": "游戏内付费频次 + 持续性 + 娱乐消费占比 > 单次充值金额",
+      "distinguish": [
+        "氪金战士 ≠ 订阅收藏家",
+        "游戏月卡、Battle Pass、游戏会员等可能具有周期性，但如果能够明确识别为游戏相关服务，优先增强「氪金战士」特征。",
+        "氪金战士 ≠ 快递召唤师",
+        "线上购买游戏相关实体商品，例如手柄、键盘、游戏机、实体游戏卡带等，本质上仍属于实物购物，不应直接视为“氪金”。"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "You say “free to play.” Your bank statement says otherwise."
+      ],
+      "do_not_say": [
+        "游戏成瘾",
+        "上瘾",
+        "网瘾",
+        "败家",
+        "乱充钱",
+        "浪费钱",
+        "人傻钱多",
+        "冲动消费",
+        "管不住手",
+        "没有自制力",
+        "沉迷游戏",
+        "不务正业",
+        "交智商税"
+      ],
+      "guardrails": [
+        "不根据游戏消费频率判断用户存在游戏成瘾、网瘾或沉迷问题",
+        "不将游戏充值描述为“败家”“乱花钱”或“交智商税”",
+        "不默认虚拟商品因为没有实体形态就“不值得花钱”",
+        "不根据充值金额推断用户收入、财富或经济状况",
+        "不根据游戏类型、角色或游戏平台推断用户性别、年龄或职业",
+        "不默认用户充值是为了炫耀、攀比或获得竞争优势",
+        "不将高频游戏消费直接定义为冲动消费或缺乏自制力",
+        "可以使用“氪金”“皮肤”“抽卡”“战令”“充值”等游戏社区常见表达",
+        "人格解读重点突出游戏兴趣、虚拟内容消费和为娱乐体验付费"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "嘴上说着零氪，账单从不配合。",
+        "对你来说，游戏不只是消遣，也是值得认真投入的快乐主场。新皮肤上线、赛季通行证更新、限定角色登场，总有那么一刻让你心甘情愿"
+      ],
+      "signature": {
+        "dims": {
+          "fun": [
+            85,
+            3
+          ],
+          "online": [
+            70,
+            1
+          ],
+          "night": [
+            55,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "game_share",
+            "op": ">=",
+            "value": 0.2
+          }
+        ]
+      },
+      "name_en": "Top-Up Warrior",
+      "axis_en": "Category · Gaming",
+      "tone_en": "Lighthearted, relatable, non-judgmental about spending",
+      "traits_en": [
+        "Loves gaming",
+        "Spends on virtual items",
+        "Sensitive to limited editions",
+        "Invests in experiences",
+        "Pays for happiness"
+      ],
+      "core_categories_en": "Mobile game top-ups / PC game in-app purchases / Console game digital spending / Game points / Virtual currency / Skins / Characters / Equipment / Battle Pass / Season Pass / Game subscription cards — any game-related virtual spending.",
+      "do_not_say_en": [
+        "Game addiction",
+        "Addicted",
+        "Internet addiction",
+        "Wasteful",
+        "Throwing money away",
+        "Wasting money",
+        "Rich but dumb",
+        "Impulse spending",
+        "Can't control yourself",
+        "No self-discipline",
+        "Obsessed with gaming",
+        "Not doing anything productive",
+        "Paying a stupidity tax"
+      ],
+      "guardrails_en": [
+        "Do not judge users as having gaming addiction, internet addiction, or obsession based on spending frequency",
+        "Do not describe game top-ups as 'wasteful', 'throwing money away', or 'paying a stupidity tax'",
+        "Do not assume virtual goods are 'not worth paying for' just because they have no physical form",
+        "Do not infer users' income, wealth, or financial status from top-up amounts",
+        "Do not infer users' gender, age, or occupation from game genre, characters, or platform",
+        "Do not assume users top up to show off, compete, or gain an advantage",
+        "Do not directly label frequent game spending as impulse spending or lack of self-control",
+        "Use common gaming community terms like 'top-up', 'skin', 'gacha', 'battle pass', 'recharge'",
+        "Focus interpretation on gaming interest, virtual content spending, and paying for entertainment experiences"
+      ],
+      "distinguish_en": [
+        "Top-Up Warrior ≠ Subscription Collector",
+        "Game subscription cards, Battle Pass, game memberships may be periodic, but if clearly identifiable as game-related services, prioritize strengthening the 'Top-Up Warrior' trait.",
+        "Top-Up Warrior ≠ Express Summoner",
+        "Buying game-related physical items online (e.g., controllers, keyboards, consoles, physical game cartridges) is essentially physical shopping and should not be directly treated as 'top-up'."
+      ],
+      "focus_en": "In-game spending frequency + consistency + entertainment spending share > single top-up amount"
+    },
+    {
+      "code": "DQOL",
+      "name": "地球online玩家",
+      "emoji": "🌍",
+      "group": "regular",
+      "axis": "类别·旅游",
+      "rarity": "少见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "episodes",
+          "label": "≥ 2 次独立旅行周期（文档为 90 天，需历史账单）",
+          "metric": "travel_episodes_90d",
+          "op": ">=",
+          "value": 2,
+          "weight": 1,
+          "requires_history": true,
+          "label_en": "≥ 2 independent travel cycles (90 days per cycle, requires historical billing)"
+        },
+        {
+          "id": "categories",
+          "label": "覆盖交通 / 住宿 / 门票 ≥ 3 类",
+          "metric": "travel_categories",
+          "op": ">=",
+          "value": 3,
+          "weight": 2,
+          "label_en": "Covers ≥ 3 categories: transport / accommodation / tickets"
+        },
+        {
+          "id": "share",
+          "label": "旅行占非固定消费 ≥ 15%",
+          "metric": "travel_nonfixed_share",
+          "op": ">=",
+          "value": 0.15,
+          "weight": 2,
+          "label_en": "Travel accounts for ≥ 15% of non-fixed spending"
+        },
+        {
+          "id": "chain",
+          "label": "长途交通 + 住宿 / 门票的消费链 ≥ 2 类",
+          "metric": "travel_chain",
+          "op": ">=",
+          "value": 2,
+          "weight": 1,
+          "label_en": "Spending chain includes ≥ 2 categories: long-distance transport + accommodation / tickets"
+        },
+        {
+          "id": "cross_region",
+          "label": "≥ 2 个异地城市（需位置信息）",
+          "metric": "travel_cross_region",
+          "op": ">=",
+          "value": 2,
+          "weight": 1,
+          "requires_history": true,
+          "label_en": "≥ 2 different cities (requires location data)"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "把钱花在路上，把世界装进生活。",
+      "tagline_en": "Spend on the journey. Collect the world.",
+      "interpretation": "对你来说，旅行不只是换个地方看看，更是给生活安上新坐标。机票、酒店、车票、门票······每一笔都是新的风景和新的故事。比起把钱花在看得见的东西上，你更愿意把预算留给远方，钱可以再赚，地图不能只看。",
+      "interpretation_en": "For you, travel isn’t just about seeing a new place—it’s about adding new coordinates to your life. Flights, hotels, train tickets, attraction passes… every expense turns into a new view and a new story. You’d rather save part of your budget for the next adventure than spend it all on things. After all, you can always earn more money—but a map isn’t meant to stay unexplored.",
+      "traits": [
+        "旅行优先",
+        "体验导向",
+        "地图拓展",
+        "出行消费",
+        "探索欲在线"
+      ],
+      "core_categories": "机票 / 高铁及长途铁路 / 长途巴士 / 酒店及民宿 / 旅行平台 / 景区门票 / 博物馆及展览门票 / 旅行当地交通 / 跨境交通 / 旅行相关活动及体验等非日常旅行型消费",
+      "focus": "旅行周期 + 多类别消费链 + 跨地区特征 > 单笔旅行金额",
+      "distinguish": [
+        "地球体验官 ≠ 通勤永动机",
+        "最大的区别是日常重复出行 vs 非日常旅行出行。普通城市交通不能仅因为频率高就增加「地球体验官」得分，需要结合异地消费、长途交通、住宿等旅行信号。",
+        "地球体验官 ≠ 探店雷达",
+        "旅行途中去不同餐厅，并不意味着这些消费全部归入「地球体验官」。",
+        "日常持续探索不同餐厅 → 探店雷达酒店 / 机票 / 景点 / 旅行体验 → 地球体验官",
+        "如果用户本身同时喜欢旅行和探店，两个钱格可以同时获得高分。"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "Spend on the journey. Collect the world."
+      ],
+      "do_not_say": [
+        "乱花钱",
+        "不会存钱",
+        "月光",
+        "败家",
+        "穷游",
+        "炫富",
+        "爱玩",
+        "不务正业",
+        "到处乱跑",
+        "旅游上瘾",
+        "享乐主义",
+        "有钱人",
+        "花钱买快乐",
+        "不顾未来"
+      ],
+      "guardrails": [
+        "不根据旅行频率推断用户收入、财富或家庭经济水平",
+        "不将旅行消费描述为“乱花钱”“不会存钱”或“不务正业”",
+        "不根据机票、酒店价格判断用户“有钱”“奢侈”或“炫富”",
+        "不默认高频旅行意味着用户逃避工作、学习或现实生活",
+        "不根据旅行地点推断用户职业、国籍、家庭背景或长期居住地",
+        "不默认旅行消费一定是休闲旅游，也可能包含探亲、学习、商务等场景",
+        "如果账单无法区分旅行目的，应使用“出行”“探索”“体验”等中性表达",
+        "可以围绕“地图、坐标、行李箱、登机牌、下一站”等元素制造轻松幽默感",
+        "人格解读重点突出跨地区出行、体验型消费和持续探索的账单特征"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "把钱花在路上，把世界装进生活。",
+        "对你来说，旅行不只是换个地方看看，更是给生活安上新坐标。机票、酒店、车票、门票······每一笔都是新的风景和新的故事。"
+      ],
+      "signature": {
+        "dims": {
+          "fun": [
+            80,
+            2
+          ],
+          "lavish": [
+            75,
+            2
+          ],
+          "petty": [
+            20,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "travel_share",
+            "op": ">=",
+            "value": 0.25
+          }
+        ]
+      },
+      "name_en": "Earth Online Player",
+      "axis_en": "Category · Travel",
+      "tone_en": "Light, relatable, no spending shame",
+      "traits_en": [
+        "Travel first",
+        "Experience-driven",
+        "Map expansion",
+        "Travel spending",
+        "Exploration mode: ON"
+      ],
+      "core_categories_en": "Flights / High-speed rail & long-distance trains / Long-distance buses / Hotels & homestays / Travel platforms / Scenic spot tickets / Museum & exhibition tickets / Local travel transport / Cross-border transport / Travel-related activities & experiences — non-daily travel spending",
+      "do_not_say_en": [
+        "waste money",
+        "can't save",
+        "living paycheck to paycheck",
+        "squander",
+        "budget travel",
+        "show off wealth",
+        "love to play",
+        "not doing serious work",
+        "running around everywhere",
+        "travel addiction",
+        "hedonism",
+        "rich person",
+        "buying happiness with money",
+        "no regard for the future"
+      ],
+      "guardrails_en": [
+        "Do not infer user income, wealth, or family economic status based on travel frequency",
+        "Do not describe travel spending as 'waste money', 'can't save', or 'not doing serious work'",
+        "Do not judge users as 'rich', 'extravagant', or 'showing off' based on flight or hotel prices",
+        "Do not assume high travel frequency means the user is avoiding work, study, or real life",
+        "Do not infer user occupation, nationality, family background, or long-term residence based on travel destinations",
+        "Do not assume travel spending is always leisure travel; it may include visiting family, studying, business, etc.",
+        "If billing cannot distinguish travel purpose, use neutral terms like 'trip', 'exploration', 'experience'",
+        "Use elements like 'map, coordinates, suitcase, boarding pass, next stop' to create light humor",
+        "Personality interpretation should highlight cross-region travel, experience-based spending, and continuous exploration in billing patterns"
+      ],
+      "distinguish_en": [
+        "Earth Online Player ≠ Commuter Machine",
+        "The key difference is daily repetitive travel vs. non-daily travel. Ordinary city transport should not increase 'Earth Online Player' score just because of high frequency; it requires travel signals like cross-city spending, long-distance transport, and accommodation.",
+        "Earth Online Player ≠ Restaurant Radar",
+        "Going to different restaurants during a trip does not mean all those expenses count toward 'Earth Online Player'.",
+        "Daily continuous exploration of different restaurants → Restaurant Radar; Hotels / flights / attractions / travel experiences → Earth Online Player",
+        "If a user enjoys both travel and restaurant exploration, both money personalities can score high simultaneously."
+      ],
+      "focus_en": "Travel cycles + multi-category spending chain + cross-region features > single trip amount"
+    },
+    {
+      "code": "TQYD",
+      "name": "通勤永动机",
+      "emoji": "🚇",
+      "group": "regular",
+      "axis": "类别·交通",
+      "rarity": "常见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "freq",
+          "label": "城市交通 ≥ 20 笔",
+          "metric": "commute_cnt",
+          "op": ">=",
+          "value": 20,
+          "weight": 2,
+          "label_en": "Urban transport ≥ 20 transactions"
+        },
+        {
+          "id": "persist",
+          "label": "每周都有交通消费（≥ 4 周）",
+          "metric": "weeks_C7",
+          "op": ">=",
+          "value": 4,
+          "weight": 2,
+          "label_en": "Transport spending every week (≥ 4 weeks)"
+        },
+        {
+          "id": "per_week",
+          "label": "每周交通 ≥ 5 次",
+          "metric": "per_week_C7",
+          "op": ">=",
+          "value": 5,
+          "weight": 1,
+          "label_en": "Weekly transport ≥ 5 trips"
+        },
+        {
+          "id": "share",
+          "label": "交通占日常可变支出 ≥ 10%",
+          "metric": "commute_nonfixed_share",
+          "op": ">=",
+          "value": 0.1,
+          "weight": 1,
+          "label_en": "Transport ≥ 10% of daily variable spending"
+        },
+        {
+          "id": "modes",
+          "label": "≥ 2 种交通方式",
+          "metric": "transport_modes",
+          "op": ">=",
+          "value": 2,
+          "weight": 1,
+          "label_en": "≥ 2 transport modes"
+        },
+        {
+          "id": "regular",
+          "label": "工作日中 ≥ 60% 有交通记录",
+          "metric": "weekday_commute_ratio",
+          "op": ">=",
+          "value": 0.6,
+          "weight": 1,
+          "label_en": "≥ 60% of workdays have transport records"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "每天都在赶路，余额也跟着刷步数。",
+      "tagline_en": "Always on the move. So is your money.",
+      "interpretation": "你的日常不是静止画面，而是一条不断刷新的路线。地铁、公交、打车、共享单车……交通费一笔不大，却总能准时出现在账单里。上课、上班、见朋友还是去吃饭，你的生活半径全靠一程又一程撑起来。别人用步数记录一天，你的账单直接记录你今天跑了多远。",
+      "interpretation_en": "Your daily life is always in motion. Metro, buses, ride-hailing, shared bikes—the charges may be small, but they never miss a day. Class, work, dinner, or meeting friends, there’s always somewhere to go. Some people count steps. Your bank statement counts trips.",
+      "traits": [
+        "高频出行",
+        "城市穿梭",
+        "交通常驻",
+        "日常刚需",
+        "移动在线"
+      ],
+      "core_categories": "地铁 / MRT / 公交 / 公共交通卡 / 出租车 / 网约车 / 共享单车 / 城市轮渡等日常城市内交通消费",
+      "focus": "高频 × 持续 × 日常规律性 > 交通消费总金额",
+      "distinguish": [
+        "通勤永动机 ≠ 地球Online玩家",
+        "日常城市内重复移动 → 通勤非日常跨地区移动 → 旅行",
+        "如果旅行期间出现 Grab、Uber、地铁等，可以结合异地位置 + 同期酒店/机票等旅行消费，降低它们对「通勤永动机」的权重。"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "Always on the move. So is your money."
+      ],
+      "do_not_say": [
+        "打工人",
+        "社畜",
+        "牛马",
+        "穷忙",
+        "奔波劳碌",
+        "命苦",
+        "没车",
+        "买不起车",
+        "通勤痛苦",
+        "浪费时间",
+        "天天挤地铁",
+        "打车烧钱",
+        "交通费刺客",
+        "没有生活"
+      ],
+      "guardrails": [
+        "不根据交通消费推断用户一定是上班族或学生",
+        "不根据公共交通消费推断用户没有车、买不起车或经济条件有限",
+        "不根据网约车频率判断用户“懒”“奢侈”或“浪费钱”",
+        "不默认高频移动意味着通勤时间长或生活压力大",
+        "不根据出行时间推断用户具体工作、学校或作息",
+        "不根据交通路线推断或生成用户的具体居住地、工作地等敏感位置信息",
+        "不评价某种交通方式比另一种“更高级”或“更节省”",
+        "可以使用“赶路 / 刷卡 / 换乘 / 下一站 / 移动 / 路线”等轻松表达",
+        "人格解读重点突出 高频、持续、规律的城市移动消费特征"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "每天都在赶路，余额也跟着刷步数。",
+        "你的日常不是静止画面，而是一条不断刷新的路线。地铁、公交、打车、共享单车……交通费一笔不大，却总能准时出现在账单里。上课"
+      ],
+      "signature": {
+        "dims": {
+          "commute": [
+            85,
+            4
+          ],
+          "petty": [
+            65,
+            1
+          ],
+          "lavish": [
+            15,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "name_en": "Perpetual Commuter",
+      "axis_en": "Category · Transport",
+      "tone_en": "Light, relatable, non-judgmental",
+      "traits_en": [
+        "Frequent traveler",
+        "City navigator",
+        "Transport regular",
+        "Daily essential",
+        "Always on the go"
+      ],
+      "core_categories_en": "Subway / MRT / Bus / Public transport card / Taxi / Ride-hailing / Bike-sharing / City ferry — daily urban transport spending",
+      "do_not_say_en": [
+        "Wage slave",
+        "Corporate drone",
+        "Workhorse",
+        "Stuck in the grind",
+        "Always rushing",
+        "Hard life",
+        "No car",
+        "Can't afford a car",
+        "Commute misery",
+        "Wasting time",
+        "Cramming the subway every day",
+        "Burning cash on taxis",
+        "Transport fee rip-off",
+        "No life"
+      ],
+      "guardrails_en": [
+        "Don't assume user is an office worker or student based on transport spending",
+        "Don't infer user has no car, can't afford one, or has limited finances from public transport use",
+        "Don't judge user as 'lazy', 'extravagant', or 'wasteful' based on ride-hailing frequency",
+        "Don't assume frequent movement means long commutes or high life stress",
+        "Don't infer user's specific job, school, or schedule from travel times",
+        "Don't infer or generate sensitive location info like home or workplace from transport routes",
+        "Don't rank one transport mode as 'better' or 'more economical' than another",
+        "Use light expressions like 'on the go / tap in / transfer / next stop / moving / route'",
+        "Focus interpretation on frequent, consistent, routine urban movement spending"
+      ],
+      "distinguish_en": [
+        "Perpetual Commuter ≠ EarthOnline Player",
+        "Daily intra-city repeat movement → commute; non-daily cross-region movement → travel",
+        "If Grab, Uber, or subway appear during travel, combine with location + hotel/flight spending to reduce their weight for 'Perpetual Commuter'"
+      ],
+      "focus_en": "Frequency × Consistency × Daily routine > Total transport spending"
+    },
+    {
+      "code": "MHZT",
+      "name": "毛孩子提款机",
+      "emoji": "🐱",
+      "group": "regular",
+      "axis": "类别·宠物",
+      "rarity": "少见",
+      "override": false,
+      "mode": "count",
+      "conditions": [
+        {
+          "id": "freq",
+          "label": "宠物相关消费 ≥ 5 笔",
+          "metric": "pet_cnt",
+          "op": ">=",
+          "value": 5,
+          "weight": 2,
+          "label_en": "Pet-related purchases ≥ 5 transactions"
+        },
+        {
+          "id": "persist",
+          "label": "至少 3 周出现宠物消费",
+          "metric": "weeks_C11",
+          "op": ">=",
+          "value": 3,
+          "weight": 2,
+          "label_en": "Pet spending appears in at least 3 weeks"
+        },
+        {
+          "id": "categories",
+          "label": "覆盖食品 / 用品 / 医疗 / 服务 ≥ 2 类",
+          "metric": "pet_categories",
+          "op": ">=",
+          "value": 2,
+          "weight": 1,
+          "label_en": "Covers ≥ 2 categories: food/supplies/medical/services"
+        },
+        {
+          "id": "share",
+          "label": "宠物占非固定支出 ≥ 10%",
+          "metric": "pet_nonfixed_share",
+          "op": ">=",
+          "value": 0.1,
+          "weight": 1,
+          "label_en": "Pet spending ≥ 10% of non-fixed expenses"
+        },
+        {
+          "id": "repeat",
+          "label": "同一宠物商户复购 ≥ 2 次",
+          "metric": "pet_max_repeat",
+          "op": ">=",
+          "value": 2,
+          "weight": 1,
+          "label_en": "Repeat purchase from same pet merchant ≥ 2 times"
+        },
+        {
+          "id": "months",
+          "label": "连续 ≥ 3 个月（需历史账单）",
+          "metric": "pet_months_streak",
+          "op": ">=",
+          "value": 3,
+          "weight": 1,
+          "requires_history": true,
+          "label_en": "Continuous ≥ 3 months (requires past bills)"
+        }
+      ],
+      "min_conditions": 3,
+      "tagline": "你负责赚钱，它负责花钱。",
+      "tagline_en": "You make the money. They spend it.",
+      "interpretation": "你的账单里，住着一个没有收入、消费却很稳定的角色。主粮定期补，零食不能断，玩具永远不嫌多······洗澡、看病也是固定项目。给自己买东西还能货比三家，轮到毛孩子，付款流程变得格外丝滑。它不懂什么叫消费降级，只知道吃好、玩好、睡好——至于买单这件事，当然还是交给你。",
+      "interpretation_en": "There’s a little someone in your budget with zero income but very consistent spending habits. Food needs restocking, treats can’t run out, there’s always room for one more toy, and grooming and vet visits are simply part of the routine. You might compare prices when shopping for yourself, but when it comes to your furry one, checkout suddenly feels effortless. They’ve never heard of “spending less”—only eating well, playing well, and sleeping well. And the bill? That’s your department.",
+      "traits": [
+        "宠爱在线",
+        "长期投入",
+        "口粮常备",
+        "有求必应",
+        "毛孩子优先"
+      ],
+      "core_categories": "宠物食品 / 猫粮狗粮 / 宠物零食 / 猫砂 / 宠物日用品 / 玩具 / 宠物洗护 / 美容 / 宠物医院 / 兽医 / 宠物保险 / 寄养 / 宠物服务等宠物相关消费",
+      "focus": "持续性 + 消费频次 + 多场景覆盖 > 单次消费金额",
+      "distinguish": [
+        "毛孩子提款机 ≠ 快递召唤师",
+        "即使宠物用品通过电商购买，只要能够识别具体商品类别，仍然优先归入宠物消费。",
+        "淘宝买猫粮 → 毛孩子提款机电商买衣服 → 快递召唤师",
+        "继续遵循“具体消费类别 > 消费渠道”的准则"
+      ],
+      "tone": "轻松、有共鸣、不带消费羞辱",
+      "slogan_examples": [
+        "You make the money. They spend it."
+      ],
+      "do_not_say": [
+        "猫奴",
+        "狗奴",
+        "宠物奴",
+        "败家",
+        "烧钱",
+        "吞金兽",
+        "碎钞机",
+        "乱花钱",
+        "养不起",
+        "过度溺爱",
+        "不理性消费",
+        "人不如宠物",
+        "宠物比人重要",
+        "对宠物比对自己好",
+        "钱都给宠物花了"
+      ],
+      "guardrails": [
+        "不根据宠物消费金额判断用户“溺爱”“败家”或消费不理性",
+        "不把宠物医疗费用描述为“烧钱”“浪费钱”或“不值得”",
+        "不根据单次高额宠物医疗支出直接判定该人格",
+        "不默认用户为了宠物而压缩自己的基本生活需求",
+        "不生成“宠物比人重要”“对宠物比对自己好”等价值判断",
+        "不根据账单擅自判断宠物具体是猫、狗、兔或其他动物；信息不足时统一使用“宠物 / 毛孩子”",
+        "不根据宠物消费推断用户的婚姻、家庭结构、独居状态或职业",
+        "不根据消费金额推断用户收入或经济能力",
+        "可以使用“毛孩子 / 主子 / 口粮 / 零食 / 玩具 / 买单 / 余额”等轻松表达",
+        "人格解读重点突出稳定的宠物消费、日常照护，以及愿意为毛孩子投入的温暖感"
+      ],
+      "illustration_prompt": "",
+      "summary_examples": [
+        "你负责赚钱，它负责花钱。",
+        "你的账单里，住着一个没有收入、消费却很稳定的角色。主粮定期补，零食不能断，玩具永远不嫌多······洗澡、看病也是固定项"
+      ],
+      "name_en": "Furry Kid ATM",
+      "axis_en": "Category · Pets",
+      "tone_en": "Lighthearted, relatable, no spending shame",
+      "traits_en": [
+        "Pampering online",
+        "Long-term commitment",
+        "Always stocked up",
+        "Yes to everything",
+        "Furry kid comes first"
+      ],
+      "core_categories_en": "Pet food / Cat & dog food / Pet treats / Cat litter / Pet daily supplies / Toys / Pet grooming / Bathing / Pet hospital / Vet / Pet insurance / Pet boarding / Pet services, and other pet-related spending",
+      "do_not_say_en": [
+        "Cat slave",
+        "Dog slave",
+        "Pet slave",
+        "Wasteful",
+        "Money burner",
+        "Money-eating beast",
+        "Cash shredder",
+        "Spending recklessly",
+        "Can't afford it",
+        "Overindulgent",
+        "Irrational spending",
+        "People worse off than pets",
+        "Pets more important than people",
+        "Treating pets better than yourself",
+        "Spending all money on pets"
+      ],
+      "guardrails_en": [
+        "Do not judge users as 'overindulgent', 'wasteful', or 'irrational' based on pet spending amount",
+        "Do not describe pet medical expenses as 'money-burning', 'wasteful', or 'not worth it'",
+        "Do not assign this persona based on a single high pet medical expense",
+        "Do not assume users cut back on basic needs for their pets",
+        "Do not generate value judgments like 'pets more important than people' or 'treating pets better than yourself'",
+        "Do not guess the specific pet type (cat, dog, rabbit, etc.) from bills; use 'pet / furry kid' when info is insufficient",
+        "Do not infer user's marital status, family structure, living alone, or occupation from pet spending",
+        "Do not infer user's income or financial ability from spending amount",
+        "May use light expressions like 'furry kid / boss / kibble / treats / toys / picking up the tab / balance'",
+        "Persona interpretation should highlight stable pet spending, daily care, and the warmth of being willing to invest in the furry kid"
+      ],
+      "distinguish_en": [
+        "Furry Kid ATM ≠ Delivery Summoner",
+        "Even if pet supplies are bought via e-commerce, as long as the specific product category is identifiable, prioritize classifying as pet spending.",
+        "Buying cat food on Taobao → Furry Kid ATM; buying clothes on e-commerce → Delivery Summoner",
+        "Continue following the rule: 'specific spending category > spending channel'"
+      ],
+      "focus_en": "Consistency + spending frequency + multi-scenario coverage > single transaction amount"
+    },
+    {
+      "code": "JW",
+      "name": "卷王",
+      "emoji": "📚",
+      "group": "regular",
+      "axis": "类别·学习",
+      "rarity": "少见",
+      "override": false,
+      "mode": "any",
+      "rule_groups": [
+        [
+          {
+            "id": "share20",
+            "label": "学习类占总消费 ≥ 20%",
+            "metric": "study_share",
+            "op": ">=",
+            "value": 0.2,
+            "weight": 2,
+            "label_en": "Learning ≥ 20% of total spend"
+          },
+          {
+            "id": "cnt_or_top3",
+            "label": "学习类 ≥ 5 笔或进入前三",
+            "metric": "study_cnt_or_top3",
+            "op": ">=",
+            "value": 1,
+            "weight": 1,
+            "label_en": "Learning ≥ 5 transactions or in top 3"
+          }
+        ],
+        [
+          {
+            "id": "share30",
+            "label": "学习类占总消费 ≥ 30%",
+            "metric": "study_share",
+            "op": ">=",
+            "value": 0.3,
+            "weight": 2,
+            "label_en": "Learning ≥ 30% of total spend"
+          },
+          {
+            "id": "n3",
+            "label": "有效交易 > 3 笔",
+            "metric": "txn_count",
+            "op": ">",
+            "value": 3,
+            "weight": 1,
+            "label_en": "More than 3 valid transactions"
+          }
+        ],
+        [
+          {
+            "id": "early",
+            "label": "05:00–08:00 消费 ≥ 15 笔",
+            "metric": "early_cnt",
+            "op": ">=",
+            "value": 15,
+            "weight": 2,
+            "label_en": "15+ transactions between 05:00–08:00"
+          },
+          {
+            "id": "study5",
+            "label": "学习类 ≥ 5 笔",
+            "metric": "study_cnt",
+            "op": ">=",
+            "value": 5,
+            "weight": 1,
+            "label_en": "Learning ≥ 5 transactions"
+          }
+        ]
+      ],
+      "tagline": "别人在消费，你在投资自己。",
+      "tagline_en": "While others spending, you are self-investing.",
+      "interpretation": "你把钱花在了未来的自己身上。你的账单看起来不像账单，更像一份正在持续更新的培养计划。课程要买，书要看，学习工具也得安排上，别人花钱给生活加点快乐，你更习惯顺手给未来的自己加点技能点。至于早上五六点就出现的消费记录，只能说有些人还在梦里，你已经开始给脑子准备早餐了。吃得饱不饱不知道，精神食粮反正是一顿没落下。",
+      "interpretation_en": "Your spending history looks less like a bill and more like an ongoing self-upgrade plan. Courses, books, study tools—you’re always finding another way to add a few points to your future skill tree. And if those expenses start showing up at five or six in the morning, well, some people are still dreaming while you’re already serving breakfast to your brain. Whether your stomach is full or not doesn’t matter,  your brain is definitely well-fed.",
+      "traits": [
+        "自我投资",
+        "知识付费",
+        "学习型消费",
+        "目标导向",
+        "精神食粮充足"
+      ],
+      "core_categories": "教育培训 / 书籍教材 / 文具及学习用品 / 在线课程 / 考试报名 / 学习软件与工具 / 知识付费 / 早间学习相关消费",
+      "focus": "",
+      "distinguish": [],
+      "tone": "轻松、调侃",
+      "slogan_examples": [
+        "While others spending, you are self-investing.",
+        "PAGE CHEWER",
+        "ALL YOU CAN READ. ALL YOU CAN EAT.",
+        "Professional Knowledge Chewer."
+      ],
+      "slogan_examples_cn": [
+        "吃的饱不饱不知道，只知到精神食粮十分丰盛。",
+        "把头往书里一埋就开始大吃特吃！",
+        "书中自有黄金糕！"
+      ],
+      "do_not_say": [
+        "书呆子",
+        "内卷",
+        "没用"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "一只戴着眼镜、埋头在一堆书里的猫，桌上亮着一盏台灯，复古网点印刷风格。",
+      "rules_text": [
+        "教育培训与学习类消费占总消费金额 ≥ 20% AND（ 每月学习/教育类交易≥ 5笔 or学习教育支出为当期前三。）",
+        "教育培训/买书与学习用品类消费≥30% AND总体有效交易大于3笔",
+        "每月在5：00-8：00时间段消费笔数≥15笔，且在所有交易中学习教育支出至少5笔（早起卷王）"
+      ],
+      "summary_examples": [
+        "别人在消费，你在投资自己。",
+        "你把钱花在了未来的自己身上。你的账单看起来不像账单，更像一份正在持续更新的培养计划。课程要买，书要看，学习工具也得安排上"
+      ],
+      "signature": {
+        "dims": {
+          "practical": [
+            80,
+            2
+          ],
+          "lavish": [
+            60,
+            1
+          ],
+          "petty": [
+            30,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "C10_share",
+            "op": ">=",
+            "value": 0.25
+          }
+        ]
+      },
+      "name_en": "Page Chewer",
+      "axis_en": "Category · Learning",
+      "tone_en": "Lighthearted, teasing",
+      "traits_en": [
+        "Self-investment",
+        "Paying for knowledge",
+        "Learning-driven spending",
+        "Goal-oriented",
+        "Well-fed on mental nourishment"
+      ],
+      "core_categories_en": "Education & training / Books & materials / Stationery & learning supplies / Online courses / Exam registration / Learning software & tools / Paying for knowledge / Morning study-related spending",
+      "do_not_say_en": [
+        "Nerd",
+        "Rat race",
+        "Useless"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    },
+    {
+      "code": "HAO",
+      "name": "壕",
+      "emoji": "👑",
+      "group": "regular",
+      "axis": "金额·大额",
+      "rarity": "稀有",
+      "override": false,
+      "mode": "any",
+      "rule_groups": [
+        [
+          {
+            "id": "median",
+            "label": "单笔中位数 ≥ ¥70",
+            "metric": "median_amount",
+            "op": ">=",
+            "value": 70,
+            "weight": 2,
+            "label_en": "Median per transaction ≥ ¥70"
+          },
+          {
+            "id": "big",
+            "label": "大额消费占比 ≥ 40%",
+            "metric": "big_ticket_share",
+            "op": ">=",
+            "value": 0.4,
+            "weight": 2,
+            "label_en": "Large transaction share ≥ 40%"
+          },
+          {
+            "id": "top",
+            "label": "最大类别 ∈ 网购 / 美妆服饰 / 堂食",
+            "metric": "top_category",
+            "op": "in",
+            "value": [
+              "C5",
+              "C6",
+              "C2"
+            ],
+            "weight": 1,
+            "label_en": "Top category ∈ Online shopping / Beauty & fashion / Dining in"
+          },
+          {
+            "id": "n10",
+            "label": "≥ 10 笔",
+            "metric": "txn_count",
+            "op": ">=",
+            "value": 10,
+            "weight": 1,
+            "label_en": "≥ 10 transactions"
+          }
+        ]
+      ],
+      "tagline": "银行卡余额里零多到数不清。",
+      "tagline_en": "JUST SWIPE.",
+      "interpretation": "你的消费单位可能和别人不太一样，你买东西大概率不看右下角。别人纠结的是“要不要买”，你考虑的是“买几个”。价格标签对你来说跟一张纸没区别。从吃饭到购物，预算参考是“我乐意”。偶尔买一次贵的不算什么，大家都有奢侈消费，但你的账单里一笔接一笔都保持着这个水准，那只能说：银行卡的颜色可以很多，但你手里只有黑色的。",
+      "interpretation_en": "Your spending works a little differently from everyone else’s. You probably don’t even look at the bottom-right corner of the price tag. While other people are asking, “Should I buy?”, you’re asking, “How many should I buy?”  To you, a price tag is basically just a tiny piece of paper. Dinner, shopping, whatever—the budget is simply: because I felt like it.  One expensive purchase? Totally normal. Everyone treats themselves sometimes. But when your entire statement keeps hitting the same price range, swipe after swipe… well. Credit cards come in many colors. Yours just happens to come in black.",
+      "traits": [
+        "高客单价",
+        "大额消费",
+        "价格钝感",
+        "品质优先",
+        "出手阔绰"
+      ],
+      "core_categories": "高客单价堂食 / 美妆服饰 / 奢侈品 / 数码产品 / 娱乐体验 / 旅行及其他持续性高客单价消费",
+      "focus": "",
+      "distinguish": [],
+      "tone": "轻松、调侃",
+      "slogan_examples": [
+        "JUST SWIPE.",
+        "PRICE IS JUST A NUMBER.",
+        "WANT IT. SWIPE IT.",
+        "ONLY BLACK CARD."
+      ],
+      "slogan_examples_cn": [
+        "钱对我来说只是个数字而已。",
+        "今天全场消费我买单。",
+        "银行卡我只用黑色的。"
+      ],
+      "do_not_say": [
+        "败家",
+        "乱花钱"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "一只戴着皇冠、坐在一堆购物袋上的猫，复古网点印刷风格。",
+      "rules_text": [
+        "同时满足以下三个条件：单笔消费金额的中位数 ≥ ¥70人民币大额消费占比 ≥ 40%最大消费类别属于网购 / 美妆服饰 / 堂食之一，且月度消费大于等于10笔。"
+      ],
+      "summary_examples": [
+        "银行卡余额里零多到数不清。",
+        "你的消费单位可能和别人不太一样，你买东西大概率不看右下角。别人纠结的是“要不要买”，你考虑的是“买几个”。价格标签对你来"
+      ],
+      "signature": {
+        "dims": {
+          "lavish": [
+            95,
+            3
+          ],
+          "petty": [
+            10,
+            2
+          ],
+          "shopping": [
+            70,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "top_category",
+            "op": "in",
+            "value": [
+              "C5",
+              "C6",
+              "C2"
+            ]
+          },
+          {
+            "metric": "median_amount",
+            "op": ">=",
+            "value": 80
+          }
+        ]
+      },
+      "name_en": "Black Card Roller",
+      "axis_en": "Amount · Big Spender",
+      "tone_en": "Light-hearted, teasing",
+      "traits_en": [
+        "High ticket items",
+        "Big spending",
+        "Price insensitive",
+        "Quality first",
+        "Generous spender"
+      ],
+      "core_categories_en": "High-ticket dining / Beauty & fashion / Luxury goods / Electronics / Entertainment experiences / Travel and other consistently high-ticket spending",
+      "do_not_say_en": [
+        "wasteful",
+        "splurging recklessly"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    },
+    {
+      "code": "SCTZ",
+      "name": "散财童子",
+      "emoji": "💸",
+      "group": "regular",
+      "axis": "金额·小额高频",
+      "rarity": "常见",
+      "override": false,
+      "mode": "any",
+      "rule_groups": [
+        [
+          {
+            "id": "per_day",
+            "label": "日均 ≥ 3 笔",
+            "metric": "txn_per_day",
+            "op": ">=",
+            "value": 3,
+            "weight": 1,
+            "label_en": "Daily ≥ 3 transactions"
+          },
+          {
+            "id": "small60",
+            "label": "小额（≤ ¥20）≥ 60%",
+            "metric": "small_txn_ratio",
+            "op": ">=",
+            "value": 0.6,
+            "weight": 2,
+            "label_en": "Small (≤ ¥20) ≥ 60%"
+          },
+          {
+            "id": "top30",
+            "label": "最大类别 < 30%",
+            "metric": "top_category_share",
+            "op": "<",
+            "value": 0.3,
+            "weight": 1,
+            "label_en": "Largest category < 30%"
+          }
+        ],
+        [
+          {
+            "id": "under30",
+            "label": "< ¥30 的笔数 ≥ 50%",
+            "metric": "under30_ratio",
+            "op": ">=",
+            "value": 0.5,
+            "weight": 2,
+            "label_en": "Transactions < ¥30 ≥ 50%"
+          },
+          {
+            "id": "per_day25",
+            "label": "且日均 ≥ 2.5 笔（校准加：区分省钱大师）",
+            "metric": "txn_per_day",
+            "op": ">=",
+            "value": 2.5,
+            "weight": 1,
+            "label_en": "And daily ≥ 2.5 transactions (calibrated: to distinguish from Penny Pincher)"
+          }
+        ]
+      ],
+      "tagline": "钱像水一样流走了！",
+      "tagline_en": "SMALL BILLS. BIG HOLE.WHERE DID IT GO?",
+      "interpretation": "你的钱不是突然消失的，而是十块、二十块、三十块一点一点从钱包里溜走的。早上买杯咖啡，中午顺手加个小菜，下午便利店转一圈，晚上再付个打车费，每一笔单独拎出来都显得无伤大雅。直到月底把它们叫到一起开会，才发现这些“小钱”原来背着你组建了一支完整的消费大军。鄙人平日无甚爱好，唯爱花点小钱——只不过花的次数稍微多了一点。",
+      "interpretation_en": "Your money doesn’t disappear in one big purchase—it slips away ten, twenty, or thirty yuan at a time. Coffee in the morning, a snack after lunch, a quick convenience-store stop, then a ride home at night. Every purchase looks harmless. It’s only when they all meet at the end of the month that you realize those “little expenses” have quietly become a BIG trouble. OH NO.",
+      "traits": [
+        "小额高频",
+        "随手支付",
+        "消费分散",
+        "积少成多",
+        "钱包漏水"
+      ],
+      "core_categories": "便利店 / 咖啡奶茶 / 小吃零食 / 公共交通 / 打车 / 日用品 / 小额网购 / 高频扫码支付等分散型小额消费",
+      "focus": "",
+      "distinguish": [],
+      "tone": "轻松、调侃",
+      "slogan_examples": [
+        "SMALL BILLS. BIG HOLE.WHERE DID IT GO?"
+      ],
+      "slogan_examples_cn": [
+        "花大钱办小事。",
+        "看着账单小发雷霆。",
+        "鄙人平日无甚爱好，唯爱花点小钱。"
+      ],
+      "do_not_say": [
+        "没有自控力",
+        "月光族",
+        "穷"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "一只走路时口袋里的硬币不断掉出来的猫，复古网点印刷风格。",
+      "rules_text": [
+        "同时满足以下三个条件：平均每天交易次数 ≥ 3 笔小额交易占全部交易笔数 ≥ 60%最大单一消费类别占总消费金额 < 30%。",
+        "低于 ¥30 的交易笔数占总交易笔数 ≥ 50%"
+      ],
+      "summary_examples": [
+        "钱像水一样流走了！",
+        "你的钱不是突然消失的，而是十块、二十块、三十块一点一点从钱包里溜走的。早上买杯咖啡，中午顺手加个小菜，下午便利店转一圈，"
+      ],
+      "signature": {
+        "dims": {
+          "petty": [
+            90,
+            3
+          ],
+          "lavish": [
+            10,
+            2
+          ],
+          "shopping": [
+            35,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "top_category_share",
+            "op": "<",
+            "value": 0.4
+          }
+        ]
+      },
+      "name_en": "Small-Bill Sprinkler",
+      "axis_en": "Amount · Small & Frequent",
+      "tone_en": "Light, teasing",
+      "traits_en": [
+        "Small & frequent",
+        "Tap-and-go",
+        "Scattered spending",
+        "Pennies add up",
+        "Leaky wallet"
+      ],
+      "core_categories_en": "Convenience stores / Coffee & milk tea / Snacks & street food / Public transit / Ride-hailing / Daily essentials / Small online purchases / High-frequency scan-to-pay — scattered small spending",
+      "do_not_say_en": [
+        "No self-control",
+        "Broke at month-end",
+        "Poor"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    },
+    {
+      "code": "SQDS",
+      "name": "省钱大师",
+      "emoji": "🐿️",
+      "group": "regular",
+      "axis": "金额·低消费",
+      "rarity": "少见",
+      "override": false,
+      "mode": "any",
+      "rule_groups": [
+        [
+          {
+            "id": "necessity",
+            "label": "必需消费 ≥ 60%",
+            "metric": "necessity_share",
+            "op": ">=",
+            "value": 0.6,
+            "weight": 2,
+            "label_en": "Essential spending ≥ 60%"
+          },
+          {
+            "id": "median",
+            "label": "中位数 ≤ ¥30",
+            "metric": "median_amount",
+            "op": "<=",
+            "value": 30,
+            "weight": 1,
+            "label_en": "Median ≤ ¥30"
+          },
+          {
+            "id": "big_nonnec",
+            "label": "大额非必需 ≤ 15%",
+            "metric": "big_nonnecessity_share",
+            "op": "<=",
+            "value": 0.15,
+            "weight": 1,
+            "label_en": "Large non-essentials ≤ 15%"
+          }
+        ],
+        [
+          {
+            "id": "daily50",
+            "label": "日消费 ≤ ¥50 连续 ≥ 3 天（剔除固定支出，每天 ≥ 2 笔）",
+            "metric": "daily_le50_streak",
+            "op": ">=",
+            "value": 3,
+            "weight": 2,
+            "label_en": "Daily spending ≤ ¥50 for ≥ 3 consecutive days (exclude fixed expenses, ≥ 2 transactions/day)"
+          }
+        ],
+        [
+          {
+            "id": "weekly350",
+            "label": "周消费 ≤ ¥350 的周数 ≥ 2（剔除固定支出，该周 ≥ 4 个消费日）",
+            "metric": "weeks_le350",
+            "op": ">=",
+            "value": 2,
+            "weight": 2,
+            "label_en": "Weeks with weekly spending ≤ ¥350 for ≥ 2 weeks (exclude fixed expenses, ≥ 4 spending days/week)"
+          }
+        ]
+      ],
+      "tagline": "理性消费，快乐加倍。",
+      "tagline_en": "SAVE SMART. LIVE LARGE.",
+      "interpretation": "你不是不花钱，只是每一笔钱最好都有一个说得过去的理由。吃饭、交通和日常用品该花就花，至于那些“好像有点想要，但其实也不是非买不可”的东西，通常很难顺利通过你的钱包审批。别人看到余额想着还能买什么，你看到余额想到的是还能留下多少。虽然暂时不知道省下来的钱要买什么，但没关系——先省了再说，包里有粮，心里不慌。",
+      "interpretation_en": "It’s not that you don’t spend—you just prefer every purchase to have a good reason. Food, transport, and daily essentials get approved without much trouble, but anything in the “I kind of want it, but do I really need it?” category faces a much tougher review. While others look at their balance and wonder what else they can buy, you wonder how much of it you can keep. You may not know what you’re saving for yet, but that’s a problem for future you. Save it right, sleep tight.",
+      "traits": [
+        "必要优先",
+        "低客单价",
+        "预算意识",
+        "克制消费",
+        "安全感储备"
+      ],
+      "core_categories": "基础餐饮 / 公共交通 / 日常生活 / 基础服饰 / 房租等必要生活支出；同时重点识别低客单价、低非必需大额消费的账单结构",
+      "focus": "",
+      "distinguish": [],
+      "tone": "佩服、鼓励、调侃",
+      "slogan_examples": [
+        "SAVE SMART. LIVE LARGE.",
+        "SAVE TODAY. RICHER TOMORROW.",
+        "SMALL STEPS. BIG MONEY.",
+        "SAVE FIRST, THEN THINK."
+      ],
+      "slogan_examples_cn": [
+        "包里有粮心里不慌。",
+        "虽然不知道省钱要买什么，但是省了再说。",
+        "存款数量与安全感成正比。"
+      ],
+      "do_not_say": [
+        "抠门",
+        "小气"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "一只猫抱着存钱罐、露出满足微笑的猫，周边设施可以稍微简约一些，符合“爱省钱”的概念，复古网点印刷风格。",
+      "rules_text": [
+        "同时满足以下三个条件：必需消费（衣食住行）占总消费金额 ≥ 60%单笔消费金额中位数 ≤ ¥30大额非必需消费占比 ≤ 15%（必需消费如房租，吃饭等不算）",
+        "日消费≤¥50，一周内连续三日达成/一个月内两周达成周消费≤¥350，刨去房租学费等大额缴费。"
+      ],
+      "summary_examples": [
+        "理性消费，快乐加倍。",
+        "你不是不花钱，只是每一笔钱最好都有一个说得过去的理由。吃饭、交通和日常用品该花就花，至于那些“好像有点想要，但其实也不是"
+      ],
+      "signature": {
+        "dims": {
+          "practical": [
+            80,
+            3
+          ],
+          "lavish": [
+            5,
+            2
+          ],
+          "petty": [
+            55,
+            1
+          ]
+        },
+        "gates": [
+          {
+            "metric": "median_amount",
+            "op": "<=",
+            "value": 25
+          }
+        ]
+      },
+      "name_en": "Savings Master",
+      "axis_en": "Spending: Low Consumption",
+      "tone_en": "Admiration, Encouragement, Playful Teasing",
+      "traits_en": [
+        "Needs First",
+        "Low Ticket Size",
+        "Budget Conscious",
+        "Restrained Spending",
+        "Safety Net Savings"
+      ],
+      "core_categories_en": "Basic meals / Public transit / Daily essentials / Basic clothing / Rent and other necessary living expenses; also spotlight bill patterns with low ticket sizes and low non-essential big spending.",
+      "do_not_say_en": [
+        "Stingy",
+        "Cheap"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    },
+    {
+      "code": "YXDW",
+      "name": "夜行动物",
+      "emoji": "🌙",
+      "group": "regular",
+      "axis": "时间·深夜",
+      "rarity": "少见",
+      "override": false,
+      "mode": "any",
+      "rule_groups": [
+        [
+          {
+            "id": "ratio",
+            "label": "21:00–05:00 笔数占比 ≥ 30%",
+            "metric": "late_night_ratio",
+            "op": ">=",
+            "value": 0.3,
+            "weight": 2,
+            "label_en": "Transactions from 21:00–05:00 account for ≥ 30%"
+          },
+          {
+            "id": "n10",
+            "label": "> 10 笔",
+            "metric": "txn_count",
+            "op": ">",
+            "value": 10,
+            "weight": 1,
+            "label_en": "More than 10 transactions"
+          }
+        ],
+        [
+          {
+            "id": "cnt15",
+            "label": "深夜笔数 ≥ 15",
+            "metric": "late_night_cnt",
+            "op": ">=",
+            "value": 15,
+            "weight": 2,
+            "label_en": "Late-night transactions ≥ 15"
+          },
+          {
+            "id": "ratio15",
+            "label": "且深夜占比 ≥ 15%（校准加）",
+            "metric": "late_night_ratio",
+            "op": ">=",
+            "value": 0.15,
+            "weight": 1,
+            "label_en": "And late-night share ≥ 15% (calibration bonus)"
+          }
+        ],
+        [
+          {
+            "id": "daily3",
+            "label": "某日深夜 ≥ 3 笔",
+            "metric": "max_daily_late_cnt",
+            "op": ">=",
+            "value": 3,
+            "weight": 2,
+            "label_en": "≥ 3 transactions on a single late night"
+          },
+          {
+            "id": "days2",
+            "label": "且这样的天数 ≥ 2（校准加）",
+            "metric": "days_with_3plus_late",
+            "op": ">=",
+            "value": 2,
+            "weight": 1,
+            "label_en": "And such days ≥ 2 (calibration bonus)"
+          }
+        ]
+      ],
+      "tagline": "凌晨花的钱不是钱，是自由。",
+      "tagline_en": "OWL’s SHOPPING TIME!",
+      "interpretation": "白天的你可能看起来十分正常，一到晚上九点以后，钱包才慢慢进入一天的黄金时段。夜宵可以点，购物软件可以逛，回家要打车，睡前刷着刷着还可能莫名其妙多出几个待收货。别人到了凌晨准备结束今天，你的消费记录却告诉我们：精彩的部分可能才刚刚开始。至于为什么半夜又下单了，不知道啊，可能只是在床上摔了一跤，手机刚好打开购物软件并完成了支付。",
+      "interpretation_en": "You may look perfectly ordinary during the day, but after 9 p.m., your wallet finally enters prime time. Midnight snacks, late rides, online shopping, convenience-store runs—while everyone else is wrapping up the day, your transaction history is just getting started. As for why another order appeared at 2 a.m.? No idea. Maybe you fell over in bed and somehow landed directly on the checkout button.",
+      "traits": [
+        "深夜活跃",
+        "昼伏夜出",
+        "夜间消费",
+        "睡前下单",
+        "凌晨自由"
+      ],
+      "core_categories": "21:00–05:00 发生的外卖 / 夜宵 / 打车 / 网购 / 便利店 / 娱乐及其他深夜消费行为",
+      "focus": "",
+      "distinguish": [],
+      "tone": "神秘、夜话口吻",
+      "slogan_examples": [
+        "OWL’s SHOPPING TIME!",
+        "OPEN 24/7. ESPECIALLY 2AM.",
+        "NIGHT OWL. NIGHT ORDER."
+      ],
+      "slogan_examples_cn": [
+        "不知道啊我就在晚上摔了一跤，然后手机自动打开购物软件下单支付了。",
+        "睡前的pdd格外好玩。",
+        "凌晨，猎杀时刻！"
+      ],
+      "do_not_say": [
+        "熬夜伤身",
+        "失眠"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "一只夜里躺在床上拿着手机正在花钱、双眼发亮的猫，窗外可以看到月亮，复古网点印刷风格。",
+      "rules_text": [
+        "发生在 21:00–05:00 的深夜交易，占全部交易笔数 ≥ 30%，且月度所有项总交易大于10笔",
+        "月度在21：00-5：00时间段的交易笔数≥15笔",
+        "日度在21：00-5：00时间段交易≥3笔"
+      ],
+      "summary_examples": [
+        "凌晨花的钱不是钱，是自由。",
+        "白天的你可能看起来十分正常，一到晚上九点以后，钱包才慢慢进入一天的黄金时段。夜宵可以点，购物软件可以逛，回家要打车，睡前"
+      ],
+      "signature": {
+        "dims": {
+          "night": [
+            90,
+            3
+          ],
+          "fun": [
+            50,
+            1
+          ],
+          "online": [
+            60,
+            1
+          ]
+        },
+        "gates": []
+      },
+      "name_en": "Night Owl",
+      "axis_en": "Time·Late Night",
+      "tone_en": "Mysterious, late-night whisper",
+      "traits_en": [
+        "Active late at night",
+        "Nocturnal",
+        "Nighttime spending",
+        "Late-night orders",
+        "Free in the early hours"
+      ],
+      "core_categories_en": "Takeout / late-night snacks / ride-hailing / online shopping / convenience stores / entertainment and other late-night spending from 21:00–05:00",
+      "do_not_say_en": [
+        "Staying up late is bad for you",
+        "Insomnia"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    },
+    {
+      "code": "YDDJ",
+      "name": "月底渡劫人",
+      "emoji": "🥀",
+      "group": "special",
+      "axis": "时间·月度节奏",
+      "rarity": "稀有",
+      "override": false,
+      "mode": "any",
+      "rule_groups": [
+        [
+          {
+            "id": "front",
+            "label": "前 10 天 ≥ 50%",
+            "metric": "front_loading",
+            "op": ">=",
+            "value": 0.5,
+            "weight": 2,
+            "label_en": "First 10 days ≥ 50%"
+          },
+          {
+            "id": "tail",
+            "label": "后 10 天 ≤ 前 10 天的 50%",
+            "metric": "tail_vs_front",
+            "op": "<=",
+            "value": 0.5,
+            "weight": 2,
+            "label_en": "Last 10 days ≤ 50% of first 10 days"
+          },
+          {
+            "id": "front_days",
+            "label": "前 10 天 ≥ 5 个消费日",
+            "metric": "front10_days",
+            "op": ">=",
+            "value": 5,
+            "weight": 1,
+            "label_en": "First 10 days ≥ 5 spending days"
+          },
+          {
+            "id": "tail_days",
+            "label": "后 10 天 ≥ 5 个消费日",
+            "metric": "last10_days",
+            "op": ">=",
+            "value": 5,
+            "weight": 1,
+            "label_en": "Last 10 days ≥ 5 spending days"
+          }
+        ]
+      ],
+      "tagline": "月初花钱靠心情，月底活着看命。",
+      "tagline_en": "STARTED WITH “SWIPE.”， ENDED WITH “I’M FINE.”",
+      "interpretation": "你的一个月像是被硬生生切成了两个经济周期。月初的你相信钱是流动的，喜欢就买、想吃就点，银行卡最大的作用就是证明“支付成功”；到了月底，消费欲望突然开始讲道理，外卖变成“家里其实还有吃的”，购物车变成“下个月再说”，连路过便利店都多了一份定力。不是月底的你突然成熟了，只是月初的你多少有点没给月底的自己留活路。好消息是：距离下个月月初，已经不远了。",
+      "interpretation_en": "Your month seems to run on two completely different economies. At the beginning, money is meant to move—see it, want it, swipe it. Your card’s main job is basically to say “Payment Successful.” Then the end of the month arrives, and suddenly you become financially enlightened. Delivery becomes “There’s food at home.” Your shopping cart becomes“Maybe next month.” Even the convenience store can no longer tempt you. It’s not that end-of-month you suddenly became responsible. Beginning-of-month you just left them very little choice. Good news: next month is almost here.",
+      "traits": [
+        "前松后紧",
+        "月初豪爽",
+        "月底收手",
+        "消费前置",
+        "周期性吃土"
+      ],
+      "core_categories": "不限制具体消费类别，主要识别同一统计周期内明显“前高后低”的消费节奏。",
+      "focus": "",
+      "distinguish": [],
+      "tone": "苦中作乐、月底生存文学、自嘲式调侃",
+      "slogan_examples": [
+        "STARTED WITH “SWIPE.”， ENDED WITH “I’M FINE.”"
+      ],
+      "slogan_examples_cn": [
+        "月底最大的消费项目：忍住",
+        "月初：JUST SWIPE. 月底：JUST SURVIVE."
+      ],
+      "do_not_say": [
+        "穷",
+        "没钱",
+        "月光族",
+        "财务状况差",
+        "入不敷出",
+        "工资花完了"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "一只猫坐在月底只剩几枚硬币的钱包旁边，面前摆着泡面和空空的购物车，手里拿着日历认真数距离下个月还有几天；旁边用小画面形成反差：月初的同一只猫戴着墨镜疯狂刷卡购物。整体保持轻松、夸张、苦中作乐的漫画风格，不表现真实贫困或经济困境。",
+      "rules_text": [
+        "同时满足以下条件：",
+        "1. 月度前 10 天消费占全月消费 ≥ 50%；",
+        "2. 月度最后 10 天消费 ≤ 前 10 天消费的 50%；",
+        "3. 前 10 天与最后 10 天均存在 ≥ 5 个有效消费日，避免因账单缺失造成误判。"
+      ],
+      "summary_examples": [
+        "月初花钱靠心情，月底活着看命。",
+        "你的一个月像是被硬生生切成了两个经济周期。月初的你相信钱是流动的，喜欢就买、想吃就点，银行卡最大的作用就是证明“支付成功"
+      ],
+      "name_en": "End-of-Month Survivor",
+      "axis_en": "Time·Monthly Rhythm",
+      "tone_en": "Finding joy in hardship, month-end survival prose, self-mocking banter",
+      "traits_en": [
+        "Loose at first, tight later",
+        "Generous at month start",
+        "Pulls back at month end",
+        "Front-loaded spending",
+        "Eats dirt on a cycle"
+      ],
+      "core_categories_en": "No specific spending category restrictions; mainly identifies a clear 'front-heavy, back-light' spending rhythm within the same billing cycle.",
+      "do_not_say_en": [
+        "poor",
+        "broke",
+        "living paycheck to paycheck",
+        "bad financial situation",
+        "can't make ends meet",
+        "salary is gone"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    },
+    {
+      "code": "SJNS",
+      "name": "社交能手",
+      "emoji": "🧧",
+      "group": "special",
+      "axis": "成就·社交",
+      "rarity": "稀有",
+      "override": true,
+      "mode": "any",
+      "rule_groups": [
+        [
+          {
+            "id": "transfers",
+            "label": "转账 / 红包 ≥ 10 笔（不计入消费）",
+            "metric": "transfer_count",
+            "op": ">=",
+            "value": 10,
+            "weight": 2,
+            "label_en": "Transfers / red packets ≥ 10 (excluded from spending)"
+          }
+        ]
+      ],
+      "tagline": "钱是流动的，人情也是。",
+      "tagline_en": "FRIENDS FIRST. BILLS LATER.",
+      "interpretation": "你的账单里不只有消费，还有一张看不见的社交关系网。今天帮朋友垫一下饭钱，明天收一笔 AA，生日发个红包，聚会结束再负责把账算明白，钱在你的账户里进进出出，总能和某个人联系起来。对你来说，转账不只是数字从一个账户跑到另一个账户，也是朋友之间一句“我先来”“一会儿转你”。如果朋友圈需要一个结算中心，你大概已经在没有工资的情况下上岗很久了。",
+      "interpretation_en": "Your transaction history isn’t just about spending—it’s also a map of your social life. You cover dinner today, collect someone’s share tomorrow, send a birthday red packet, and somehow end up settling the bill after every group outing. Money moves in and out of your account, but there’s usually a friend attached to it. If your group chat ever needed a finance department, congratulations: you’ve probably been running it for free.",
+      "traits": [
+        "社交活跃",
+        "转账频繁",
+        "AA 熟练",
+        "人情往来",
+        "朋友圈结算中心"
+      ],
+      "core_categories": "好友转账 / AA 收付款 / 红包 / 代付 / 聚餐结算 / 随礼 / 活动费用分摊等社交资金往来",
+      "focus": "",
+      "distinguish": [],
+      "tone": "长辈式温情、略调侃",
+      "slogan_examples": [
+        "FRIENDS FIRST. BILLS LATER.",
+        "SOCIAL CAPITAL PAID."
+      ],
+      "slogan_examples_cn": [
+        "就爱给朋友花点小钱。"
+      ],
+      "do_not_say": [
+        "冤大头",
+        "被薅",
+        "借钱不还"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "",
+      "rules_text": [],
+      "summary_examples": [
+        "钱是流动的，人情也是。",
+        "你的账单里不只有消费，还有一张看不见的社交关系网。今天帮朋友垫一下饭钱，明天收一笔 AA，生日发个红包，聚会结束再负责把"
+      ],
+      "name_en": "Social Connector",
+      "axis_en": "Achievement · Social",
+      "tone_en": "Elderly warmth, slightly teasing",
+      "traits_en": [
+        "Socially active",
+        "Frequent transfers",
+        "AA pro",
+        "Gift exchanges",
+        "Circle's settlement hub"
+      ],
+      "core_categories_en": "Friend transfers / AA payments / Red packets / Paying for others / Group dinner settlements / Gifts / Activity fee splits and other social money flows",
+      "do_not_say_en": [
+        "Sucker",
+        "Getting taken advantage of",
+        "Not paying back loans"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    },
+    {
+      "code": "YDSS",
+      "name": "一店死侍",
+      "emoji": "❤️",
+      "group": "special",
+      "axis": "成就·专一",
+      "rarity": "稀有",
+      "override": true,
+      "mode": "any",
+      "override_groups": [
+        0
+      ],
+      "rule_groups": [
+        [
+          {
+            "id": "share50",
+            "label": "单一商户占笔数 ≥ 50%",
+            "metric": "top_merchant_count_share",
+            "op": ">=",
+            "value": 0.5,
+            "weight": 2,
+            "label_en": "Single merchant accounts for ≥ 50% of transactions"
+          },
+          {
+            "id": "n20",
+            "label": "≥ 20 笔",
+            "metric": "txn_count",
+            "op": ">=",
+            "value": 20,
+            "weight": 1,
+            "label_en": "≥ 20 transactions"
+          }
+        ],
+        [
+          {
+            "id": "daily4",
+            "label": "某日同一商户 ≥ 4 笔（排除交通与平台）",
+            "metric": "merchant_max_daily_cnt",
+            "op": ">=",
+            "value": 4,
+            "weight": 2,
+            "label_en": "≥ 4 transactions at the same merchant in one day (excluding transport and platforms)"
+          }
+        ],
+        [
+          {
+            "id": "streak",
+            "label": "连续 ≥ 3 天同一商户每日 ≥ 2 笔（排除交通与平台）",
+            "metric": "merchant_streak_days",
+            "op": ">=",
+            "value": 3,
+            "weight": 2,
+            "label_en": "≥ 2 transactions daily at the same merchant for ≥ 3 consecutive days (excluding transport and platforms)"
+          }
+        ],
+        [
+          {
+            "id": "month30",
+            "label": "同一商户月 ≥ 30 笔（排除外卖 / 电商平台）",
+            "metric": "merchant_max_cnt_ex_platform",
+            "op": ">=",
+            "value": 30,
+            "weight": 2,
+            "label_en": "≥ 30 transactions at the same merchant in a month (excluding food delivery / e-commerce platforms)"
+          }
+        ]
+      ],
+      "tagline": "弱水三千，只刷一家。",
+      "tagline_en": "ONE STORE. ONE HEART.",
+      "interpretation": "世界上店那么多，你的钱包偏偏只对一家长情。第一次消费可能是偶遇，第二次算回购，等到同一个名字在账单里出现二三十次，这段关系显然已经不能用“经常去”简单概括。别人货比三家，你负责认准一家；新品可以看，新店可以路过，但最后付款的时候还是熟悉的那个名字。弱水三千，只刷一家——这不是重复消费，这是 commitment。",
+      "interpretation_en": "There are countless stores out there, yet your wallet keeps choosing the same one. The first purchase might be a coincidence, the second a repeat, but once the same merchant appears twenty or thirty times, “regular customer” starts to feel like an understatement. Others shop around; you stay committed. New stores may come and go, but when it’s time to pay, somehow it’s always the same name. This isn’t repetition—it’s a relationship.",
+      "traits": [
+        "超高复购",
+        "商户忠诚",
+        "固定选择",
+        "拒绝变心",
+        "长期关系"
+      ],
+      "core_categories": "同一咖啡店 / 奶茶店 / 餐厅 / 便利店 / 超市 / 品牌门店 / 电商店铺等产生的高频重复消费；排除因外卖平台统一显示商户名称而造成的误判",
+      "focus": "",
+      "distinguish": [],
+      "tone": "深情、告白式",
+      "slogan_examples": [
+        "ONE STORE. ONE HEART.",
+        "LOYALTY LEVEL: MAX.",
+        "LOVE AT EVERY SWIPE.",
+        "TILL RECEIPTS DO US PART."
+      ],
+      "slogan_examples_cn": [],
+      "do_not_say": [
+        "单调",
+        "没得选",
+        "傻"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "",
+      "rules_text": [
+        "同时满足：消费次数最多的同一家商户，其交易笔数占全部交易笔数 ≥ 50%整个统计周期有效交易笔数 ≥ 20 笔当前版本属于 Special Persona，触发后优先覆盖普通人格。",
+        "每日在某一商家消费 ≥4笔",
+        "连续 ≥3 天，每日在同一商户消费 ≥2笔",
+        "每个月在某一商家消费 ≥30笔（排除美团饿了么等外卖平台导致的商家名称统一，其实在外卖平台上买的不是一家的外卖）"
+      ],
+      "summary_examples": [
+        "弱水三千，只刷一家。",
+        "世界上店那么多，你的钱包偏偏只对一家长情。第一次消费可能是偶遇，第二次算回购，等到同一个名字在账单里出现二三十次，这段关"
+      ],
+      "name_en": "One-Store Loyalist",
+      "axis_en": "Achievement · Devotion",
+      "tone_en": "Affectionate, confessional",
+      "traits_en": [
+        "Ultra-high repurchase",
+        "Loyal to one merchant",
+        "Fixed choice",
+        "Refuses to switch",
+        "Long-term relationship"
+      ],
+      "core_categories_en": "High-frequency repeat spending at the same coffee shop / milk tea shop / restaurant / convenience store / supermarket / brand store / e-commerce shop, etc.; excludes misidentification caused by unified merchant names on food delivery platforms",
+      "do_not_say_en": [
+        "Monotonous",
+        "No other choice",
+        "Foolish"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    },
+    {
+      "code": "DSDS",
+      "name": "端水大师",
+      "emoji": "🐙",
+      "group": "fallback",
+      "axis": "兜底·均衡",
+      "rarity": "少见",
+      "override": false,
+      "mode": "fallback",
+      "rule_groups": [
+        [
+          {
+            "id": "no_hit",
+            "label": "无其他人格命中",
+            "metric": "rule_hits",
+            "op": "==",
+            "value": 0,
+            "weight": 1,
+            "label_en": "No other persona triggered"
+          },
+          {
+            "id": "top30",
+            "label": "最大类别 < 30%",
+            "metric": "top_category_share",
+            "op": "<",
+            "value": 0.3,
+            "weight": 1,
+            "label_en": "Largest category < 30%"
+          }
+        ]
+      ],
+      "tagline": "什么都花一点，什么都不上头。",
+      "tagline_en": "BALANCED. MOSTLY.A LITTLE OF EVERYTHING.",
+      "interpretation": "想从你的账单里挑一个最突出的爱好并不容易，因为每个类别都被你照顾得相当周到。吃饭要有，购物不能少，交通、娱乐和日常生活也一个没落下，谁都分到一点，但谁也别想独占钱包。别人消费多少有点偏科，你端水端得十分稳定。问你最爱把钱花在哪里？不好意思，这道题拒绝单选——生活这么丰富，当然要雨露均沾。",
+      "interpretation_en": "Trying to find one dominant obsession in your spending is surprisingly difficult, because every category gets its fair share. Food, shopping, transport, entertainment, and everyday essentials all make regular appearances, but none gets to take over. While other people’s spending has a clear favorite, yours refuses to pick sides. Asked where you love spending most? Sorry—this question is not multiple choice.",
+      "traits": [
+        "雨露均沾",
+        "类别均衡",
+        "兴趣广泛",
+        "拒绝偏科",
+        "消费多面手"
+      ],
+      "core_categories": "餐饮 / 购物 / 交通 / 娱乐 / 生鲜 / 饮品 / 日用 / 学习等多个消费类别均有稳定支出，且不存在明显占据主导地位的单一类别",
+      "focus": "",
+      "distinguish": [],
+      "tone": "平和、总结",
+      "slogan_examples": [
+        "BALANCED. MOSTLY.A LITTLE OF EVERYTHING."
+      ],
+      "slogan_examples_cn": [],
+      "do_not_say": [
+        "平庸",
+        "没特点",
+        "无聊"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "",
+      "rules_text": [
+        "同时满足：没有命中前面的其他人格规则最大单一消费类别占总消费金额 < 30%属于 Fallback Persona（兜底人格）。",
+        "每日消费覆盖每个类别",
+        "每周消费覆盖每个类别的天数≥5天"
+      ],
+      "summary_examples": [
+        "什么都花一点，什么都不上头。",
+        "想从你的账单里挑一个最突出的爱好并不容易，因为每个类别都被你照顾得相当周到。吃饭要有，购物不能少，交通、娱乐和日常生活也"
+      ],
+      "name_en": "Balance Master",
+      "axis_en": "Safety Net · Balance",
+      "tone_en": "Calm, summarizing",
+      "traits_en": [
+        "Even-handed",
+        "Category-balanced",
+        "Broad interests",
+        "No favoritism",
+        "Versatile spender"
+      ],
+      "core_categories_en": "Steady spending across dining, shopping, transport, entertainment, fresh groceries, drinks, daily essentials, learning, and more — with no single category dominating.",
+      "do_not_say_en": [
+        "mediocre",
+        "unremarkable",
+        "boring"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    },
+    {
+      "code": "SJWF",
+      "name": "数据无法捕获之人",
+      "emoji": "🕵️",
+      "group": "fallback",
+      "axis": "兜底·数据不足",
+      "rarity": "传说",
+      "override": false,
+      "mode": "fallback",
+      "rule_groups": [
+        [
+          {
+            "id": "level",
+            "label": "数据充足度 = 不足",
+            "metric": "data_level",
+            "op": "==",
+            "value": "不足",
+            "weight": 1,
+            "label_en": "Data sufficiency = insufficient"
+          }
+        ]
+      ],
+      "tagline": "账单太薄，看不透你。",
+      "tagline_en": "NOT ENOUGH DATA. YET.COME BACK WITH MORE.",
+      "interpretation": "不是你没有消费人格，只是这份账单还不够了解你。几笔交易很容易被一顿大餐、一次购物或者一张机票带偏，用这么一点线索就急着判断你的消费人格，多少有点草率。于是这一次，本算法决定承认自己的能力边界：你的消费人格暂时成功逃过数据捕获。换一份更完整的账单再来，我一定会看破你的！",
+      "interpretation_en": "It’s not that you don’t have a spending personality—this bill simply doesn’t know you well enough yet. A handful of transactions can be easily distorted by one dinner, one shopping trip, or one flight, and assigning you a personality from that would be a little too confident. So this time, the algorithm admits defeat: you’ve successfully escaped data capture. Bring back a fuller statement, though, and I have the confidence to understand you better next time!",
+      "traits": [
+        "数据稀少",
+        "难以定义",
+        "拒绝被捕获",
+        "暂时隐身"
+      ],
+      "core_categories": "有效交易笔数不足 / 消费类别覆盖不足 / 统计周期过短 / 可用于识别消费习惯的数据不足",
+      "focus": "",
+      "distinguish": [],
+      "tone": "好奇、邀请",
+      "slogan_examples": [
+        "NOT ENOUGH DATA. YET.COME BACK WITH MORE."
+      ],
+      "slogan_examples_cn": [],
+      "do_not_say": [
+        "没钱",
+        "不消费",
+        "可疑"
+      ],
+      "guardrails": [],
+      "illustration_prompt": "",
+      "rules_text": [],
+      "summary_examples": [
+        "账单太薄，看不透你。",
+        "不是你没有消费人格，只是这份账单还不够了解你。几笔交易很容易被一顿大餐、一次购物或者一张机票带偏，用这么一点线索就急着判"
+      ],
+      "name_en": "Data Escapee",
+      "axis_en": "Safety Net · Data Insufficient",
+      "tone_en": "Curious, inviting",
+      "traits_en": [
+        "Sparse data",
+        "Hard to define",
+        "Refuses capture",
+        "Temporarily invisible"
+      ],
+      "core_categories_en": "Insufficient valid transactions / Incomplete spending category coverage / Too short a statistical period / Lack of data to identify spending habits",
+      "do_not_say_en": [
+        "Broke",
+        "Doesn't spend",
+        "Suspicious"
+      ],
+      "guardrails_en": [],
+      "distinguish_en": [],
+      "focus_en": ""
+    }
+  ],
+  "badges": [
+    {
+      "code": "QQDK",
+      "name": "全勤打工人",
+      "emoji": "🏆",
+      "trigger": [
+        {
+          "metric": "active_days_ratio",
+          "op": ">=",
+          "value": 0.9
+        },
+        {
+          "metric": "period_days",
+          "op": ">=",
+          "value": 28
+        }
+      ],
+      "trigger_any": [
+        [
+          {
+            "metric": "active_days_ratio",
+            "op": ">=",
+            "value": 0.9
+          },
+          {
+            "metric": "period_days",
+            "op": ">=",
+            "value": 28
+          }
+        ],
+        [
+          {
+            "metric": "days_with_2plus_commute",
+            "op": ">=",
+            "value": 22
+          }
+        ],
+        [
+          {
+            "metric": "commute_cnt",
+            "op": ">=",
+            "value": 50
+          }
+        ]
+      ],
+      "line": "人全勤，钱包也全勤。",
+      "slogan": "31 DAYS. 31 RECEIPTS. PERFECT ATTENDANCE.",
+      "name_en": "Full-Time Grinder",
+      "line_en": "Perfect attendance, perfect wallet."
+    },
+    {
+      "code": "YRBZ",
+      "name": "一日暴走",
+      "emoji": "🎰",
+      "trigger_any": [
+        [
+          {
+            "metric": "max_day_share",
+            "op": ">=",
+            "value": 0.5
+          },
+          {
+            "metric": "max_day_txn_count",
+            "op": ">=",
+            "value": 5
+          },
+          {
+            "metric": "txn_count",
+            "op": ">=",
+            "value": 10
+          }
+        ]
+      ],
+      "line": "平时很省，直到那一天。",
+      "slogan": "ONE DAY. ALL IN.",
+      "name_en": "One-Day Spree",
+      "line_en": "Frugal every day, until that one day."
+    },
+    {
+      "code": "HYM",
+      "name": "薅羊毛大师",
+      "emoji": "🐑",
+      "trigger_any": [
+        [
+          {
+            "metric": "discount_txn_ratio",
+            "op": ">=",
+            "value": 0.2
+          },
+          {
+            "metric": "txn_count",
+            "op": ">=",
+            "value": 20
+          }
+        ]
+      ],
+      "line": "没有优惠的订单不配被支付。",
+      "slogan": "COUPON FIRST. PAY LATER.",
+      "name_en": "Coupon Connoisseur",
+      "line_en": "Orders without a discount don't deserve to be paid."
+    }
+  ],
+  "modifier_tags": [
+    {
+      "tag": "🎉 周末爆发",
+      "vip_only": true,
+      "trigger": [
+        {
+          "metric": "weekend_share",
+          "op": ">=",
+          "value": 0.45
+        }
+      ]
+    },
+    {
+      "tag": "🌆 下班放纵",
+      "vip_only": true,
+      "trigger": [
+        {
+          "metric": "after_work_share",
+          "op": ">=",
+          "value": 0.4
+        }
+      ]
+    },
+    {
+      "tag": "⚡ 冲动派",
+      "vip_only": true,
+      "trigger": [
+        {
+          "metric": "impulse_share",
+          "op": ">=",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "tag": "🍢 夜宵党",
+      "vip_only": true,
+      "trigger": [
+        {
+          "metric": "late_meal_ratio",
+          "op": ">=",
+          "value": 0.3
+        }
+      ]
+    }
+  ]
+}

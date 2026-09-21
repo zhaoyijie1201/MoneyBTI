@@ -1,0 +1,839 @@
+{
+ "cards": {
+  "WMBY": {
+   "name": "Delivery Regular",
+   "axis": "Category·Delivery",
+   "traits": [
+    "Convenience First",
+    "High-Frequency Ordering",
+    "Time Priority",
+    "Variety Seeker",
+    "Instant Gratification"
+   ],
+   "condition_labels": [
+    "Delivery orders ≥ 12 times",
+    "Delivery accounts for ≥ 50% of dining spend",
+    "Delivery appears in at least 3 weeks",
+    "Covers ≥ 2 meal periods",
+    "Delivery order count significantly higher than groceries (≥ 1.5x)"
+   ],
+   "tone": "Light, relatable, non-shaming",
+   "core_categories": "Meals, fast food, breakfast, late-night snacks, and other delivery-based dining purchases made through delivery platforms or food delivery apps.",
+   "do_not_say": [
+    "shopaholic",
+    "shopping addiction",
+    "impulse buyer",
+    "wasteful",
+    "reckless spender",
+    "impulsive shopper",
+    "can't control spending",
+    "materialistic",
+    "buying useless stuff"
+   ],
+   "guardrails": [
+    "Do not assume high-frequency online shopping indicates 'shopping addiction' or lack of self-control.",
+    "Do not describe frequent online shopping as 'wasteful' or 'reckless spending'.",
+    "Do not assume purchased items are unnecessary or have no practical use.",
+    "Do not infer user income, wealth, or financial status from purchase amounts.",
+    "Do not infer user gender, occupation, or social status from purchased items.",
+    "Do not label high-frequency small orders as 'impulsive shopping' unless supported by other clear behavioral data.",
+    "It's okay to playfully reference typical online shopping scenarios like cart, bundling, coupons, and delivery notifications, but keep it light, relatable, and non-shaming."
+   ],
+   "distinguish": [
+    "When purchasing milk tea via delivery platforms, if the specific merchant can be identified as a tea brand, prioritize counting it under milk tea consumption traits."
+   ],
+   "focus": "High frequency + consistency + delivery-based dining + clear delivery usage habits"
+  },
+  "NCXM": {
+   "name": "Milk Tea Lifeline",
+   "axis": "Category · Drinks",
+   "traits": [
+    "Small, frequent spending",
+    "Happiness refill",
+    "Flavor preference",
+    "Daily ritual",
+    "Instant gratification"
+   ],
+   "condition_labels": [
+    "Freshly made tea drinks ≥ 8 times",
+    "Tea drinks appear in at least 3 weeks",
+    "Weekly tea drinks ≥ 2 times",
+    "Repeat purchase at same tea shop ≥ 3 times",
+    "Tea drink orders significantly higher than snacks/desserts (≥ 1.5x)"
+   ],
+   "tone": "Lighthearted, relatable, no spending shame",
+   "core_categories": "Consumption of freshly made tea drinks: milk tea, new-style tea, fruit tea, fresh milk tea, etc.",
+   "do_not_say": [
+    "addicted",
+    "habit-forming",
+    "can't control yourself",
+    "quit milk tea",
+    "unhealthy",
+    "gain weight",
+    "obese",
+    "waste money",
+    "squander money",
+    "no self-discipline"
+   ],
+   "guardrails": [
+    "Do not judge users as 'addicted' based on milk tea purchase frequency",
+    "Do not infer users' weight, health status, or dietary issues from tea drink bills",
+    "Do not comment that users drink 'too much' milk tea or 'should drink less'",
+    "Do not describe frequent small-amount tea purchases as wasteful",
+    "Do not assume users buy milk tea due to stress, fatigue, or emotional issues",
+    "Do not infer users' income or economic level from the brands they buy",
+    "May use lighthearted internet expressions like 'life-saving', 'happiness buff', 'refill'",
+    "Personality interpretation should highlight small self-indulgence, daily rituals, and frequent tea-drinking habits"
+   ],
+   "distinguish": [
+    "Milk Tea Lifeline ≠ Takeout Monthly Subscriber: if users buy milk tea via delivery platforms, prioritize milk tea traits. Follow 'specific consumption category > consumption channel' — do not over-score 'Takeout Monthly Subscriber' just because users order milk tea delivery."
+   ],
+   "focus": "Purchase frequency > Consistency > Repeat purchases > Spending amount"
+  },
+  "TDLD": {
+   "name": "Restaurant Radar",
+   "axis": "Category · Dine-In",
+   "traits": [
+    "First to try",
+    "New spot radar",
+    "Flavor explorer",
+    "Experience-driven",
+    "Low revisit rate"
+   ],
+   "condition_labels": [
+    "Dine-in ≥ 8 times",
+    "≥ 6 different restaurants",
+    "New store rate ≥ 50% (requires history)",
+    "Single store ≤ 30% of dine-in visits",
+    "Non-fast-food chains ≥ 40% of dine-in"
+   ],
+   "tone": "Light, relatable, no spending shame",
+   "core_categories": "Dine-in restaurants, specialty dining, cafés, brunch spots, dessert shops, bistro bars — any food & drink experience with a vibe.",
+   "do_not_say": [
+    "gluttonous",
+    "wasting money",
+    "throwing money away",
+    "can't save",
+    "trend-following",
+    "Instagram trap",
+    "vain",
+    "show-off",
+    "just for the photo",
+    "can't manage life"
+   ],
+   "guardrails": [
+    "Don't label frequent new restaurant visits as 'trend-following'",
+    "Don't assume users dine out just for photos, social media, or hype spots",
+    "Don't judge users as 'wasting money' or 'can't manage life' based on higher dine-in spending",
+    "Don't infer income, wealth, or social status from restaurant tier or spending amount",
+    "Don't infer weight, health, or eating habits from dining frequency",
+    "Don't assume a high new-store rate means users are fickle",
+    "Light expressions like 'hit or miss', 'hidden gem', 'unlock a new spot' are fine",
+    "Focus interpretation on curiosity, novelty-seeking, merchant diversity, and experience orientation"
+   ],
+   "distinguish": [
+    "Restaurant Radar ≠ Delivery Devotee — Delivery Devotee is about convenience, frequency, and ordering in; Restaurant Radar is about dine-in, variety, and exploration.",
+    "Restaurant Radar ≠ Boba Lifeline — if consumption involves multiple brands of milk tea, fruit tea, or other made-to-order drinks, prioritize Boba Lifeline identification.",
+    "If a user frequently visits the same chain coffee shop, don't label them as a spot-hunter just because of high frequency; if they consistently visit different independent cafés, brunch spots, etc., that strengthens the Restaurant Radar score."
+   ],
+   "focus": "Merchant diversity + new-store rate + sustained exploration behavior"
+  },
+  "KDZH": {
+   "name": "Parcel Summoner",
+   "axis": "Category: Online Shopping",
+   "traits": [
+    "High-frequency online shopper",
+    "Loves variety",
+    "Deal spotter",
+    "Instant buyer",
+    "Digital spender"
+   ],
+   "condition_labels": [
+    "≥ 10 physical online orders",
+    "Online shopping in at least 3 weeks",
+    "Online shopping ≥ 25% of non-fixed spending",
+    "Covers ≥ 3 product categories",
+    "≥ 3 different merchants/brands"
+   ],
+   "tone": "Light, relatable, no spending shame",
+   "core_categories": "Online purchases of physical goods from general e-commerce, brand online stores, social commerce, etc., such as clothing, home goods, digital accessories, daily necessities, stationery, small items.",
+   "do_not_say": [
+    "Shopaholic",
+    "Shopping addiction",
+    "Impulse buyer",
+    "Wasteful",
+    "Overspender",
+    "Impulsive spender",
+    "Can't control yourself",
+    "Materialistic",
+    "Buying useless stuff"
+   ],
+   "guardrails": [
+    "Don't assume high-frequency shopping equals addiction or lack of self-control",
+    "Don't describe frequent online shopping as 'wasteful' or 'overspending'",
+    "Don't assume purchased items are unnecessary or useless",
+    "Don't infer income, wealth, or financial status from spending amounts",
+    "Don't infer gender, occupation, or social identity from purchased items",
+    "Don't label small frequent orders as 'impulsive spending' without clear behavioral data",
+    "It's okay to joke about carts, bundling, coupons, delivery notifications, etc., but keep it light, relatable, and shame-free"
+   ],
+   "distinguish": [],
+   "focus": "Shopping frequency and consistency > total spending amount"
+  },
+  "CCLJ": {
+   "name": "Market Money Manager",
+   "axis": "Category · Fresh Food",
+   "traits": [
+    "Thrifty",
+    "Down-to-earth",
+    "Planned spending",
+    "Value-oriented",
+    "In control of daily life"
+   ],
+   "condition_labels": [
+    "Grocery purchases ≥ 8 times",
+    "Bought groceries at least 3 weeks",
+    "Groceries account for ≥ 30% of food & drink spending",
+    "Groceries cover ≥ 3 categories",
+    "Grocery trips clearly outnumber takeout orders (≥ 1.5x)"
+   ],
+   "tone": "Lighthearted, relatable, no spending shame",
+   "core_categories": "Wet markets / fresh supermarkets / community grocery stores / fruit shops / meat, poultry, eggs & dairy / grains, oils & condiments / online fresh food platforms — any household grocery spending.",
+   "do_not_say": [
+    "stingy",
+    "cheap",
+    "poor",
+    "can't afford it",
+    "penny-pincher",
+    "always looking for a deal",
+    "nickel-and-diming",
+    "housewife",
+    "househusband",
+    "overly frugal"
+   ],
+   "guardrails": [
+    "Don't describe price-checking, discounts, or value-seeking as 'stingy' or 'cheap'",
+    "Don't infer low income, financial hardship, or limited spending power from grocery buying behavior",
+    "Don't infer gender, marital status, or family role from grocery shopping frequency",
+    "Don't assume frequent grocery buyers cook every day themselves",
+    "Don't describe buying discounted or promotional items as 'being greedy for a bargain'",
+    "Don't judge a lifestyle as 'healthier' or 'more disciplined' just because takeout spending is low",
+    "Feel free to playfully reference scenes like grocery shopping, price-checking, picking produce, or stocking up — but highlight planning skills, life savvy, and a sense of control over spending"
+   ],
+   "distinguish": [
+    "Market Money Manager ≠ Takeout Monthly Pass Holder",
+    "Frequent grocery buying, low takeout frequency → stronger 'Market Money Manager' traits. Frequent takeout, little grocery buying → stronger 'Takeout Monthly Pass Holder' traits.",
+    "The two aren't mutually exclusive. If a user orders takeout often on weekdays but regularly buys groceries on weekends, calculate Money Personality match separately.",
+    "Market Money Manager ≠ Delivery Summoner",
+    "Even if groceries (vegetables, fruit, meat, rice, oil, etc.) are bought through online platforms, they should still be identified as grocery spending, not general online shopping."
+   ],
+   "focus": "Purchase frequency + consistency > single transaction amount"
+  },
+  "JZZY": {
+   "name": "Refined Living Curator",
+   "axis": "Category: Beauty & Fashion",
+   "traits": [
+    "Quality-driven",
+    "Detail-oriented",
+    "Self-care spender",
+    "Good taste",
+    "Experience-first"
+   ],
+   "condition_labels": [
+    "Quality/image spending ≥ 6 times",
+    "≥ 20% of non-fixed expenses",
+    "Covers ≥ 3 quality categories",
+    "Appears at least 3 weeks",
+    "Hair/nail/beauty services ≥ 2 times"
+   ],
+   "tone": "Light, relatable, no spending shame",
+   "core_categories": "Skincare / Makeup / Perfume & Fragrance / Apparel & Fashion / Accessories / Hair / Nails / Beauty treatments / Premium lifestyle items / Designer home goods — any spending that clearly boosts personal image, aesthetic, or quality of life.",
+   "do_not_say": [
+    "vain",
+    "competitive",
+    "materialistic",
+    "gold-digger",
+    "wasteful",
+    "face-conscious",
+    "fake fancy",
+    "reckless spender",
+    "luxury",
+    "pampered",
+    "brand-chaser",
+    "consumerist"
+   ],
+   "guardrails": [
+    "Don't describe quality or image spending as 'vain', 'gold-digging', or 'competitive'",
+    "Don't infer income, family background, or social class from brand, price, or spending amount",
+    "Don't assume users buy beauty, fashion, or fragrance for others' approval",
+    "Don't infer gender from beauty, hair, or nail spending",
+    "Don't equate 'refined' with expensive, luxury, or designer brands",
+    "Don't label users as consumerist or overspenders just because they spend more on quality",
+    "Use positive terms like 'ritual', 'texture', 'self-care', 'discerning'",
+    "Interpretation should highlight aesthetic choices, quality awareness, attention to detail, and life experience"
+   ],
+   "distinguish": [
+    "Refined Living Curator ≠ Delivery Summoner",
+    "'Delivery Summoner' focuses on high-frequency online physical goods purchases;",
+    "'Refined Living Curator' focuses on the type of goods/services bought and a quality lifestyle tendency.",
+    "20 online purchases in a month including daily essentials, stationery, digital accessories → stronger Delivery Summoner trait. Consistent purchases of skincare, fragrance, fashion, plus hair/nail spending → stronger Refined Living Curator trait.",
+    "If a user buys skincare online, both 'online shopping' and 'quality spending' traits can coexist; final score determines the dominant persona.",
+    "Refined Living Curator ≠ Grocery Investor",
+    "Even if a user frequently buys imported ingredients, organic produce, or premium supermarket items, as long as the spending is essentially on household groceries, it should be prioritized under 'Grocery Investor'."
+   ],
+   "focus": "Category diversity + consistency + quality lifestyle spending share > single item price",
+   "interpretation": "You're willing to pay for 'texture' in life. Skincare, makeup, fashion, perfume, or those little things that make everyday life more refined and comfortable — they might all show up on your bill. You don't necessarily go for the priciest, but you care about quality, design, and experience. For you, being refined isn't about filling life with expensive stuff — it's about thoughtfully choosing the lifestyle you love within your means. You can save where it counts, but you never settle when it matters."
+  },
+  "DYSJ": {
+   "name": "Subscription Collector",
+   "axis": "Category · Subscriptions",
+   "traits": [
+    "Digital lifestyle",
+    "Recurring payments",
+    "Convenience-oriented",
+    "Always a member",
+    "Small frequent charges"
+   ],
+   "condition_labels": [
+    "≥ 5 different subscription services",
+    "Regular charges from the same merchant (requires billing history)",
+    "Subscriptions span ≥ 3 categories",
+    "≥ 3 consecutive charges for 3 billing cycles (requires billing history)",
+    "Subscriptions account for ≥ 40% of digital service spending"
+   ],
+   "tone": "Lighthearted, empathetic, no spending shame",
+   "core_categories": "Streaming memberships / music subscriptions / cloud storage / software subscriptions / AI tools / reading memberships / learning platforms / fitness or lifestyle service memberships—any subscription-based spending with recurring payment characteristics.",
+   "do_not_say": [
+    "sucker",
+    "forgot to cancel",
+    "wasting money",
+    "throwing money away",
+    "subscribing randomly",
+    "membership addict",
+    "getting ripped off",
+    "more money than sense",
+    "doesn't know how to save",
+    "victim of auto-renewal",
+    "paying the stupid tax"
+   ],
+   "guardrails": [
+    "Do not assume users forgot to cancel or are unaware of being charged",
+    "Do not describe multiple memberships as 'wasting money,' 'getting ripped off,' or 'paying the stupid tax'",
+    "Do not assume users don't actually use these subscriptions",
+    "Do not infer income or financial status based on number or price of subscriptions",
+    "Do not judge subscription value as simply 'worth it' or 'not worth it'",
+    "Do not infer lack of financial management skills just because of many auto-renewals",
+    "It's okay to poke fun at typical scenarios like Premium, auto-renewal, or membership count, but avoid spending shame",
+    "Personality interpretation should highlight digital lifestyle, convenience, service experience, and ongoing subscription habits"
+   ],
+   "distinguish": [
+    "Subscription Collector ≠ Whale Spender",
+    "Game memberships, Battle Passes, monthly cards, etc., may have both subscription and gaming spending attributes.",
+    "If the bill clearly identifies gaming-related payments, prioritize enhancing the 'Whale Spender' trait; regular subscriptions like streaming, software, or cloud services fall under 'Subscription Collector'."
+   ],
+   "focus": "Active subscription count + recurrence + continuity > total subscription amount"
+  },
+  "KJZS": {
+   "name": "Top-Up Warrior",
+   "axis": "Category · Gaming",
+   "traits": [
+    "Loves gaming",
+    "Spends on virtual items",
+    "Sensitive to limited editions",
+    "Invests in experiences",
+    "Pays for happiness"
+   ],
+   "condition_labels": [
+    "Game top-ups / in-app purchases ≥ 5 times",
+    "Game spending appears in at least 3 weeks",
+    "Gaming accounts for ≥ 30% of entertainment spending",
+    "≥ 3 transactions on the same game / platform",
+    "≥ 3 purchases of virtual content (e.g., points, skins, battle passes)"
+   ],
+   "tone": "Lighthearted, relatable, non-judgmental about spending",
+   "core_categories": "Mobile game top-ups / PC game in-app purchases / Console game digital spending / Game points / Virtual currency / Skins / Characters / Equipment / Battle Pass / Season Pass / Game subscription cards — any game-related virtual spending.",
+   "do_not_say": [
+    "Game addiction",
+    "Addicted",
+    "Internet addiction",
+    "Wasteful",
+    "Throwing money away",
+    "Wasting money",
+    "Rich but dumb",
+    "Impulse spending",
+    "Can't control yourself",
+    "No self-discipline",
+    "Obsessed with gaming",
+    "Not doing anything productive",
+    "Paying a stupidity tax"
+   ],
+   "guardrails": [
+    "Do not judge users as having gaming addiction, internet addiction, or obsession based on spending frequency",
+    "Do not describe game top-ups as 'wasteful', 'throwing money away', or 'paying a stupidity tax'",
+    "Do not assume virtual goods are 'not worth paying for' just because they have no physical form",
+    "Do not infer users' income, wealth, or financial status from top-up amounts",
+    "Do not infer users' gender, age, or occupation from game genre, characters, or platform",
+    "Do not assume users top up to show off, compete, or gain an advantage",
+    "Do not directly label frequent game spending as impulse spending or lack of self-control",
+    "Use common gaming community terms like 'top-up', 'skin', 'gacha', 'battle pass', 'recharge'",
+    "Focus interpretation on gaming interest, virtual content spending, and paying for entertainment experiences"
+   ],
+   "distinguish": [
+    "Top-Up Warrior ≠ Subscription Collector",
+    "Game subscription cards, Battle Pass, game memberships may be periodic, but if clearly identifiable as game-related services, prioritize strengthening the 'Top-Up Warrior' trait.",
+    "Top-Up Warrior ≠ Express Summoner",
+    "Buying game-related physical items online (e.g., controllers, keyboards, consoles, physical game cartridges) is essentially physical shopping and should not be directly treated as 'top-up'."
+   ],
+   "focus": "In-game spending frequency + consistency + entertainment spending share > single top-up amount"
+  },
+  "DQOL": {
+   "name": "Earth Online Player",
+   "axis": "Category · Travel",
+   "traits": [
+    "Travel first",
+    "Experience-driven",
+    "Map expansion",
+    "Travel spending",
+    "Exploration mode: ON"
+   ],
+   "condition_labels": [
+    "≥ 2 independent travel cycles (90 days per cycle, requires historical billing)",
+    "Covers ≥ 3 categories: transport / accommodation / tickets",
+    "Travel accounts for ≥ 15% of non-fixed spending",
+    "Spending chain includes ≥ 2 categories: long-distance transport + accommodation / tickets",
+    "≥ 2 different cities (requires location data)"
+   ],
+   "tone": "Light, relatable, no spending shame",
+   "core_categories": "Flights / High-speed rail & long-distance trains / Long-distance buses / Hotels & homestays / Travel platforms / Scenic spot tickets / Museum & exhibition tickets / Local travel transport / Cross-border transport / Travel-related activities & experiences — non-daily travel spending",
+   "do_not_say": [
+    "waste money",
+    "can't save",
+    "living paycheck to paycheck",
+    "squander",
+    "budget travel",
+    "show off wealth",
+    "love to play",
+    "not doing serious work",
+    "running around everywhere",
+    "travel addiction",
+    "hedonism",
+    "rich person",
+    "buying happiness with money",
+    "no regard for the future"
+   ],
+   "guardrails": [
+    "Do not infer user income, wealth, or family economic status based on travel frequency",
+    "Do not describe travel spending as 'waste money', 'can't save', or 'not doing serious work'",
+    "Do not judge users as 'rich', 'extravagant', or 'showing off' based on flight or hotel prices",
+    "Do not assume high travel frequency means the user is avoiding work, study, or real life",
+    "Do not infer user occupation, nationality, family background, or long-term residence based on travel destinations",
+    "Do not assume travel spending is always leisure travel; it may include visiting family, studying, business, etc.",
+    "If billing cannot distinguish travel purpose, use neutral terms like 'trip', 'exploration', 'experience'",
+    "Use elements like 'map, coordinates, suitcase, boarding pass, next stop' to create light humor",
+    "Personality interpretation should highlight cross-region travel, experience-based spending, and continuous exploration in billing patterns"
+   ],
+   "distinguish": [
+    "Earth Online Player ≠ Commuter Machine",
+    "The key difference is daily repetitive travel vs. non-daily travel. Ordinary city transport should not increase 'Earth Online Player' score just because of high frequency; it requires travel signals like cross-city spending, long-distance transport, and accommodation.",
+    "Earth Online Player ≠ Restaurant Radar",
+    "Going to different restaurants during a trip does not mean all those expenses count toward 'Earth Online Player'.",
+    "Daily continuous exploration of different restaurants → Restaurant Radar; Hotels / flights / attractions / travel experiences → Earth Online Player",
+    "If a user enjoys both travel and restaurant exploration, both money personalities can score high simultaneously."
+   ],
+   "focus": "Travel cycles + multi-category spending chain + cross-region features > single trip amount"
+  },
+  "TQYD": {
+   "name": "Perpetual Commuter",
+   "axis": "Category · Transport",
+   "traits": [
+    "Frequent traveler",
+    "City navigator",
+    "Transport regular",
+    "Daily essential",
+    "Always on the go"
+   ],
+   "condition_labels": [
+    "Urban transport ≥ 20 transactions",
+    "Transport spending every week (≥ 4 weeks)",
+    "Weekly transport ≥ 5 trips",
+    "Transport ≥ 10% of daily variable spending",
+    "≥ 2 transport modes",
+    "≥ 60% of workdays have transport records"
+   ],
+   "tone": "Light, relatable, non-judgmental",
+   "core_categories": "Subway / MRT / Bus / Public transport card / Taxi / Ride-hailing / Bike-sharing / City ferry — daily urban transport spending",
+   "do_not_say": [
+    "Wage slave",
+    "Corporate drone",
+    "Workhorse",
+    "Stuck in the grind",
+    "Always rushing",
+    "Hard life",
+    "No car",
+    "Can't afford a car",
+    "Commute misery",
+    "Wasting time",
+    "Cramming the subway every day",
+    "Burning cash on taxis",
+    "Transport fee rip-off",
+    "No life"
+   ],
+   "guardrails": [
+    "Don't assume user is an office worker or student based on transport spending",
+    "Don't infer user has no car, can't afford one, or has limited finances from public transport use",
+    "Don't judge user as 'lazy', 'extravagant', or 'wasteful' based on ride-hailing frequency",
+    "Don't assume frequent movement means long commutes or high life stress",
+    "Don't infer user's specific job, school, or schedule from travel times",
+    "Don't infer or generate sensitive location info like home or workplace from transport routes",
+    "Don't rank one transport mode as 'better' or 'more economical' than another",
+    "Use light expressions like 'on the go / tap in / transfer / next stop / moving / route'",
+    "Focus interpretation on frequent, consistent, routine urban movement spending"
+   ],
+   "distinguish": [
+    "Perpetual Commuter ≠ EarthOnline Player",
+    "Daily intra-city repeat movement → commute; non-daily cross-region movement → travel",
+    "If Grab, Uber, or subway appear during travel, combine with location + hotel/flight spending to reduce their weight for 'Perpetual Commuter'"
+   ],
+   "focus": "Frequency × Consistency × Daily routine > Total transport spending"
+  },
+  "MHZT": {
+   "name": "Furry Kid ATM",
+   "axis": "Category · Pets",
+   "traits": [
+    "Pampering online",
+    "Long-term commitment",
+    "Always stocked up",
+    "Yes to everything",
+    "Furry kid comes first"
+   ],
+   "condition_labels": [
+    "Pet-related purchases ≥ 5 transactions",
+    "Pet spending appears in at least 3 weeks",
+    "Covers ≥ 2 categories: food/supplies/medical/services",
+    "Pet spending ≥ 10% of non-fixed expenses",
+    "Repeat purchase from same pet merchant ≥ 2 times",
+    "Continuous ≥ 3 months (requires past bills)"
+   ],
+   "tone": "Lighthearted, relatable, no spending shame",
+   "core_categories": "Pet food / Cat & dog food / Pet treats / Cat litter / Pet daily supplies / Toys / Pet grooming / Bathing / Pet hospital / Vet / Pet insurance / Pet boarding / Pet services, and other pet-related spending",
+   "do_not_say": [
+    "Cat slave",
+    "Dog slave",
+    "Pet slave",
+    "Wasteful",
+    "Money burner",
+    "Money-eating beast",
+    "Cash shredder",
+    "Spending recklessly",
+    "Can't afford it",
+    "Overindulgent",
+    "Irrational spending",
+    "People worse off than pets",
+    "Pets more important than people",
+    "Treating pets better than yourself",
+    "Spending all money on pets"
+   ],
+   "guardrails": [
+    "Do not judge users as 'overindulgent', 'wasteful', or 'irrational' based on pet spending amount",
+    "Do not describe pet medical expenses as 'money-burning', 'wasteful', or 'not worth it'",
+    "Do not assign this persona based on a single high pet medical expense",
+    "Do not assume users cut back on basic needs for their pets",
+    "Do not generate value judgments like 'pets more important than people' or 'treating pets better than yourself'",
+    "Do not guess the specific pet type (cat, dog, rabbit, etc.) from bills; use 'pet / furry kid' when info is insufficient",
+    "Do not infer user's marital status, family structure, living alone, or occupation from pet spending",
+    "Do not infer user's income or financial ability from spending amount",
+    "May use light expressions like 'furry kid / boss / kibble / treats / toys / picking up the tab / balance'",
+    "Persona interpretation should highlight stable pet spending, daily care, and the warmth of being willing to invest in the furry kid"
+   ],
+   "distinguish": [
+    "Furry Kid ATM ≠ Delivery Summoner",
+    "Even if pet supplies are bought via e-commerce, as long as the specific product category is identifiable, prioritize classifying as pet spending.",
+    "Buying cat food on Taobao → Furry Kid ATM; buying clothes on e-commerce → Delivery Summoner",
+    "Continue following the rule: 'specific spending category > spending channel'"
+   ],
+   "focus": "Consistency + spending frequency + multi-scenario coverage > single transaction amount"
+  },
+  "JW": {
+   "name": "Page Chewer",
+   "axis": "Category · Learning",
+   "traits": [
+    "Self-investment",
+    "Paying for knowledge",
+    "Learning-driven spending",
+    "Goal-oriented",
+    "Well-fed on mental nourishment"
+   ],
+   "condition_labels": [
+    "Learning ≥ 20% of total spend",
+    "Learning ≥ 5 transactions or in top 3",
+    "Learning ≥ 30% of total spend",
+    "More than 3 valid transactions",
+    "15+ transactions between 05:00–08:00",
+    "Learning ≥ 5 transactions"
+   ],
+   "tone": "Lighthearted, teasing",
+   "core_categories": "Education & training / Books & materials / Stationery & learning supplies / Online courses / Exam registration / Learning software & tools / Paying for knowledge / Morning study-related spending",
+   "do_not_say": [
+    "Nerd",
+    "Rat race",
+    "Useless"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  },
+  "HAO": {
+   "name": "Black Card Roller",
+   "axis": "Amount · Big Spender",
+   "traits": [
+    "High ticket items",
+    "Big spending",
+    "Price insensitive",
+    "Quality first",
+    "Generous spender"
+   ],
+   "condition_labels": [
+    "Median per transaction ≥ ¥70",
+    "Large transaction share ≥ 40%",
+    "Top category ∈ Online shopping / Beauty & fashion / Dining in",
+    "≥ 10 transactions"
+   ],
+   "tone": "Light-hearted, teasing",
+   "core_categories": "High-ticket dining / Beauty & fashion / Luxury goods / Electronics / Entertainment experiences / Travel and other consistently high-ticket spending",
+   "do_not_say": [
+    "wasteful",
+    "splurging recklessly"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  },
+  "SCTZ": {
+   "name": "Small-Bill Sprinkler",
+   "axis": "Amount · Small & Frequent",
+   "traits": [
+    "Small & frequent",
+    "Tap-and-go",
+    "Scattered spending",
+    "Pennies add up",
+    "Leaky wallet"
+   ],
+   "condition_labels": [
+    "Daily ≥ 3 transactions",
+    "Small (≤ ¥20) ≥ 60%",
+    "Largest category < 30%",
+    "Transactions < ¥30 ≥ 50%",
+    "And daily ≥ 2.5 transactions (calibrated: to distinguish from Penny Pincher)"
+   ],
+   "tone": "Light, teasing",
+   "core_categories": "Convenience stores / Coffee & milk tea / Snacks & street food / Public transit / Ride-hailing / Daily essentials / Small online purchases / High-frequency scan-to-pay — scattered small spending",
+   "do_not_say": [
+    "No self-control",
+    "Broke at month-end",
+    "Poor"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  },
+  "SQDS": {
+   "name": "Savings Master",
+   "axis": "Spending: Low Consumption",
+   "traits": [
+    "Needs First",
+    "Low Ticket Size",
+    "Budget Conscious",
+    "Restrained Spending",
+    "Safety Net Savings"
+   ],
+   "condition_labels": [
+    "Essential spending ≥ 60%",
+    "Median ≤ ¥30",
+    "Large non-essentials ≤ 15%",
+    "Daily spending ≤ ¥50 for ≥ 3 consecutive days (exclude fixed expenses, ≥ 2 transactions/day)",
+    "Weeks with weekly spending ≤ ¥350 for ≥ 2 weeks (exclude fixed expenses, ≥ 4 spending days/week)"
+   ],
+   "tone": "Admiration, Encouragement, Playful Teasing",
+   "core_categories": "Basic meals / Public transit / Daily essentials / Basic clothing / Rent and other necessary living expenses; also spotlight bill patterns with low ticket sizes and low non-essential big spending.",
+   "do_not_say": [
+    "Stingy",
+    "Cheap"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  },
+  "YXDW": {
+   "name": "Night Owl",
+   "axis": "Time·Late Night",
+   "traits": [
+    "Active late at night",
+    "Nocturnal",
+    "Nighttime spending",
+    "Late-night orders",
+    "Free in the early hours"
+   ],
+   "condition_labels": [
+    "Transactions from 21:00–05:00 account for ≥ 30%",
+    "More than 10 transactions",
+    "Late-night transactions ≥ 15",
+    "And late-night share ≥ 15% (calibration bonus)",
+    "≥ 3 transactions on a single late night",
+    "And such days ≥ 2 (calibration bonus)"
+   ],
+   "tone": "Mysterious, late-night whisper",
+   "core_categories": "Takeout / late-night snacks / ride-hailing / online shopping / convenience stores / entertainment and other late-night spending from 21:00–05:00",
+   "do_not_say": [
+    "Staying up late is bad for you",
+    "Insomnia"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  },
+  "YDDJ": {
+   "name": "End-of-Month Survivor",
+   "axis": "Time·Monthly Rhythm",
+   "traits": [
+    "Loose at first, tight later",
+    "Generous at month start",
+    "Pulls back at month end",
+    "Front-loaded spending",
+    "Eats dirt on a cycle"
+   ],
+   "condition_labels": [
+    "First 10 days ≥ 50%",
+    "Last 10 days ≤ 50% of first 10 days",
+    "First 10 days ≥ 5 spending days",
+    "Last 10 days ≥ 5 spending days"
+   ],
+   "tone": "Finding joy in hardship, month-end survival prose, self-mocking banter",
+   "core_categories": "No specific spending category restrictions; mainly identifies a clear 'front-heavy, back-light' spending rhythm within the same billing cycle.",
+   "do_not_say": [
+    "poor",
+    "broke",
+    "living paycheck to paycheck",
+    "bad financial situation",
+    "can't make ends meet",
+    "salary is gone"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  },
+  "SJNS": {
+   "name": "Social Connector",
+   "axis": "Achievement · Social",
+   "traits": [
+    "Socially active",
+    "Frequent transfers",
+    "AA pro",
+    "Gift exchanges",
+    "Circle's settlement hub"
+   ],
+   "condition_labels": [
+    "Transfers / red packets ≥ 10 (excluded from spending)"
+   ],
+   "tone": "Elderly warmth, slightly teasing",
+   "core_categories": "Friend transfers / AA payments / Red packets / Paying for others / Group dinner settlements / Gifts / Activity fee splits and other social money flows",
+   "do_not_say": [
+    "Sucker",
+    "Getting taken advantage of",
+    "Not paying back loans"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  },
+  "YDSS": {
+   "name": "One-Store Loyalist",
+   "axis": "Achievement · Devotion",
+   "traits": [
+    "Ultra-high repurchase",
+    "Loyal to one merchant",
+    "Fixed choice",
+    "Refuses to switch",
+    "Long-term relationship"
+   ],
+   "condition_labels": [
+    "Single merchant accounts for ≥ 50% of transactions",
+    "≥ 20 transactions",
+    "≥ 4 transactions at the same merchant in one day (excluding transport and platforms)",
+    "≥ 2 transactions daily at the same merchant for ≥ 3 consecutive days (excluding transport and platforms)",
+    "≥ 30 transactions at the same merchant in a month (excluding food delivery / e-commerce platforms)"
+   ],
+   "tone": "Affectionate, confessional",
+   "core_categories": "High-frequency repeat spending at the same coffee shop / milk tea shop / restaurant / convenience store / supermarket / brand store / e-commerce shop, etc.; excludes misidentification caused by unified merchant names on food delivery platforms",
+   "do_not_say": [
+    "Monotonous",
+    "No other choice",
+    "Foolish"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  },
+  "DSDS": {
+   "name": "Balance Master",
+   "axis": "Safety Net · Balance",
+   "traits": [
+    "Even-handed",
+    "Category-balanced",
+    "Broad interests",
+    "No favoritism",
+    "Versatile spender"
+   ],
+   "condition_labels": [
+    "No other persona triggered",
+    "Largest category < 30%"
+   ],
+   "tone": "Calm, summarizing",
+   "core_categories": "Steady spending across dining, shopping, transport, entertainment, fresh groceries, drinks, daily essentials, learning, and more — with no single category dominating.",
+   "do_not_say": [
+    "mediocre",
+    "unremarkable",
+    "boring"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  },
+  "SJWF": {
+   "name": "Data Escapee",
+   "axis": "Safety Net · Data Insufficient",
+   "traits": [
+    "Sparse data",
+    "Hard to define",
+    "Refuses capture",
+    "Temporarily invisible"
+   ],
+   "condition_labels": [
+    "Data sufficiency = insufficient"
+   ],
+   "tone": "Curious, inviting",
+   "core_categories": "Insufficient valid transactions / Incomplete spending category coverage / Too short a statistical period / Lack of data to identify spending habits",
+   "do_not_say": [
+    "Broke",
+    "Doesn't spend",
+    "Suspicious"
+   ],
+   "guardrails": [],
+   "distinguish": [],
+   "focus": ""
+  }
+ },
+ "badges": {
+  "QQDK": {
+   "name": "Full-Time Grinder",
+   "line": "Perfect attendance, perfect wallet."
+  },
+  "YRBZ": {
+   "name": "One-Day Spree",
+   "line": "Frugal every day, until that one day."
+  },
+  "HYM": {
+   "name": "Coupon Connoisseur",
+   "line": "Orders without a discount don't deserve to be paid."
+  }
+ }
+}

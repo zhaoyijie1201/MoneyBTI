@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="title">MoneyBTI 钱格 · 本月的钱，花成了什么样？</title>
+  <link rel="icon" type="image/png" href="favicon.png?v=59">
+  <link rel="apple-touch-icon" href="cats/app_icon2.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Roboto+Slab:wght@400;700&family=Noto+Sans+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=59">
+  <link rel="stylesheet" href="app.css?v=61">
+  <link rel="stylesheet" href="ticket.css?v=57">
+</head>
+<body>
+
+  <header class="header wrap">
+    <a class="brand" href="#" aria-label="MoneyBTI">
+      <span class="brand__mark" aria-hidden="true">🪙</span>
+      <span>
+        <span class="brand__kicker" data-i18n="brandKicker">MoneyBTI · Spending personality</span><br>
+        <span class="brand__name" data-i18n="brandName">MoneyBTI 钱格</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="main">
+      <a class="nav__link is-active" href="#panel-upload" data-nav="home" data-i18n="navHome">我的钱格</a>
+      <a class="nav__link" href="#" data-nav="gallery" data-i18n="navGallery">人格图鉴</a>
+      <a class="nav__link" href="#" data-nav="about" data-i18n="navAbout">关于 MoneyBTI</a>
+    </nav>
+    <div class="header__actions">
+      <div class="language-switch" role="group" aria-label="界面语言" data-i18n-aria="langLabel">
+        <button class="language-switch__btn is-active" type="button" data-lang="zh" aria-pressed="true">中</button>
+        <button class="language-switch__btn" type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button class="pill pill--dark" type="button" id="btn-debug" data-i18n="debug">幕后日志</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ① 上传 -->
+    <section class="hero wrap" id="panel-upload" aria-labelledby="hero-title">
+      <div class="hero__copy">
+        <span class="hero__blob" aria-hidden="true"></span>
+        <span class="sticker" aria-hidden="true"><img class="sticker__img" src="cats/app_icon2.webp" alt=""></span>
+        <p class="eyebrow hero__eyebrow" id="hero-date">Personal expense digest</p>
+        <h1 class="hero__title" id="hero-title"><span data-i18n="heroTitle1">本月的钱，</span><br><span class="accent" data-i18n="heroTitle2">花成了什么样？</span></h1>
+        <p class="hero__lead" data-i18n="heroLead"></p>
+
+        <div class="hero__controls">
+          <div class="segmented" role="radiogroup" aria-label="tier">
+            <button class="segmented__btn is-active" type="button" data-tier="basic" aria-checked="true" data-i18n="tierBasic">普通 · 按商户规则分类</button>
+            <button class="segmented__btn" type="button" data-tier="vip" aria-checked="false" data-i18n="tierVip">VIP 👑 · AI 逐笔看账单</button>
+          </div>
+          <label class="check"><input type="checkbox" id="chk-compare"> <span data-i18n="compare">对比模式：同时生成普通版和 VIP 版，并排查看</span></label>
+        </div>
+
+        <div class="dropzone" id="dropzone" aria-describedby="upload-hint upload-status" data-state="idle">
+          <div class="dropzone__card">
+            <span class="dropzone__icon" aria-hidden="true">🐱</span>
+            <div class="dropzone__text">
+              <p class="dropzone__title" data-i18n="dropTitle">把月账单交给钱格猫</p>
+              <p class="dropzone__hint" id="upload-hint" data-i18n="dropHint">支持微信 / 支付宝导出的 CSV、XLSX 文件，也可以拖拽到这里</p>
+              <button class="linkbtn" type="button" id="tutorial-trigger" aria-haspopup="dialog" aria-controls="tutorial"><span aria-hidden="true">📖</span> <span data-i18n="howExport">不知道怎么导出账单？看教程</span></button>
+            </div>
+            <button class="pill pill--coral" id="upload-trigger" type="button" data-i18n="upload">上传账单 +</button>
+            <input id="file-input" type="file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+          </div>
+          <div class="dropzone__feedback">
+            <p class="dropzone__note"><span class="dot" aria-hidden="true"></span><span data-i18n="dropNote">数据只用于生成你的报告，不会公开。</span></p>
+            <p class="upload-status" id="upload-status" role="status" aria-live="polite" data-i18n="uploadIdle">请选择或拖入一份账单文件。</p>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <span class="demo-row__label" data-i18n="demoLabel">或用合成演示账单：</span>
+          <select id="sample-select" class="select"></select>
+          <button class="pill pill--yellow" type="button" id="btn-demo" data-i18n="demoBtn">用它演示</button>
+        </div>
+
+        <ol class="steps" aria-label="steps">
+          <li class="step" data-step="1"><span class="step__num">01</span><span data-i18n="step1">读懂交易</span></li>
+          <li class="step" data-step="2"><span class="step__num">02</span><span data-i18n="step2">确认分类</span></li>
+          <li class="step" data-step="3"><span class="step__num">03</span><span data-i18n="step3">消费画像与候选</span></li>
+          <li class="step" data-step="4"><span class="step__num">04</span><span data-i18n="step4">钱格小票</span></li>
+        </ol>
+      </div>
+
+      <aside class="analysis" id="analysis-panel" aria-label="分析结果" data-i18n-aria="analysisLabel">
+        <span class="analysis__deco" aria-hidden="true"></span>
+        <article class="card" id="analysis-card" data-state="idle" aria-live="polite" aria-busy="false">
+          <div class="card__head">
+            <span class="card__head-label" id="analysis-state-label">MoneyBTI / Waiting for bill</span>
+            <span class="card__paw" aria-hidden="true">🐾</span>
+          </div>
+          <div class="card__progress" id="card-progress" hidden>
+            <div class="card__progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="card-progress-fill"></i></div>
+            <span class="card__progress-time" id="card-progress-time"></span>
+          </div>
+          <div class="card__body">
+            <div class="analysis-empty" id="analysis-empty">
+              <div class="analysis-cat" aria-hidden="true"><div class="catlab"><div class="cat"><span class="cat__ear cat__ear--l"></span><span class="cat__ear cat__ear--r"></span><div class="cat__face"><span class="cat__eye"></span><span class="cat__eye"></span><span class="cat__nose"></span></div><span class="cat__paw"></span><span class="cat__tail"></span></div><div class="strip"><div><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div></div>
+              <p class="persona__kicker">Today's money type</p>
+              <h2 class="persona__name" data-i18n="analysisWaitingTitle">等待分析 🐾</h2>
+              <p class="persona__summary" id="analysis-waiting-text" data-i18n="analysisWaitingText">上传账单后，这里会显示你的消费人格、分类统计和消费总结。</p>
+            </div>
+            <div id="analysis-content" hidden>
+              <div class="analysis-cat" aria-hidden="true"><div class="catlab"><div class="cat"><span class="cat__ear cat__ear--l"></span><span class="cat__ear cat__ear--r"></span><div class="cat__face"><span class="cat__eye"></span><span class="cat__eye"></span><span class="cat__nose"></span></div><span class="cat__paw"></span><span class="cat__tail"></span></div><div class="strip"><div><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div></div>
+              <div class="persona">
+                <div>
+                  <p class="persona__kicker">Today's money type</p>
+                  <h2 class="persona__name"><span id="persona-name"></span> <span id="persona-emoji" aria-hidden="true"></span></h2>
+                  <p class="persona__code"><span id="persona-code"></span><span id="persona-subtitle"></span></p>
+                </div>
+                <span class="badge" id="persona-badge" hidden></span>
+              </div>
+              <p class="persona__summary" id="persona-summary"></p>
+              <div class="stats" id="category-stats" aria-label="消费分类统计" data-i18n-aria="categoriesLabel"></div>
+              <div class="total">
+                <span class="total__label" id="total-label" data-i18n="analysisTotal">TOTAL · 所选周期</span>
+                <span class="total__value" id="total-amount">¥0.00</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </aside>
+    </section>
+
+    <div class="wrap"><div class="status" id="status" hidden></div></div>
+
+    <!-- ② 分类确认 -->
+    <section class="panel wrap" id="panel-classify" hidden>
+      <div class="panel__head">
+        <div>
+          <p class="eyebrow" data-i18n="p2Eyebrow">② 第二步 · 确认分类</p>
+          <h2 class="section-title"><span data-i18n="p2Title1">先确认分类，</span><br><span data-i18n="p2Title2">再定义钱格。</span></h2>
+          <p class="panel__lead" id="classify-stats"></p>
+          <div class="report-inline" id="report-body"></div>
+        </div>
+        <div class="panel__actions">
+          <button class="pill pill--ghost" type="button" id="btn-filter-flag" data-i18n="filterFlag">只看需要确认的</button>
+          <button class="pill pill--coral" type="button" id="btn-confirm" data-i18n="confirm">确认并继续 →</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="table" id="txn-table">
+          <thead><tr id="txn-head"></tr></thead>
+          <tbody id="txn-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ③ 指标、维度与候选 -->
+    <section class="panel panel--band" id="panel-metrics" hidden>
+      <div class="wrap">
+        <div class="panel__head">
+          <div>
+            <p class="eyebrow" data-i18n="p3Eyebrow">③ 第三步 · 消费画像与候选人格</p>
+            <h2 class="section-title"><span data-i18n="p3Title1">算出来的你，</span><br><span data-i18n="p3Title2">和最像的三张卡。</span></h2>
+            <p class="panel__lead" id="metrics-lead"></p>
+          </div>
+          <div class="panel__actions">
+            <button class="pill pill--coral" type="button" id="btn-generate" data-i18n="generate">生成钱格 →</button>
+          </div>
+        </div>
+        <div class="metrics-grid">
+          <div class="mcard"><p class="mcard__title" data-i18n="catShare">类别占比</p><div id="cat-bars"></div><div class="total" id="metrics-total"></div></div>
+          <div class="mcard"><p class="mcard__title"><span data-i18n="radar">消费维度雷达</span> <span class="muted small" data-i18n="radarHint">60 分以上 = 这一面很明显</span></p><div id="radar"></div></div>
+          <div class="mcard mcard--wide"><p class="mcard__title" data-i18n="keyMetrics">关键数字</p><div class="chips" id="metric-chips"></div></div>
+          <div class="mcard mcard--wide"><p class="mcard__title" data-i18n="candidates">最像你的三张人格卡 · 匹配度与逐条说明</p><div class="cands" id="cands"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 钱格与小票 -->
+    <section class="panel wrap" id="panel-result" hidden>
+      <div class="panel__head">
+        <div>
+          <p class="eyebrow" data-i18n="p4Eyebrow">④ 第四步 · 你的钱格与小票</p>
+          <h2 class="section-title" data-i18n="p4Title">这就是你的钱格。</h2>
+          <p class="panel__lead" id="result-lead"></p>
+        </div>
+        <div class="panel__actions">
+          <button class="pill pill--ghost" type="button" id="btn-regenerate" data-i18n="regenerate">重新生成</button>
+          <button class="pill pill--ghost" type="button" id="btn-copy" data-i18n="copyShare">复制分享文案</button>
+          <button class="pill pill--yellow" type="button" id="btn-export" data-i18n="exportPng">导出 PNG</button>
+        </div>
+      </div>
+      <div class="result-grid" id="result-grid">
+        <div id="persona-col"></div>
+        <div class="receipt-col">
+          <div class="themes" role="radiogroup" aria-label="ticket theme">
+            <button class="pill pill--dark" type="button" data-theme="cream" role="radio" aria-checked="true" data-i18n="themeCream">奶油</button>
+            <button class="pill pill--ghost" type="button" data-theme="night" role="radio" aria-checked="false" data-i18n="themeNight">夜市</button>
+            <button class="pill pill--ghost" type="button" data-theme="mint" role="radio" aria-checked="false" data-i18n="themeMint">薄荷</button>
+          </div>
+          <div class="receipt-wrap"><div class="tk-fold" data-collapsed="false">
+            <article class="tk" id="receipt" data-theme="cream" aria-label="ticket preview"></article>
+            <button class="tk-fold__btn pill pill--ghost" type="button" data-fold-toggle></button>
+          </div></div>
+        </div>
+      </div>
+      <div id="compare-grid" class="compare" hidden></div>
+    </section>
+  </main>
+
+  <!-- 人格图鉴 -->
+  <div class="modal" id="gallery" hidden>
+    <div class="modal__box">
+      <div class="modal__head"><p class="eyebrow" data-i18n="galleryTitle">Persona gallery</p><button class="modal__close" type="button" data-close aria-label="关闭" data-i18n-aria="close" title="关闭">✕</button></div>
+      <div class="gallery modal__body" id="gallery-grid"></div>
+    </div>
+  </div>
+  <div class="modal" id="ticket-modal" hidden>
+    <div class="modal__box modal__box--ticket">
+      <div class="modal__head"><p class="eyebrow" data-i18n="ticketModalTitle">你的钱格小票</p><button class="modal__close" type="button" data-close aria-label="关闭" data-i18n-aria="close" title="关闭">✕</button></div>
+      <div class="ticket-modal__themes themes" role="radiogroup" aria-label="ticket theme">
+        <button class="pill pill--dark" type="button" data-theme="cream" role="radio" aria-checked="true" data-i18n="themeCream">奶油</button>
+        <button class="pill pill--ghost" type="button" data-theme="night" role="radio" aria-checked="false" data-i18n="themeNight">夜市</button>
+        <button class="pill pill--ghost" type="button" data-theme="mint" role="radio" aria-checked="false" data-i18n="themeMint">薄荷</button>
+      </div>
+      <div class="ticket-loading" id="ticket-loading" hidden aria-live="polite"></div>
+      <div class="ticket-modal__body"><article class="tk" id="receipt-modal" data-theme="cream" aria-label="ticket"></article></div>
+      <div class="ticket-modal__actions">
+        <button class="pill pill--yellow" type="button" id="modal-export" data-i18n="exportPng">导出 PNG</button>
+        <button class="pill pill--ghost" type="button" id="modal-copy" data-i18n="copyShare">复制分享文案</button>
+        <button class="pill pill--dark" type="button" id="modal-goto" data-i18n="ticketModalGoto">查看完整结果 ↓</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="badge-modal" hidden>
+    <div class="modal__box modal__box--narrow">
+      <div class="modal__head"><p class="eyebrow" data-i18n="badgeModalTitle">Achievement badge</p><button class="modal__close" type="button" data-close aria-label="关闭" data-i18n-aria="close" title="关闭">✕</button></div>
+      <div class="badge-view modal__body" id="badge-body"></div>
+    </div>
+  </div>
+  <div class="modal" id="tutorial" hidden>
+    <div class="modal__box modal__box--tutorial" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <div class="modal__head"><p class="eyebrow" id="tutorial-title" data-i18n="tutTitle">如何导出账单</p><button class="modal__close" type="button" data-close aria-label="关闭" data-i18n-aria="close" title="关闭">✕</button></div>
+      <div class="tut-tabs" role="tablist" aria-label="platform">
+        <button class="pill pill--dark" type="button" role="tab" aria-selected="true" data-tut-tab="alipay" id="tut-tab-alipay" aria-controls="tut-alipay" data-i18n="tutAlipay">支付宝</button>
+        <button class="pill pill--ghost" type="button" role="tab" aria-selected="false" data-tut-tab="wechat" id="tut-tab-wechat" aria-controls="tut-wechat" data-i18n="tutWechat">微信</button>
+      </div>
+      <div class="modal__body tut">
+        <section class="tut__pane" id="tut-alipay" role="tabpanel" aria-labelledby="tut-tab-alipay">
+          <p class="tut__lead" data-i18n="tutAlipayLead">在支付宝 App 里申请「交易流水」，支付宝会把 CSV 文件发到你的邮箱。</p>
+          <ol class="tut__steps">
+            <li class="tut__step"><figure><img src="BillTutorial/alipay-1.webp" alt="" loading="lazy" width="720" height="1565"><figcaption><b>1</b><span data-i18n="tutAlipay1">打开支付宝，点右下角「我的」，进入「账单」。</span></figcaption></figure></li>
+            <li class="tut__step"><figure><img src="BillTutorial/alipay-2.webp" alt="" loading="lazy" width="720" height="1565"><figcaption><b>2</b><span data-i18n="tutAlipay2">点右上角「···」。</span></figcaption></figure></li>
+            <li class="tut__step"><figure><img src="BillTutorial/alipay-3.webp" alt="" loading="lazy" width="720" height="1565"><figcaption><b>3</b><span data-i18n="tutAlipay3">选「开具交易流水证明」→「用于个人对账」，选择时间范围（建议近 1 个月），填写邮箱并提交。</span></figcaption></figure></li>
+          </ol>
+          <p class="tut__note" data-i18n="tutAlipayNote">4. 几分钟后到邮箱下载压缩包，解压密码在支付宝的通知消息里；解压得到的 CSV 直接上传即可。</p>
+        </section>
+        <section class="tut__pane" id="tut-wechat" role="tabpanel" aria-labelledby="tut-tab-wechat" hidden>
+          <p class="tut__lead" data-i18n="tutWechatLead">在微信 App 里下载「账单流水」，微信会把 Excel 文件发到你的邮箱。</p>
+          <figure class="tut__wide"><img src="BillTutorial/wechat.webp" alt="" loading="lazy" width="1196" height="1613"></figure>
+          <ol class="tut__list">
+            <li data-i18n="tutWechat1">打开微信，点右下角「我」→「服务」→「钱包」。</li>
+            <li data-i18n="tutWechat2">点右上角「账单」，再点右上角「···」→「下载账单」。</li>
+            <li data-i18n="tutWechat3">选「用于个人对账」（Excel 格式），接收方式选邮箱，填写邮箱，账单时间选「近一月」，点「下一步」完成验证。</li>
+            <li data-i18n="tutWechat4">几分钟后到邮箱下载压缩包，解压密码在微信支付的通知里；解压得到的 XLSX 直接上传即可。</li>
+          </ol>
+        </section>
+        <p class="tut__privacy"><span class="dot" aria-hidden="true"></span><span data-i18n="tutPrivacy">账单文件只在生成报告时使用，不会保存或公开。</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="about" hidden>
+    <div class="modal__box modal__box--narrow">
+      <div class="modal__head"><p class="eyebrow" data-i18n="aboutTitle">About</p><button class="modal__close" type="button" data-close aria-label="关闭" data-i18n-aria="close" title="关闭">✕</button></div>
+      <div class="about modal__body" id="about-body"></div>
+    </div>
+  </div>
+
+  <!-- 调试抽屉 -->
+  <aside class="drawer" id="drawer" hidden>
+    <div class="drawer__head"><span class="eyebrow" data-i18n="drawerTitle">幕后日志</span><button class="pill pill--ghost" type="button" data-close data-i18n="collapse">收起</button></div>
+    <div class="drawer__body" id="drawer-body"><p class="muted" data-i18n="drawerEmpty">还没有运行。</p></div>
+  </aside>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="i18n.js?v=60"></script>
+  <script src="ticket-copy.js?v=52"></script>
+  <script src="app.js?v=60"></script>
+</body>
+</html>

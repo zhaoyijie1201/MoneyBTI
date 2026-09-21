@@ -1,0 +1,15 @@
+data/
+cache/
+api_key.txt
+OpenRouter_api.txt
+open_router_api_key.txt
+access token.txt
+eval/results*/
+tests/labels/
+tests/truth/
+*.docx
+*.pdf
+~$*
+__pycache__/
+.git/
+web/cats/originals/

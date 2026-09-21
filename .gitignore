@@ -1,0 +1,8 @@
+api_key.txt
+OpenRouter_api.txt
+open_router_api_key.txt
+access token.txt
+cache/
+data/
+~$*
+__pycache__/

@@ -1,0 +1,1088 @@
+{
+  "_meta": {
+    "version": "2.0",
+    "date": "2026-09-10",
+    "description": "MoneyBTI 钱格 商户映射知识库 v2。21 组商户家族 (L1) + 支付宝平台分类映射 (L2) + 商品说明关键词 (L3) + 否定词表 + 平台穿透规则。匹配顺序：negations → 平台穿透（商户为外卖 / 电商平台时先用商品说明匹配品牌家族）→ L1 → L2 → L3 → 未分类。新增 C11 宠物。",
+    "categories": {
+      "C1": "外卖",
+      "C2": "堂食餐厅",
+      "C3": "生鲜零食",
+      "C4": "咖啡饮品",
+      "C5": "网购",
+      "C6": "美妆服饰",
+      "C7": "交通通勤",
+      "C8": "娱乐氪金",
+      "C9": "生活居家医疗",
+      "C10": "学习其他",
+      "C11": "宠物"
+    },
+    "category_defaults": {
+      "C1": {
+        "is_online": true,
+        "is_necessity": false
+      },
+      "C2": {
+        "is_online": false,
+        "is_necessity": false
+      },
+      "C3": {
+        "is_online": false,
+        "is_necessity": true
+      },
+      "C4": {
+        "is_online": false,
+        "is_necessity": false
+      },
+      "C5": {
+        "is_online": true,
+        "is_necessity": false
+      },
+      "C6": {
+        "is_online": true,
+        "is_necessity": false
+      },
+      "C7": {
+        "is_online": false,
+        "is_necessity": true
+      },
+      "C8": {
+        "is_online": true,
+        "is_necessity": false
+      },
+      "C9": {
+        "is_online": false,
+        "is_necessity": true
+      },
+      "C10": {
+        "is_online": false,
+        "is_necessity": true
+      },
+      "C11": {
+        "is_online": false,
+        "is_necessity": false
+      }
+    },
+    "categories_en": {
+      "C1": "Delivery",
+      "C2": "Dining out",
+      "C3": "Groceries & snacks",
+      "C4": "Coffee & tea",
+      "C5": "Online shopping",
+      "C6": "Beauty & fashion",
+      "C7": "City transport",
+      "C8": "Entertainment",
+      "C9": "Home & health",
+      "C10": "Learning & other",
+      "C11": "Pets"
+    }
+  },
+  "negations": [
+    {
+      "id": "N1",
+      "keywords": [
+        "话费",
+        "电费",
+        "水费",
+        "燃气",
+        "宽带",
+        "流量"
+      ],
+      "category": "C9",
+      "note": "先于 L3 的“充值”命中，避免话费充值被判成娱乐氪金"
+    },
+    {
+      "id": "N2",
+      "keywords": [
+        "软件服务费",
+        "分账",
+        "手续费",
+        "服务费"
+      ],
+      "category": "C10",
+      "note": "闲鱼/平台扣费不是购物"
+    }
+  ],
+  "L1_merchant_families": [
+    {
+      "id": "M01",
+      "family": "外卖平台",
+      "category": "C1",
+      "keywords": [
+        "美团",
+        "饿了么",
+        "淘宝闪购",
+        "抖音生活服务",
+        "京东秒送",
+        "外卖"
+      ],
+      "is_online": true,
+      "is_necessity": false
+    },
+    {
+      "id": "M02",
+      "family": "快餐连锁",
+      "category": "C2",
+      "keywords": [
+        "肯德基",
+        "KFC",
+        "麦当劳",
+        "必胜客",
+        "华莱士",
+        "塔斯汀",
+        "汉堡王",
+        "萨莉亚"
+      ],
+      "is_online": false,
+      "is_necessity": false
+    },
+    {
+      "id": "M03",
+      "family": "餐馆与食堂",
+      "category": "C2",
+      "keywords": [
+        "烤肉",
+        "火锅",
+        "自助",
+        "餐饮管理",
+        "餐饮",
+        "牛杂",
+        "米线",
+        "面馆",
+        "饭店",
+        "食堂",
+        "后勤",
+        "小吃",
+        "烧烤",
+        "铁板",
+        "寿喜烧",
+        "餐厅"
+      ],
+      "is_online": false,
+      "is_necessity": false
+    },
+    {
+      "id": "M04",
+      "family": "超市便利店",
+      "category": "C3",
+      "keywords": [
+        "盒马",
+        "山姆",
+        "全家",
+        "罗森",
+        "7-ELEVEN",
+        "便利蜂",
+        "超市",
+        "便利店",
+        "丰 e 足食",
+        "丰e足食",
+        "水果",
+        "生鲜",
+        "永辉",
+        "大润发"
+      ],
+      "is_online": false,
+      "is_necessity": true
+    },
+    {
+      "id": "M05",
+      "family": "零食烘焙",
+      "category": "C3",
+      "keywords": [
+        "零食",
+        "烘焙",
+        "面包",
+        "蛋糕",
+        "好想来",
+        "绝味",
+        "鸭脖",
+        "三只松鼠",
+        "良品铺子",
+        "牛肉干"
+      ],
+      "is_online": false,
+      "is_necessity": false
+    },
+    {
+      "id": "M06",
+      "family": "咖啡",
+      "category": "C4",
+      "keywords": [
+        "瑞幸",
+        "星巴克",
+        "Manner",
+        "库迪",
+        "咖啡",
+        "Costa",
+        "Tims"
+      ],
+      "is_online": false,
+      "is_necessity": false
+    },
+    {
+      "id": "M07",
+      "family": "茶饮",
+      "category": "C4",
+      "keywords": [
+        "蜜雪",
+        "喜茶",
+        "奈雪",
+        "霸王茶姬",
+        "茉莉奶白",
+        "古茗",
+        "沪上阿姨",
+        "奶茶",
+        "茶饮",
+        "书亦",
+        "益禾堂",
+        "煮叶"
+      ],
+      "is_online": false,
+      "is_necessity": false
+    },
+    {
+      "id": "M08",
+      "family": "综合电商",
+      "category": "C5",
+      "keywords": [
+        "淘宝",
+        "天猫",
+        "京东",
+        "拼多多",
+        "小红书",
+        "抖音电商",
+        "唯品会",
+        "得物",
+        "1688"
+      ],
+      "is_online": true,
+      "is_necessity": false
+    },
+    {
+      "id": "M09",
+      "family": "二手与平台交易",
+      "category": "C5",
+      "keywords": [
+        "闲鱼",
+        "转转",
+        "多抓鱼"
+      ],
+      "is_online": true,
+      "is_necessity": false,
+      "note": "闲鱼的“软件服务费/分账”行先被 N2 拦下"
+    },
+    {
+      "id": "M10",
+      "family": "服饰美妆品牌",
+      "category": "C6",
+      "keywords": [
+        "UNIQLO",
+        "优衣库",
+        "ZARA",
+        "H&M",
+        "屈臣氏",
+        "丝芙兰",
+        "SEPHORA",
+        "MUJI",
+        "无印良品",
+        "耐克",
+        "NIKE",
+        "阿迪",
+        "服饰",
+        "美妆",
+        "护肤",
+        "美发",
+        "美甲",
+        "美容",
+        "SPA",
+        "纹绣",
+        "皮肤管理",
+        "美睫",
+        "香氛",
+        "香水",
+        "饰品"
+      ],
+      "is_online": false,
+      "is_necessity": false,
+      "subtypes": {
+        "makeup": [
+          "美妆",
+          "彩妆",
+          "屈臣氏",
+          "丝芙兰",
+          "SEPHORA",
+          "口红"
+        ],
+        "skincare": [
+          "护肤",
+          "面膜",
+          "精华",
+          "水乳"
+        ],
+        "clothing": [
+          "服饰",
+          "UNIQLO",
+          "优衣库",
+          "ZARA",
+          "H&M",
+          "MUJI",
+          "无印良品",
+          "耐克",
+          "NIKE",
+          "阿迪",
+          "衣",
+          "鞋"
+        ],
+        "fragrance": [
+          "香氛",
+          "香水"
+        ],
+        "service": [
+          "美发",
+          "美甲",
+          "美容",
+          "SPA",
+          "纹绣",
+          "皮肤管理",
+          "美睫"
+        ],
+        "accessory": [
+          "饰品",
+          "手链",
+          "项链",
+          "耳环"
+        ]
+      }
+    },
+    {
+      "id": "M11",
+      "family": "地铁公交",
+      "category": "C7",
+      "keywords": [
+        "地铁",
+        "轨道交通",
+        "公交",
+        "交通卡",
+        "一卡通",
+        "乘车码"
+      ],
+      "is_online": false,
+      "is_necessity": true
+    },
+    {
+      "id": "M12",
+      "family": "网约车共享单车",
+      "category": "C7",
+      "keywords": [
+        "高德打车",
+        "滴滴",
+        "曹操",
+        "T3出行",
+        "哈啰",
+        "骑安",
+        "美团单车",
+        "青桔",
+        "先乘后付",
+        "打车"
+      ],
+      "is_online": false,
+      "is_necessity": true
+    },
+    {
+      "id": "M13",
+      "family": "游戏与应用商店",
+      "category": "C8",
+      "keywords": [
+        "网易",
+        "腾讯游戏",
+        "App Store",
+        "Apple Music",
+        "Steam",
+        "Valve",
+        "米哈游",
+        "战令",
+        "长鸣珠",
+        "点券",
+        "游戏"
+      ],
+      "is_online": true,
+      "is_necessity": false
+    },
+    {
+      "id": "M14",
+      "family": "视频音乐订阅",
+      "category": "C8",
+      "keywords": [
+        "爱奇艺",
+        "腾讯视频",
+        "bilibili",
+        "哔哩哔哩",
+        "网易云音乐",
+        "QQ音乐",
+        "Spotify",
+        "Netflix",
+        "优酷",
+        "芒果TV",
+        "iCloud",
+        "Google One",
+        "百度网盘",
+        "阿里云盘",
+        "ChatGPT",
+        "OpenAI",
+        "Claude",
+        "Notion",
+        "Adobe",
+        "Microsoft 365",
+        "Office 365",
+        "WPS",
+        "Keep",
+        "得到",
+        "知乎",
+        "喜马拉雅",
+        "Kindle",
+        "微信读书",
+        "樊登",
+        "Duolingo",
+        "多邻国"
+      ],
+      "is_online": true,
+      "is_necessity": false,
+      "subtypes": {
+        "video": [
+          "爱奇艺",
+          "腾讯视频",
+          "bilibili",
+          "哔哩哔哩",
+          "优酷",
+          "芒果TV",
+          "Netflix",
+          "Disney"
+        ],
+        "music": [
+          "网易云音乐",
+          "QQ音乐",
+          "Spotify",
+          "Apple Music",
+          "酷狗"
+        ],
+        "software": [
+          "ChatGPT",
+          "OpenAI",
+          "Claude",
+          "Notion",
+          "Adobe",
+          "Microsoft 365",
+          "Office 365",
+          "WPS",
+          "App Store"
+        ],
+        "cloud": [
+          "iCloud",
+          "Google One",
+          "百度网盘",
+          "阿里云盘",
+          "Cloud",
+          "云服务"
+        ],
+        "learning": [
+          "得到",
+          "知乎",
+          "喜马拉雅",
+          "Kindle",
+          "微信读书",
+          "樊登",
+          "Duolingo",
+          "多邻国",
+          "网课"
+        ],
+        "fitness": [
+          "Keep",
+          "健身",
+          "超级猩猫",
+          "乐刻"
+        ]
+      }
+    },
+    {
+      "id": "M15",
+      "family": "票务旅游",
+      "category": "C8",
+      "keywords": [
+        "猫眼",
+        "大麦",
+        "淘票票",
+        "携程",
+        "去哪儿",
+        "飞猪",
+        "酒店",
+        "民宿",
+        "影城",
+        "电影",
+        "12306",
+        "铁路",
+        "高铁",
+        "火车票",
+        "航空",
+        "机票",
+        "Trip.com",
+        "同程",
+        "途牛",
+        "青旅",
+        "景区",
+        "门票",
+        "博物馆",
+        "展览"
+      ],
+      "is_online": true,
+      "is_necessity": false,
+      "subtypes": {
+        "long_transport": [
+          "12306",
+          "铁路",
+          "高铁",
+          "火车票",
+          "航空",
+          "机票",
+          "东航",
+          "国航",
+          "南航",
+          "春秋航空"
+        ],
+        "lodging": [
+          "酒店",
+          "民宿",
+          "青旅",
+          "Hotel",
+          "如家",
+          "汉庭",
+          "全季",
+          "亚朵"
+        ],
+        "ticket": [
+          "门票",
+          "景区",
+          "博物馆",
+          "展览",
+          "猫眼",
+          "大麦",
+          "淘票票",
+          "影城",
+          "电影",
+          "演出"
+        ]
+      }
+    },
+    {
+      "id": "M16",
+      "family": "医药健康",
+      "category": "C9",
+      "keywords": [
+        "药房",
+        "大药房",
+        "药店",
+        "医院",
+        "诊所",
+        "口腔",
+        "体检",
+        "医疗"
+      ],
+      "is_online": false,
+      "is_necessity": true
+    },
+    {
+      "id": "M17",
+      "family": "生活缴费与通信",
+      "category": "C9",
+      "keywords": [
+        "中国移动",
+        "中国联通",
+        "中国电信",
+        "国家电网",
+        "燃气",
+        "水务",
+        "物业",
+        "充值缴费"
+      ],
+      "is_online": true,
+      "is_necessity": true
+    },
+    {
+      "id": "M18",
+      "family": "日用居家服务",
+      "category": "C9",
+      "keywords": [
+        "名创优品",
+        "宜家",
+        "百货店",
+        "文具",
+        "理发",
+        "洗衣",
+        "街电",
+        "怪兽充电",
+        "快递",
+        "菜鸟",
+        "顺丰",
+        "打印",
+        "照相"
+      ],
+      "is_online": false,
+      "is_necessity": true
+    },
+    {
+      "id": "M19",
+      "family": "教育学习",
+      "category": "C10",
+      "keywords": [
+        "大学",
+        "学校",
+        "教育",
+        "培训",
+        "学信",
+        "书店",
+        "当当",
+        "网课",
+        "考试",
+        "学费"
+      ],
+      "is_online": false,
+      "is_necessity": true
+    },
+    {
+      "id": "M20",
+      "family": "平台服务与其他",
+      "category": "C10",
+      "keywords": [
+        "GrabReward",
+        "Grab",
+        "保险",
+        "咨询服务",
+        "会员权益订单",
+        "Cloud",
+        "云服务"
+      ],
+      "is_online": true,
+      "is_necessity": true
+    },
+    {
+      "id": "M21",
+      "family": "宠物",
+      "category": "C11",
+      "keywords": [
+        "宠物",
+        "猫粮",
+        "狗粮",
+        "猫砂",
+        "兽医",
+        "宠物医院",
+        "波奇",
+        "E宠",
+        "疯狂小狗",
+        "冻干",
+        "猫咪",
+        "狗狗",
+        "爪爪",
+        "毛孩",
+        "Pet",
+        "宠物店",
+        "宠物美容",
+        "犬",
+        "猫舍"
+      ],
+      "is_online": false,
+      "is_necessity": false,
+      "subtypes": {
+        "food": [
+          "猫粮",
+          "狗粮",
+          "冻干",
+          "猫条",
+          "罐头",
+          "零食",
+          "主粮"
+        ],
+        "supplies": [
+          "猫砂",
+          "玩具",
+          "牵引",
+          "猫抓板",
+          "窝",
+          "碗"
+        ],
+        "medical": [
+          "兽医",
+          "宠物医院",
+          "驱虫",
+          "疫苗",
+          "体检"
+        ],
+        "grooming": [
+          "洗护",
+          "美容",
+          "洗澡",
+          "剪毛"
+        ],
+        "service": [
+          "寄养",
+          "托管",
+          "训练"
+        ]
+      }
+    }
+  ],
+  "L2_alipay_category_map": {
+    "餐饮美食": {
+      "category": "C2",
+      "needs_L3_first": true,
+      "note": "先查 L3：外卖/奶茶/吐司等关键词，否则默认堂食"
+    },
+    "交通出行": {
+      "category": "C7"
+    },
+    "文化休闲": {
+      "category": "C8"
+    },
+    "酒店旅游": {
+      "category": "C8"
+    },
+    "运动户外": {
+      "category": "C8"
+    },
+    "服饰装扮": {
+      "category": "C6"
+    },
+    "美容美发": {
+      "category": "C6"
+    },
+    "日用百货": {
+      "category": "C5",
+      "note": "普通版默认线上购买；VIP 版由 M3 区分线下"
+    },
+    "家居家装": {
+      "category": "C5"
+    },
+    "数码电器": {
+      "category": "C5"
+    },
+    "医疗健康": {
+      "category": "C9"
+    },
+    "生活服务": {
+      "category": "C9"
+    },
+    "充值缴费": {
+      "category": "C9"
+    },
+    "教育培训": {
+      "category": "C10"
+    },
+    "商业服务": {
+      "category": null,
+      "note": "未分类"
+    },
+    "其他": {
+      "category": null,
+      "note": "未分类"
+    },
+    "转账红包": {
+      "category": null,
+      "note": "Parser R4 已剔除"
+    }
+  },
+  "L3_description_keywords": [
+    {
+      "keywords": [
+        "猫粮",
+        "狗粮",
+        "猫砂",
+        "冻干",
+        "驱虫",
+        "猫条",
+        "狗零食",
+        "宠物",
+        "主粮",
+        "猫抓板"
+      ],
+      "category": "C11"
+    },
+    {
+      "keywords": [
+        "外卖",
+        "闪购"
+      ],
+      "category": "C1"
+    },
+    {
+      "keywords": [
+        "奶茶",
+        "咖啡",
+        "拿铁",
+        "美式",
+        "生椰"
+      ],
+      "category": "C4"
+    },
+    {
+      "keywords": [
+        "吐司",
+        "面包",
+        "零食",
+        "烘焙",
+        "牛肉干",
+        "蛋白"
+      ],
+      "category": "C3"
+    },
+    {
+      "keywords": [
+        "【堂食】",
+        "堂食",
+        "线下门店",
+        "自助",
+        "烤肉",
+        "火锅",
+        "套餐"
+      ],
+      "category": "C2"
+    },
+    {
+      "keywords": [
+        "充值",
+        "战令",
+        "会员",
+        "月卡",
+        "订阅",
+        "道具"
+      ],
+      "category": "C8"
+    },
+    {
+      "keywords": [
+        "地铁",
+        "公交",
+        "打车",
+        "先乘后付",
+        "骑行"
+      ],
+      "category": "C7"
+    },
+    {
+      "keywords": [
+        "药",
+        "挂号",
+        "门诊"
+      ],
+      "category": "C9"
+    },
+    {
+      "keywords": [
+        "蔬菜",
+        "水果",
+        "鸡蛋",
+        "牛奶",
+        "猪肉",
+        "牛肉",
+        "鸡肉",
+        "大米",
+        "面粉",
+        "食用油",
+        "调味",
+        "生鲜"
+      ],
+      "category": "C3"
+    }
+  ],
+  "platform_passthrough": {
+    "platform_families": [
+      "M01",
+      "M08",
+      "M09"
+    ],
+    "brand_families": [
+      "M21",
+      "M07",
+      "M06",
+      "M13",
+      "M14",
+      "M05",
+      "M04",
+      "M10"
+    ],
+    "note": "具体消费类别 > 消费渠道：外卖平台买奶茶记 C4，电商买猫粮记 C11；渠道另记 channel=delivery/online"
+  },
+  "fixed_cost_keywords": [
+    "房租",
+    "物业",
+    "学费",
+    "水费",
+    "电费",
+    "燃气",
+    "话费",
+    "宽带",
+    "保险",
+    "押金",
+    "医保",
+    "社保",
+    "公积金"
+  ],
+  "metric_keywords": {
+    "transport_modes": {
+      "metro": [
+        "地铁",
+        "轨道交通",
+        "MRT"
+      ],
+      "bus": [
+        "公交",
+        "乘车码",
+        "巴士"
+      ],
+      "taxi": [
+        "打车",
+        "滴滴",
+        "曹操",
+        "T3出行",
+        "出租",
+        "网约车",
+        "高德"
+      ],
+      "bike": [
+        "哈啰",
+        "骑安",
+        "单车",
+        "青桔",
+        "骑行",
+        "美团单车"
+      ]
+    },
+    "snack": [
+      "零食",
+      "烘焙",
+      "面包",
+      "蛋糕",
+      "甜品",
+      "糖",
+      "饼干",
+      "薯片",
+      "巧克力",
+      "冰淇淋"
+    ],
+    "virtual_item": [
+      "点券",
+      "皮肤",
+      "角色",
+      "通行证",
+      "战令",
+      "长鸣珠",
+      "月卡",
+      "钻石",
+      "元宝",
+      "结晶",
+      "原石",
+      "抽卡",
+      "礼包",
+      "道具",
+      "Battle Pass",
+      "Season Pass"
+    ],
+    "study": [
+      "书",
+      "课",
+      "学",
+      "培训",
+      "考试",
+      "教材",
+      "文具",
+      "知识",
+      "学费",
+      "报名"
+    ],
+    "grocery_groups": {
+      "veg_fruit": [
+        "蔬菜",
+        "水果",
+        "果",
+        "菜"
+      ],
+      "meat": [
+        "猪肉",
+        "牛肉",
+        "鸡肉",
+        "肉",
+        "鱼",
+        "虾"
+      ],
+      "egg_dairy": [
+        "鸡蛋",
+        "蛋",
+        "牛奶",
+        "奶",
+        "酸奶"
+      ],
+      "staple": [
+        "大米",
+        "面",
+        "粮",
+        "油",
+        "调味",
+        "盐",
+        "糖"
+      ],
+      "grocery_generic": [
+        "超市",
+        "生鲜",
+        "便利店",
+        "盒马",
+        "永辉"
+      ]
+    },
+    "online_product_groups": {
+      "clothing": [
+        "衣",
+        "裤",
+        "鞋",
+        "T恤",
+        "外套",
+        "袜",
+        "包"
+      ],
+      "home": [
+        "收纳",
+        "灯",
+        "家居",
+        "毛巾",
+        "床",
+        "杯"
+      ],
+      "digital": [
+        "数据线",
+        "耳机",
+        "充电",
+        "鼠标",
+        "键盘",
+        "手机壳"
+      ],
+      "daily": [
+        "纸巾",
+        "洗",
+        "牙",
+        "日用",
+        "清洁"
+      ],
+      "stationery": [
+        "笔",
+        "本",
+        "文具"
+      ],
+      "beauty": [
+        "面膜",
+        "口红",
+        "护肤",
+        "香水"
+      ],
+      "food": [
+        "零食",
+        "咖啡",
+        "茶"
+      ]
+    }
+  }
+}

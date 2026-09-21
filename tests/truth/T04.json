@@ -1,0 +1,360 @@
+{
+ "id": "T04",
+ "expected": {
+  "group": "正常",
+  "primary": [
+   "HAO"
+  ],
+  "data_level": "勉强",
+  "note": "20 笔，中位数 ≈ ¥260，服饰为主；文案须注明样本少"
+ },
+ "report": {
+  "raw": 20,
+  "valid": 20,
+  "source": "alipay",
+  "period_from_header": true,
+  "period_start": "2026-08-01",
+  "period_end": "2026-08-31",
+  "period_days": 31
+ },
+ "metrics": {
+  "total": 7427.98,
+  "txn_count": 20,
+  "txn_per_day": 0.65,
+  "active_days": 16,
+  "period_days": 31,
+  "period_start": "2026-08-01",
+  "period_end": "2026-08-31",
+  "category_share": {
+   "C6": 0.475,
+   "C5": 0.265,
+   "C2": 0.26
+  },
+  "category_amount": {
+   "C6": 3524.79,
+   "C5": 1971.37,
+   "C2": 1931.82,
+   "C1": 0.0,
+   "C3": 0.0
+  },
+  "category_count": {
+   "C2": 6,
+   "C6": 8,
+   "C5": 6
+  },
+  "unclassified_ratio": 0.0,
+  "unclassified_amount": 0.0,
+  "top_category": "C6",
+  "top_category_share": 0.475,
+  "food_share": 0.26,
+  "delivery_ratio": 0.0,
+  "small_txn_ratio": 0.0,
+  "median_amount": 381.33,
+  "big_ticket_share": 0.978,
+  "online_share": 0.74,
+  "shopping_share": 0.74,
+  "C4_share": 0,
+  "C8_share": 0,
+  "late_night_ratio": 0.05,
+  "beverage_per_week": 0.0,
+  "commute_count_ratio": 0.0,
+  "necessity_share": 0.0,
+  "weekend_share": 0.277,
+  "front_loading": 0.309,
+  "C2_share": 0.26,
+  "C3_share": 0,
+  "C6_share": 0.475,
+  "C9_share": 0,
+  "C10_share": 0,
+  "distinct_C2_merchants": 5,
+  "game_share": 0.0,
+  "travel_share": 0.0,
+  "subscription_brands": 0,
+  "active_days_ratio": 0.516,
+  "max_day_share": 0.097,
+  "max_day": "2026-08-12",
+  "max_day_txn_count": 2,
+  "discount_txn_ratio": 0.0,
+  "transfer_count": 0,
+  "top_merchant_count_share": 0.15,
+  "after_work_share": 0.253,
+  "top_merchants": [
+   [
+    "耐克NIKE",
+    3
+   ],
+   [
+    "学校后勤食堂",
+    2
+   ],
+   [
+    "拼多多",
+    2
+   ],
+   [
+    "ZARA",
+    2
+   ],
+   [
+    "淘宝",
+    2
+   ]
+  ],
+  "outliers": [],
+  "ambiguous_count": 0,
+  "ambiguous_amount_share": 0.0,
+  "ambiguous_rows": [],
+  "masked_count": 0,
+  "data_level": "勉强",
+  "petty_index": 0.0,
+  "fixed_amount": 0,
+  "nonfixed_amount": 7427.98,
+  "weeks_total": 5,
+  "delivery_cnt": 0,
+  "delivery_food_share": 0.0,
+  "weeks_C1": 0,
+  "delivery_meal_slots": 0,
+  "delivery_vs_grocery": 0.0,
+  "tea_cnt": 0,
+  "weeks_C4": 0,
+  "per_week_C4": 0.0,
+  "tea_max_repeat": 0,
+  "snack_cnt": 0,
+  "tea_vs_snack": 0.0,
+  "dinein_cnt": 6,
+  "c2_top_merchant_share": 0.333,
+  "dinein_experience_share": 0.71,
+  "online_shop_cnt": 6,
+  "weeks_online_shop": 5,
+  "online_shop_nonfixed_share": 0.265,
+  "online_product_categories": 3,
+  "online_distinct_merchants": 4,
+  "grocery_cnt": 0,
+  "weeks_grocery": 0,
+  "grocery_food_share": 0.0,
+  "grocery_categories": 0,
+  "grocery_vs_delivery": 0.0,
+  "beauty_cnt": 8,
+  "weeks_C6": 4,
+  "beauty_nonfixed_share": 0.475,
+  "beauty_categories": 3,
+  "beauty_service_cnt": 0,
+  "subscription_categories": 0,
+  "subscription_digital_share": 0.0,
+  "game_cnt": 0,
+  "weeks_game": 0,
+  "game_entertainment_share": 0.0,
+  "game_platform_max_repeat": 0,
+  "virtual_item_cnt": 0,
+  "travel_categories": 0,
+  "travel_nonfixed_share": 0.0,
+  "travel_chain": 0,
+  "commute_cnt": 0,
+  "weeks_C7": 0,
+  "per_week_C7": 0.0,
+  "commute_nonfixed_share": 0.0,
+  "transport_modes": 0,
+  "weekday_commute_ratio": 0.0,
+  "days_with_2plus_commute": 0,
+  "pet_cnt": 0,
+  "weeks_C11": 0,
+  "pet_categories": 0,
+  "pet_nonfixed_share": 0.0,
+  "pet_max_repeat": 0,
+  "study_cnt": 0,
+  "study_share": 0.0,
+  "study_cnt_or_top3": 0,
+  "early_cnt": 0,
+  "under30_ratio": 0.0,
+  "big_nonnecessity_share": 0.978,
+  "daily_le50_streak": 0,
+  "weeks_le350": 0,
+  "late_night_cnt": 1,
+  "max_daily_late_cnt": 1,
+  "days_with_3plus_late": 0,
+  "front10_days": 6,
+  "last10_days": 4,
+  "last10_share": 0.267,
+  "tail_vs_front": 0.864,
+  "merchant_max_daily_cnt": 1,
+  "merchant_streak_days": 0,
+  "merchant_max_cnt_ex_platform": 3,
+  "dimensions": {
+   "eat": 45,
+   "delivery": 0,
+   "drink": 0,
+   "shopping": 100,
+   "online": 76,
+   "fun": 0,
+   "commute": 0,
+   "practical": 0,
+   "lavish": 100,
+   "petty": 0,
+   "night": 10
+  },
+  "highlights_candidates": [
+   {
+    "id": "t002",
+    "kind": "largest",
+    "date": "08-03",
+    "time": "14:29",
+    "merchant": "丝芙兰",
+    "amount": 549.62,
+    "category": "C6",
+    "brand": null,
+    "note": "大额"
+   },
+   {
+    "id": "t009",
+    "kind": "largest",
+    "date": "08-14",
+    "time": "20:28",
+    "merchant": "ZARA",
+    "amount": 538.95,
+    "category": "C6",
+    "brand": null,
+    "note": "大额"
+   },
+   {
+    "id": "t019",
+    "kind": "largest",
+    "date": "08-28",
+    "time": "16:54",
+    "merchant": "UNIQLO优衣库",
+    "amount": 487.4,
+    "category": "C6",
+    "brand": null,
+    "note": "大额"
+   },
+   {
+    "id": "t008",
+    "kind": "busiest_day",
+    "date": "08-12",
+    "time": "14:59",
+    "merchant": "屈臣氏",
+    "amount": 443.33,
+    "category": "C6",
+    "brand": null,
+    "note": "当天 2 笔，合计 ¥723.69"
+   },
+   {
+    "id": "t006",
+    "kind": "latest",
+    "date": "08-09",
+    "time": "21:58",
+    "merchant": "拼多多",
+    "amount": 333.72,
+    "category": "C5",
+    "brand": null,
+    "note": "本月最晚一笔"
+   }
+  ],
+  "rule_hits": 3
+ },
+ "retrieval": {
+  "candidates": [
+   {
+    "code": "HAO",
+    "match": 100.0,
+    "hit": true,
+    "override": false
+   },
+   {
+    "code": "JZZY",
+    "match": 66.7,
+    "hit": true,
+    "override": false
+   },
+   {
+    "code": "KDZH",
+    "match": 63.0,
+    "hit": true,
+    "override": false
+   }
+  ],
+  "hits": 3,
+  "special": null,
+  "close_call": false,
+  "modifier_tags": [],
+  "badges": [],
+  "dimensions": {
+   "eat": 45,
+   "delivery": 0,
+   "drink": 0,
+   "shopping": 100,
+   "online": 76,
+   "fun": 0,
+   "commute": 0,
+   "practical": 0,
+   "lavish": 100,
+   "petty": 0,
+   "night": 10
+  },
+  "all_matches": [
+   [
+    "HAO",
+    100.0
+   ],
+   [
+    "JZZY",
+    66.7
+   ],
+   [
+    "KDZH",
+    63.0
+   ],
+   [
+    "TDLD",
+    57.9
+   ],
+   [
+    "YXDW",
+    40.0
+   ],
+   [
+    "JW",
+    30.0
+   ],
+   [
+    "SCTZ",
+    9.5
+   ],
+   [
+    "WMBY",
+    0.0
+   ],
+   [
+    "NCXM",
+    0.0
+   ],
+   [
+    "CCLJ",
+    0.0
+   ],
+   [
+    "DYSJ",
+    0.0
+   ],
+   [
+    "KJZS",
+    0.0
+   ],
+   [
+    "DQOL",
+    0.0
+   ],
+   [
+    "TQYD",
+    0.0
+   ],
+   [
+    "MHZT",
+    0.0
+   ],
+   [
+    "SQDS",
+    0.0
+   ]
+  ]
+ }
+}

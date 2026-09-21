@@ -1,0 +1,242 @@
+{
+ "T01": {
+  "group": "正常",
+  "primary": [
+   "WMBY"
+  ],
+  "note": "外卖 25 笔占 70%，无超市",
+  "file": "tests/bills/T01.csv",
+  "labels": "tests/labels/T01.json"
+ },
+ "T02": {
+  "group": "正常",
+  "primary": [
+   "NCXM"
+  ],
+  "note": "奶茶咖啡 18 笔，其余均匀",
+  "file": "tests/bills/T02.csv",
+  "labels": "tests/labels/T02.json"
+ },
+ "T03": {
+  "group": "正常",
+  "primary": [
+   "SCTZ"
+  ],
+  "note": "150 笔，80% ≤ ¥20，无类别 > 30%",
+  "file": "tests/bills/T03.csv",
+  "labels": "tests/labels/T03.json"
+ },
+ "T04": {
+  "group": "正常",
+  "primary": [
+   "HAO"
+  ],
+  "data_level": "勉强",
+  "note": "20 笔，中位数 ≈ ¥260，服饰为主；文案须注明样本少",
+  "file": "tests/bills/T04.csv",
+  "labels": "tests/labels/T04.json"
+ },
+ "T05": {
+  "group": "正常",
+  "primary": [
+   "KDZH"
+  ],
+  "note": "淘宝小红书 40 笔占 65%",
+  "file": "tests/bills/T05.csv",
+  "labels": "tests/labels/T05.json"
+ },
+ "T06": {
+  "group": "正常",
+  "primary": [
+   "KJZS"
+  ],
+  "secondary": [
+   "TQYD"
+  ],
+  "note": "游戏充值占 45%，交通笔数 44%",
+  "file": "tests/bills/T06.csv",
+  "labels": "tests/labels/T06.json"
+ },
+ "T07": {
+  "group": "正常",
+  "primary": [
+   "TQYD"
+  ],
+  "note": "地铁打车 70 笔占笔数 50%",
+  "file": "tests/bills/T07.csv",
+  "labels": "tests/labels/T07.json"
+ },
+ "T08": {
+  "group": "正常",
+  "primary": [
+   "SQDS"
+  ],
+  "note": "超市交通药品为主，中位数 ≈ ¥12",
+  "file": "tests/bills/T08.csv",
+  "labels": "tests/labels/T08.json"
+ },
+ "T09": {
+  "group": "模糊",
+  "primary": [
+   "WMBY",
+   "KDZH"
+  ],
+  "confidence": "medium",
+  "note": "外卖 33% vs 网购 42%，两卡同时命中，须提及势均力敌",
+  "file": "tests/bills/T09.csv",
+  "labels": "tests/labels/T09.json"
+ },
+ "T10": {
+  "group": "模糊",
+  "primary": [
+   "DSDS"
+  ],
+  "note": "10 类均匀",
+  "file": "tests/bills/T10.csv",
+  "labels": "tests/labels/T10.json"
+ },
+ "T11": {
+  "group": "模糊",
+  "primary": [
+   "DSDS"
+  ],
+  "forbidden": [
+   "WMBY"
+  ],
+  "note": "外卖 10 笔、占餐饮 53%、只在午间：外卖包月户 5 条只满足 2 条；不得判 WMBY",
+  "file": "tests/bills/T11.csv",
+  "labels": "tests/labels/T11.json"
+ },
+ "T12": {
+  "group": "缺信息",
+  "primary": [
+   "SJWF"
+  ],
+  "data_level": "不足",
+  "note": "仅 4 笔",
+  "file": "tests/bills/T12.csv",
+  "labels": "tests/labels/T12.json"
+ },
+ "T13": {
+  "group": "缺信息",
+  "primary": [
+   "SJWF"
+  ],
+  "data_level": "不足",
+  "note": "30 笔全在同一天",
+  "file": "tests/bills/T13.csv",
+  "labels": "tests/labels/T13.json"
+ },
+ "T14": {
+  "group": "缺信息",
+  "primary": [
+   "KDZH",
+   "SJWF"
+  ],
+  "primary_basic": [
+   "SJWF"
+  ],
+  "basic_flags": {
+   "unclassified_ratio_min": 0.4
+  },
+  "confidence": "low",
+  "note": "商户全部脱敏、说明为空：普通版全部未分类 → 不足 → SMR 并触发 D1'；VIP 版靠商品标题判 C5，置信度 low",
+  "file": "tests/bills/T14.csv",
+  "labels": "tests/labels/T14.json"
+ },
+ "T15": {
+  "group": "缺信息",
+  "parse_error": true,
+  "note": "只有表头：Parser 报错，不调用 LLM",
+  "file": "tests/bills/T15.csv",
+  "labels": "tests/labels/T15.json"
+ },
+ "T16": {
+  "group": "误导",
+  "primary": [
+   "SQDS"
+  ],
+  "report": {
+   "R2_refund_closed": 6,
+   "R3_zero": 3
+  },
+  "note": "6 笔交易关闭大额 + 3 笔 0.00，剔除后判定；金额与头部统计一致",
+  "file": "tests/bills/T16.csv",
+  "labels": "tests/labels/T16.json"
+ },
+ "T17": {
+  "group": "误导",
+  "primary": [
+   "SCTZ"
+  ],
+  "forbidden": [
+   "HAO"
+  ],
+  "report": {
+   "R4_transfer": 1
+  },
+  "note": "¥8,000 转账红包不计入",
+  "file": "tests/bills/T17.csv",
+  "labels": "tests/labels/T17.json"
+ },
+ "T18": {
+  "group": "误导",
+  "forbidden": [
+   "HAO"
+  ],
+  "flags": {
+   "ambiguous_count_min": 1
+  },
+  "note": "¥5,000 房租收钱码 R8 标记；未确认不得判 HAO",
+  "file": "tests/bills/T18.csv",
+  "labels": "tests/labels/T18.json"
+ },
+ "T19": {
+  "group": "误导",
+  "primary": [
+   "KJZS"
+  ],
+  "forbidden": [
+   "SQDS"
+  ],
+  "note": "商品说明含提示注入，须忽略",
+  "file": "tests/bills/T19.csv",
+  "labels": "tests/labels/T19.json"
+ },
+ "T20": {
+  "group": "误导",
+  "primary": [
+   "WMBY"
+  ],
+  "report": {
+   "R1_not_expense": 5,
+   "R2_refund_closed": 2,
+   "R4_transfer": 6
+  },
+  "basic_flags": {
+   "unclassified_ratio_min": 0.2
+  },
+  "note": "微信 xlsx；本地小商户普通版未分类 ≥ 20% 触发 D1'",
+  "file": "tests/bills/T20.xlsx",
+  "labels": "tests/labels/T20.json"
+ },
+ "T21": {
+  "group": "正常",
+  "primary": [
+   "MHZT"
+  ],
+  "note": "宠物 9 笔跨 4 周（食品 / 医疗 / 洗护 / 用品），其余日常",
+  "file": "tests/bills/T21.csv",
+  "labels": "tests/labels/T21.json"
+ },
+ "T22": {
+  "group": "正常",
+  "primary": [
+   "YDDJ"
+  ],
+  "co_display": true,
+  "note": "前 10 天 ≥ 50%、后 10 天 ≤ 前 10 天一半 → 月底渡劫人并列显示",
+  "file": "tests/bills/T22.csv",
+  "labels": "tests/labels/T22.json"
+ }
+}

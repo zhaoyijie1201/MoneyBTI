@@ -1,0 +1,362 @@
+{
+ "id": "T16",
+ "expected": {
+  "group": "误导",
+  "primary": [
+   "SQDS"
+  ],
+  "report": {
+   "R2_refund_closed": 6,
+   "R3_zero": 3
+  },
+  "note": "6 笔交易关闭大额 + 3 笔 0.00，剔除后判定；金额与头部统计一致"
+ },
+ "report": {
+  "raw": 76,
+  "R3_zero": 3,
+  "R2_refund_closed": 6,
+  "valid": 67,
+  "source": "alipay",
+  "period_from_header": true,
+  "period_start": "2026-08-01",
+  "period_end": "2026-08-31",
+  "period_days": 31
+ },
+ "metrics": {
+  "total": 817.99,
+  "txn_count": 67,
+  "txn_per_day": 2.16,
+  "active_days": 23,
+  "period_days": 31,
+  "period_start": "2026-08-01",
+  "period_end": "2026-08-31",
+  "category_share": {
+   "C9": 0.325,
+   "C2": 0.269,
+   "C3": 0.133,
+   "C10": 0.111,
+   "C7": 0.108,
+   "C4": 0.055
+  },
+  "category_amount": {
+   "C9": 265.47,
+   "C2": 220.35,
+   "C3": 108.39,
+   "C10": 90.74,
+   "C7": 88.45,
+   "C4": 44.59,
+   "C1": 0.0
+  },
+  "category_count": {
+   "C7": 25,
+   "C9": 14,
+   "C10": 5,
+   "C3": 7,
+   "C4": 4,
+   "C2": 12
+  },
+  "unclassified_ratio": 0.0,
+  "unclassified_amount": 0.0,
+  "top_category": "C9",
+  "top_category_share": 0.325,
+  "food_share": 0.324,
+  "delivery_ratio": 0.0,
+  "small_txn_ratio": 0.776,
+  "median_amount": 12.14,
+  "big_ticket_share": 0.0,
+  "online_share": 0.0,
+  "shopping_share": 0,
+  "C4_share": 0.055,
+  "C8_share": 0,
+  "late_night_ratio": 0.0,
+  "beverage_per_week": 0.9,
+  "commute_count_ratio": 0.373,
+  "necessity_share": 0.676,
+  "weekend_share": 0.135,
+  "front_loading": 0.319,
+  "C2_share": 0.269,
+  "C3_share": 0.133,
+  "C6_share": 0,
+  "C9_share": 0.325,
+  "C10_share": 0.111,
+  "distinct_C2_merchants": 1,
+  "game_share": 0.0,
+  "travel_share": 0.0,
+  "subscription_brands": 0,
+  "active_days_ratio": 0.742,
+  "max_day_share": 0.124,
+  "max_day": "2026-08-25",
+  "max_day_txn_count": 4,
+  "discount_txn_ratio": 0.0,
+  "transfer_count": 0,
+  "top_merchant_count_share": 0.209,
+  "after_work_share": 0.36,
+  "top_merchants": [
+   [
+    "老百姓大药房",
+    14
+   ],
+   [
+    "学校后勤食堂",
+    12
+   ],
+   [
+    "滴滴出行",
+    9
+   ],
+   [
+    "苏州轨道交通运营有限公司",
+    6
+   ],
+   [
+    "高德打车",
+    5
+   ]
+  ],
+  "outliers": [],
+  "ambiguous_count": 0,
+  "ambiguous_amount_share": 0.0,
+  "ambiguous_rows": [],
+  "masked_count": 0,
+  "data_level": "充足",
+  "petty_index": 0.419,
+  "fixed_amount": 162.09,
+  "nonfixed_amount": 655.9,
+  "weeks_total": 5,
+  "delivery_cnt": 0,
+  "delivery_food_share": 0.0,
+  "weeks_C1": 0,
+  "delivery_meal_slots": 0,
+  "delivery_vs_grocery": 0.0,
+  "tea_cnt": 4,
+  "weeks_C4": 4,
+  "per_week_C4": 0.8,
+  "tea_max_repeat": 2,
+  "snack_cnt": 1,
+  "tea_vs_snack": 4.0,
+  "dinein_cnt": 12,
+  "c2_top_merchant_share": 1.0,
+  "dinein_experience_share": 1.0,
+  "online_shop_cnt": 0,
+  "weeks_online_shop": 0,
+  "online_shop_nonfixed_share": 0.0,
+  "online_product_categories": 0,
+  "online_distinct_merchants": 0,
+  "grocery_cnt": 6,
+  "weeks_grocery": 3,
+  "grocery_food_share": 0.241,
+  "grocery_categories": 3,
+  "grocery_vs_delivery": 6.0,
+  "beauty_cnt": 0,
+  "weeks_C6": 0,
+  "beauty_nonfixed_share": 0.0,
+  "beauty_categories": 0,
+  "beauty_service_cnt": 0,
+  "subscription_categories": 0,
+  "subscription_digital_share": 0.0,
+  "game_cnt": 0,
+  "weeks_game": 0,
+  "game_entertainment_share": 0.0,
+  "game_platform_max_repeat": 0,
+  "virtual_item_cnt": 0,
+  "travel_categories": 0,
+  "travel_nonfixed_share": 0.0,
+  "travel_chain": 0,
+  "commute_cnt": 25,
+  "weeks_C7": 5,
+  "per_week_C7": 5.0,
+  "commute_nonfixed_share": 0.135,
+  "transport_modes": 3,
+  "weekday_commute_ratio": 0.524,
+  "days_with_2plus_commute": 8,
+  "pet_cnt": 0,
+  "weeks_C11": 0,
+  "pet_categories": 0,
+  "pet_nonfixed_share": 0.0,
+  "pet_max_repeat": 0,
+  "study_cnt": 5,
+  "study_share": 0.111,
+  "study_cnt_or_top3": 1,
+  "early_cnt": 2,
+  "under30_ratio": 1.0,
+  "big_nonnecessity_share": 0.0,
+  "daily_le50_streak": 3,
+  "weeks_le350": 3,
+  "late_night_cnt": 0,
+  "max_daily_late_cnt": 0,
+  "days_with_3plus_late": 0,
+  "front10_days": 8,
+  "last10_days": 7,
+  "last10_share": 0.246,
+  "tail_vs_front": 0.845,
+  "merchant_max_daily_cnt": 2,
+  "merchant_streak_days": 1,
+  "merchant_max_cnt_ex_platform": 14,
+  "dimensions": {
+   "eat": 56,
+   "delivery": 0,
+   "drink": 18,
+   "shopping": 0,
+   "online": 0,
+   "fun": 0,
+   "commute": 64,
+   "practical": 70,
+   "lavish": 0,
+   "petty": 50,
+   "night": 0
+  },
+  "highlights_candidates": [
+   {
+    "id": "t051",
+    "kind": "largest",
+    "date": "08-25",
+    "time": "09:00",
+    "merchant": "新华书店",
+    "amount": 29.98,
+    "category": "C10",
+    "brand": null,
+    "note": "大额"
+   },
+   {
+    "id": "t053",
+    "kind": "largest",
+    "date": "08-25",
+    "time": "18:58",
+    "merchant": "老百姓大药房",
+    "amount": 29.32,
+    "category": "C9",
+    "brand": null,
+    "note": "大额"
+   },
+   {
+    "id": "t060",
+    "kind": "largest",
+    "date": "08-27",
+    "time": "16:52",
+    "merchant": "老百姓大药房",
+    "amount": 28.32,
+    "category": "C9",
+    "brand": null,
+    "note": "大额"
+   },
+   {
+    "id": "t007",
+    "kind": "busiest_day",
+    "date": "08-03",
+    "time": "11:01",
+    "merchant": "老百姓大药房",
+    "amount": 23.17,
+    "category": "C9",
+    "brand": null,
+    "note": "当天 6 笔，合计 ¥85.69"
+   }
+  ],
+  "rule_hits": 2
+ },
+ "retrieval": {
+  "candidates": [
+   {
+    "code": "SQDS",
+    "match": 78.5,
+    "hit": true,
+    "override": false
+   },
+   {
+    "code": "TQYD",
+    "match": 68.3,
+    "hit": true,
+    "override": false
+   },
+   {
+    "code": "SCTZ",
+    "match": 75.5,
+    "hit": false,
+    "override": false
+   }
+  ],
+  "hits": 2,
+  "special": null,
+  "close_call": false,
+  "modifier_tags": [],
+  "badges": [],
+  "dimensions": {
+   "eat": 56,
+   "delivery": 0,
+   "drink": 18,
+   "shopping": 0,
+   "online": 0,
+   "fun": 0,
+   "commute": 64,
+   "practical": 70,
+   "lavish": 0,
+   "petty": 50,
+   "night": 0
+  },
+  "all_matches": [
+   [
+    "SQDS",
+    78.5
+   ],
+   [
+    "TQYD",
+    68.3
+   ],
+   [
+    "SCTZ",
+    75.5
+   ],
+   [
+    "CCLJ",
+    59.7
+   ],
+   [
+    "NCXM",
+    49.6
+   ],
+   [
+    "JW",
+    43.3
+   ],
+   [
+    "TDLD",
+    40.0
+   ],
+   [
+    "YXDW",
+    33.3
+   ],
+   [
+    "HAO",
+    20.1
+   ],
+   [
+    "WMBY",
+    0.0
+   ],
+   [
+    "KDZH",
+    0.0
+   ],
+   [
+    "JZZY",
+    0.0
+   ],
+   [
+    "DYSJ",
+    0.0
+   ],
+   [
+    "KJZS",
+    0.0
+   ],
+   [
+    "DQOL",
+    0.0
+   ],
+   [
+    "MHZT",
+    0.0
+   ]
+  ]
+ }
+}
