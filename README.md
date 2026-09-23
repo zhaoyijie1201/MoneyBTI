@@ -1,161 +1,163 @@
 <div align="center">
 
-<img src="web/cats/app_icon2.webp" width="96" alt="MoneyBTI 钱格猫">
+<img src="web/cats/app_icon2.webp" width="96" alt="MoneyBTI cat">
 
-# 💰 MoneyBTI 钱格
+# 💰 MoneyBTI
 
-**本月的钱，花成了什么样？**
+**What did this month's money turn into?**
 
-把一份月账单，变成读得懂的消费人格与值得收藏的钱格小票。
+Turn a monthly bill into a spending persona you can actually read, and a persona ticket worth keeping.
 
-🚀 [在线体验](https://zhao1201-moneybti.hf.space) · 🤗 [Hugging Face Space](https://huggingface.co/spaces/Zhao1201/MoneyBTI) · ⚡ [快速开始](#快速开始)
+🚀 [Live Demo](https://zhao1201-moneybti.hf.space) · 🤗 [Hugging Face Space](https://huggingface.co/spaces/Zhao1201/MoneyBTI) · ⚡ [Quick Start](#-quick-start)
+
+**English** · [简体中文](README.zh-CN.md)
 
 </div>
 
-MoneyBTI 是一款 AI 消费人格分析应用。导入支付宝或微信账单，确认交易分类，就能发现自己的花钱风格：了解消费习惯、探索专属猫咪人格，再把这份月度记忆保存为复古小票。
+MoneyBTI is an AI spending-persona app. Import an Alipay or WeChat Pay bill, confirm the transaction categories, and discover your spending style: understand your habits, meet your own cat persona, and save the month as a retro ticket.
 
-[![MoneyBTI 首页：账单导入与分析入口](assets/preview-upload.png)](assets/preview-upload.png)
+[![MoneyBTI home: bill import and analysis entry](assets/preview-upload.png)](assets/preview-upload.png)
 
-## ✨ 核心功能
+## ✨ Features
 
-| 功能 | 你可以做什么 |
+| Feature | What you can do |
 | --- | --- |
-| 📥 账单导入 | 上传或拖入支付宝、微信导出的 CSV / XLSX 账单，跟随内置教程完成导出，也可直接使用演示账单体验。 |
-| ✅ 分类确认 | 自动整理消费类别，筛选需要确认的交易，并在生成结果前手动修正分类。 |
-| 📊 消费画像 | 通过类别分布、消费雷达和候选人格，了解自己的花钱偏好与匹配依据。 |
-| 🐱 专属钱格 | 获得猫咪人格卡、个性解读、消费特征和成就徽章，让账单变成一份有趣的月度观察。 |
-| 🎫 小票分享 | 切换奶油、夜市、薄荷主题，导出 PNG 图片，或复制分享文案。 |
-| 📖 人格图鉴 | 浏览不同钱格的插画、性格描述与特点，探索自己之外的花钱风格。 |
-| 🌐 双语体验 | 在中文与英文界面之间切换，查看对应语言的人格解读与小票。 |
+| 📥 Bill import | Upload or drag in CSV / XLSX bills exported from Alipay or WeChat Pay, follow the built-in export tutorial, or try the bundled demo bill. |
+| ✅ Category review | Categories are assigned automatically; filter the transactions that need a look and fix them by hand before generating the result. |
+| 📊 Spending profile | Category breakdown, a spending radar and candidate personas show your preferences and why each persona matches. |
+| 🐱 Your persona | Get a cat persona card, a personal reading, spending traits and achievement badges that turn the bill into a fun monthly review. |
+| 🎫 Ticket sharing | Switch between the Cream, Night Market and Mint themes, export a PNG, or copy the share text. |
+| 📖 Persona gallery | Browse every persona's illustration, personality and traits, and explore spending styles beyond your own. |
+| 🌐 Bilingual | Switch between Chinese and English, with persona readings and tickets in the matching language. |
 
-### 🔍 从消费习惯，认识你的钱格
+### 🔍 Get to know your persona through your spending habits
 
-每张人格卡都有对应的消费特征与匹配说明。结果页将人格解读与复古小票放在一起，方便回顾、收藏和分享。
+Every persona card comes with its spending traits and a matching explanation. The result page places the persona reading next to the retro ticket so it is easy to review, keep and share.
 
-[![人格结果与复古小票，可切换主题、复制文案并导出 PNG](assets/preview-result.png)](assets/preview-result.png)
+[![Persona result with retro ticket: switch themes, copy text and export PNG](assets/preview-result.png)](assets/preview-result.png)
 
-### 🎟️ 最终生成效果 · 人格小票
+### 🎟️ Final output · the persona ticket
 
-生成完成后，展开小票即可查看完整的猫咪人格插画、匹配度、成就徽章、消费特征与专属解读。下面展示奶油主题的完整小票，可直接导出为 PNG 保存或分享。
+Once generation finishes, expand the ticket to see the full cat illustration, match score, achievement badges, spending traits and personal reading. Below is the complete ticket in the Cream theme; it can be exported straight to PNG.
 
 <p align="center">
-  <a href="assets/preview-ticket.png"><img src="assets/preview-ticket.png" width="480" alt="最终生成的人格小票完整预览：氪金战士，包含猫咪插画、匹配度、成就徽章与消费解读"></a>
+  <a href="assets/preview-ticket.png"><img src="assets/preview-ticket.png" width="480" alt="Full preview of a generated persona ticket: the Whale Warrior, with cat illustration, match score, badges and spending reading"></a>
 </p>
 
-<p align="center"><sub>合成演示账单生成效果 · 点击查看完整高清小票</sub></p>
+<p align="center"><sub>Generated from a synthetic demo bill · click for the full-resolution ticket</sub></p>
 
-### 📊 看见花钱偏好，也看懂匹配依据
+### 📊 See your preferences and the reasoning behind the match
 
-类别分布与消费雷达帮助你快速理解账单；候选人格附带匹配说明，让结果有迹可循。生成之前，可以返回分类表调整交易类别。
+The category breakdown and spending radar help you read the bill at a glance; each candidate persona carries a matching explanation so the result is traceable. Before generating, you can go back to the category table and adjust transactions.
 
-[![消费画像：类别分布、消费雷达与候选人格的匹配说明](assets/preview-metrics.png)](assets/preview-metrics.png)
+[![Spending profile: category breakdown, spending radar and candidate persona explanations](assets/preview-metrics.png)](assets/preview-metrics.png)
 
-### 🐾 探索钱格猫的人格图鉴
+### 🐾 Explore the persona gallery
 
-从日常消费习惯到鲜明的生活偏好，每一种钱格都有自己的猫咪形象、人格描述与风格标签。
+From everyday habits to strong lifestyle preferences, every persona has its own cat, description and style tags.
 
-[![钱格人格图鉴：猫咪插画、人格描述与风格标签](assets/preview-gallery.png)](assets/preview-gallery.png)
+[![Persona gallery: cat illustrations, descriptions and style tags](assets/preview-gallery.png)](assets/preview-gallery.png)
 
-<sub>以上为当前界面与合成演示账单的功能预览，采用 2 倍像素密度截图；点击图片可查看高清原图。</sub>
+<sub>Screenshots show the current UI with a synthetic demo bill, captured at 2x pixel density. Click any image for the full-resolution original.</sub>
 
-## 📝 如何使用
+## 📝 How to use
 
-1. **📤 导入账单**：打开应用，上传支付宝 / 微信账单，或选择内置演示账单。
-2. **✅ 确认分类**：检查自动分类结果，修正未分类或存在歧义的交易。
-3. **📊 查看画像**：浏览消费偏好、候选人格和匹配说明。
-4. **🎉 生成与分享**：生成专属钱格，选择小票主题，保存图片或复制文案。
+1. **📤 Import a bill**: open the app, upload an Alipay / WeChat Pay bill, or pick the bundled demo bill.
+2. **✅ Confirm categories**: review the automatic categories and fix anything unclassified or ambiguous.
+3. **📊 View the profile**: browse spending preferences, candidate personas and matching explanations.
+4. **🎉 Generate and share**: generate your persona, pick a ticket theme, then save the image or copy the text.
 
-应用提供两种分析模式，也支持并排对比结果：
+Two analysis modes are available, and their results can be compared side by side:
 
-| 模式 | 功能 |
+| Mode | What it does |
 | --- | --- |
-| 🙂 普通版 | 通过商户规则整理交易，生成人格解读与分享小票。 |
-| 👑 VIP 版 | 在规则分类基础上加入 AI 逐笔语义分析，并支持副人格与消费亮点。 |
+| 🙂 Basic | Organises transactions with merchant rules, then generates the persona reading and share ticket. |
+| 👑 VIP | Adds AI per-transaction semantic analysis on top of the rules, with a secondary persona and spending highlights. |
 
-## 🚀 快速开始
+## 🚀 Quick start
 
-### 🐍 本地运行
+### 🐍 Run locally
 
-使用 Python 3.11，在项目根目录执行：
+With Python 3.11, from the project root:
 
 ```bash
 python -m venv .venv
 ```
 
-激活虚拟环境并配置 OpenRouter API Key。
+Activate the virtual environment and set your OpenRouter API key.
 
 **Windows PowerShell**
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
-$env:OPENROUTER_API_KEY = "你的 API Key"
+$env:OPENROUTER_API_KEY = "your API key"
 ```
 
 **macOS / Linux**
 
 ```bash
 source .venv/bin/activate
-export OPENROUTER_API_KEY="你的 API Key"
+export OPENROUTER_API_KEY="your API key"
 ```
 
-安装依赖并启动：
+Install the dependencies and start the server:
 
 ```bash
 python -m pip install -r requirements.txt
 python -m uvicorn api.main:app --reload --port 7860
 ```
 
-访问 [本地应用](http://localhost:7860)，或打开 [API 文档](http://localhost:7860/docs)。普通版的账单解析、分类与消费画像可在未配置 Key 时使用；AI 人格文案生成和 VIP 逐笔分析需要配置模型服务。
+Open the [local app](http://localhost:7860) or the [API docs](http://localhost:7860/docs). Bill parsing, categorisation and the spending profile in Basic mode work without a key; AI persona copy and VIP per-transaction analysis need a configured model provider.
 
-### 🐳 Docker 部署
+### 🐳 Docker
 
 ```bash
 docker build -t moneybti .
 docker run --rm -p 7860:7860 -e OPENROUTER_API_KEY moneybti
 ```
 
-运行前需在当前终端设置 `OPENROUTER_API_KEY`，容器会读取该环境变量。
+Set `OPENROUTER_API_KEY` in the current shell before running; the container reads it from the environment.
 
 <details>
-<summary>⚙️ 模型服务配置</summary>
+<summary>⚙️ Model provider configuration</summary>
 
-默认使用 OpenRouter，也支持通过环境变量配置阿里云百炼或其他 OpenAI 兼容接口。
+OpenRouter is the default. Alibaba Cloud Bailian or any other OpenAI-compatible endpoint can be configured through environment variables.
 
-| 环境变量 | 用途 |
+| Variable | Purpose |
 | --- | --- |
-| `OPENROUTER_API_KEY` | OpenRouter API Key。 |
-| `MONEYBTI_PROVIDER` | 服务提供商：`openrouter`（默认）或 `bailian`。 |
-| `DASHSCOPE_API_KEY` | 使用百炼时的 API Key。 |
-| `MONEYBTI_BASE_URL` | 自定义兼容接口地址；使用百炼时请填写所用服务的实际地址。 |
-| `MONEYBTI_MODEL` | 统一指定模型。 |
-| `MONEYBTI_MODEL_M3` / `MONEYBTI_MODEL_M6` / `MONEYBTI_MODEL_M7` | 分别指定逐笔分类、人格文案和语气复核模型，优先于统一配置。 |
+| `OPENROUTER_API_KEY` | OpenRouter API key. |
+| `MONEYBTI_PROVIDER` | Provider: `openrouter` (default) or `bailian`. |
+| `DASHSCOPE_API_KEY` | API key when using Bailian. |
+| `MONEYBTI_BASE_URL` | Custom compatible endpoint; for Bailian, use the actual URL of your service. |
+| `MONEYBTI_MODEL` | One model for every module. |
+| `MONEYBTI_MODEL_M3` / `MONEYBTI_MODEL_M6` / `MONEYBTI_MODEL_M7` | Per-module models for transaction classification, persona copy and tone review; these override the shared setting. |
 
-具体默认值与配置逻辑见 [`core/llm.py`](core/llm.py)。
+Defaults and the resolution logic live in [`core/llm.py`](core/llm.py).
 
 </details>
 
-## ⚙️ 工作原理
+## ⚙️ How it works
 
-账单解析 → 自动分类 → 用户确认 → 消费画像与人格匹配 → AI 解读 → 小票渲染。
+Bill parsing → automatic categorisation → user confirmation → spending profile and persona matching → AI reading → ticket rendering.
 
-账单清洗、指标计算和候选人格匹配由代码与规则完成，AI 根据已有结果生成解读。生成文案还会经过数字与表达检查；未通过复核时，可回退至预设文案。
+Bill cleaning, metric computation and candidate persona matching are done by code and rules; the AI writes the reading from those results. Generated copy is checked for numbers and wording, and falls back to preset copy when the review fails.
 
-**🛠️ 技术栈**：FastAPI · Pandas / OpenPyXL · OpenAI SDK · 原生 JavaScript / CSS · Docker。
+**🛠️ Stack**: FastAPI · Pandas / OpenPyXL · OpenAI SDK · vanilla JavaScript / CSS · Docker.
 
 ```text
-api/       HTTP 接口与静态页面服务
-core/      账单解析、分类、画像计算与 AI 工作流
-rag/       人格知识库与商户分类规则
-web/       交互界面、人格图鉴与小票渲染
-assets/    项目预览图片
-tests/     合成演示账单与测试用例
-eval/      评估脚本与开发验证工具
+api/       HTTP API and static page serving
+core/      bill parsing, categorisation, profile metrics and the AI workflow
+rag/       persona knowledge base and merchant classification rules
+web/       UI, persona gallery and ticket rendering
+assets/    project preview images
+tests/     synthetic demo bills and test cases
+eval/      evaluation scripts and development tooling
 ```
 
-## 🔒 数据处理与使用说明
+## 🔒 Data handling
 
-- 🗑️ 上传的原始账单文件在解析后删除，分析会话保存在服务端内存中。
-- 🙈 姓名、账号、订单号不会作为交易字段读入；使用 AI 功能时，所需的交易描述或汇总特征会发送至配置的模型服务。模型调用会在服务端 `cache/` 目录缓存。
-- 🎭 钱格用于消费习惯观察与娱乐分享，匹配度表示规则贴合程度，不代表心理测评结果，也不构成财务建议。
+- 🗑️ Uploaded bill files are deleted after parsing; analysis sessions are kept in server memory.
+- 🙈 Names, account numbers and order IDs are never read as transaction fields. When AI features are used, the required transaction descriptions or aggregated features are sent to the configured model provider, and model calls are cached in the server-side `cache/` directory.
+- 🎭 Personas are for observing spending habits and having fun. The match score reflects how well the rules fit; it is not a psychological assessment and not financial advice.
 
-<sub>🎓 项目起源于 NTU PE6203 · Generative AI & Agentic AI 课程。</sub>
+<sub>🎓 Built for the NTU PE6203 · Generative AI & Agentic AI course.</sub>
